@@ -2,6 +2,17 @@ name: CI
 
 on: [push, pull_request]
 
+env:
+  CI: true
+  DATABASE_URL: "dummy"
+  NEXTAUTH_SECRET: "dummy"
+  NEXTAUTH_URL: "dummy"
+  DISCORD_CLIENT_ID: "dummy"
+  DISCORD_CLIENT_SECRET: "dummy"
+  GITHUB_ID: "dummy"
+  GITHUB_SECRET: "dummy"
+
+
 jobs:
   build:
     runs-on: ubuntu-latest
