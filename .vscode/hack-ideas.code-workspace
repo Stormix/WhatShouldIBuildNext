@@ -5,6 +5,15 @@
 		}
   ],
   "settings": {
-    "typescript.tsdk": "node_modules\\typescript\\lib"
-  }
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescript.preferences.importModuleSpecifier": "shortest",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.organizeImports": true
+    },
+  },
+  "conventionalCommits.scopes": [
+    "typings",
+    "releases"
+  ],
 }
