@@ -46,6 +46,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    ideas         Idea[]
 }
 
 model VerificationToken {
@@ -54,4 +55,45 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+enum ComponentType {
+  What
+  For
+  Using
+  On
+  But
+}
+
+model Component {
+  id String @id @default(cuid())
+  type ComponentType
+  value String @unique
+  ideas ComponentsOnIdeas[]
+}
+
+model ComponentsOnIdeas {
+  id String @id @default(cuid())
+  ideaId String
+  componentId String
+
+  idea Idea @relation(fields: [ideaId], references: [id])
+  component Component @relation(fields: [componentId], references: [id])
+
+  @@index([ideaId])
+  @@index([componentId])
+}
+
+model Idea {
+  id String @id @default(cuid())
+  title String
+  description String
+  authorId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  components ComponentsOnIdeas[]
+  author User @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
 }

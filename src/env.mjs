@@ -15,7 +15,8 @@ const server = z.object({
   DISCORD_CLIENT_ID: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
   GITHUB_ID: z.string(),
-  GITHUB_SECRET: z.string()
+  GITHUB_SECRET: z.string(),
+  OPENAI_KEY: z.string()
 });
 
 /**
@@ -43,7 +44,8 @@ const processEnv = {
   GITHUB_ID: process.env.GITHUB_ID,
   GITHUB_SECRET: process.env.GITHUB_SECRET,
   NEXT_PUBLIC_COMMIT_HASH: process.env.NEXT_PUBLIC_COMMIT_HASH,
-  NEXT_PUBLIC_COMMIT_TIMESTAMP: process.env.NEXT_PUBLIC_COMMIT_TIMESTAMP
+  NEXT_PUBLIC_COMMIT_TIMESTAMP: process.env.NEXT_PUBLIC_COMMIT_TIMESTAMP,
+  OPENAI_KEY: process.env.OPENAI_KEY
 };
 
 // Don't touch the part below

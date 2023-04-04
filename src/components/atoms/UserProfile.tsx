@@ -16,7 +16,8 @@ const UserProfile = () => {
 
   return (
     <Menu as="div" className="relative ml-3">
-      <div>
+      <div className="flex flex-row items-center gap-4">
+        <span>{session.user.name}</span>
         <Menu.Button className="flex rounded-full text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
           <span className="sr-only">Open user menu</span>
           <Image

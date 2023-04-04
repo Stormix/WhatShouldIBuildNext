@@ -8,12 +8,14 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
     "@headlessui/tailwindcss": "^0.1.2",
     "@heroicons/react": "^2.0.17",
+    "@hookform/resolvers": "^3.0.0",
     "@next-auth/prisma-adapter": "^1.0.5",
     "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.28.0",
@@ -23,18 +25,23 @@
     "@trpc/server": "^10.18.0",
     "date-fns": "^2.29.3",
     "dynamic-class-list": "^2.0.2",
+    "lodash": "^4.17.21",
     "next": "^13.2.4",
     "next-auth": "4.20.1",
     "next-themes": "^0.2.1",
     "nightwind": "^1.1.13",
+    "openai": "^3.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-toggle-dark-mode": "^1.1.1",
     "superjson": "1.12.2",
-    "zod": "^3.21.4"
+    "zod": "^3.21.4",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@types/eslint": "^8.21.3",
+    "@types/lodash": "^4.14.192",
     "@types/node": "^18.15.5",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.28",
@@ -51,6 +58,7 @@
     "prettier-plugin-tailwindcss": "^0.2.6",
     "prisma": "^4.11.0",
     "tailwindcss": "^3.3.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   },
   "ct3aMetadata": {

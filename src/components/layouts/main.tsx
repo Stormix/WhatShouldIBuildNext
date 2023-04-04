@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { type PropsWithChildren } from 'react';
+import Footer from '../molecules/Footer';
 import Header from '../molecules/Header';
 
 const MainLayout = ({ children }: PropsWithChildren) => {
@@ -17,6 +18,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
         <main className="flex h-screen w-full flex-col">
           <Header />
           {children}
+          <Footer />
         </main>
       </div>
     </>
