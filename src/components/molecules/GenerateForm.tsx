@@ -4,6 +4,7 @@ import type { Component } from '@prisma/client';
 import { ComponentType } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 
+import { useIdeasStore } from '@/hooks/store/ideas';
 import type { GenerateSchema } from '@/validation/generate';
 import { generateSchema } from '@/validation/generate';
 import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
@@ -13,8 +14,22 @@ import Loading from '../atoms/Loading';
 import Select from '../atoms/Select';
 
 const GenerateForm = () => {
+  const { setGeneratedIdea } = useIdeasStore();
   const { data, isLoading } = api.components.getAll.useQuery();
-  const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation();
+  const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation({
+    onSuccess: (data) => {
+      setGeneratedIdea({
+        id: '',
+        title: data.idea,
+        description: data.description,
+        createdAt: new Date(),
+        difficulty: data.difficulty,
+        timeToComplete: data.timeToComplete,
+        authorId: '',
+        updatedAt: new Date()
+      });
+    }
+  });
 
   const components = data?.reduce((acc, curr) => {
     if (acc[curr.type]) {

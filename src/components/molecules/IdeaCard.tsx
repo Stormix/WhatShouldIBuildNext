@@ -1,3 +1,4 @@
+import { useIdeasStore } from '@/hooks/store/ideas';
 import type { Idea } from '@prisma/client';
 import { cl } from 'dynamic-class-list';
 import type { FC } from 'react';
@@ -9,25 +10,24 @@ interface IdeaCardProps {
 }
 
 const IdeaCard: FC<IdeaCardProps> = ({ className }) => {
+  const idea = useIdeasStore((state) => state.generatedIdea);
   return (
     <Card className={cl(className, 'w-full')}>
       <h3 className="text-start font-bold opacity-70">Idea</h3>
-      <h2 className="py-4 text-3xl font-semibold">
-        Build a chatbot for pet owners using T3 on web but it only speaks in UwU
-      </h2>
+      <h2 className="py-4 text-3xl font-semibold">{idea?.title ?? 'No idea generated yet'}</h2>
       <div className="mt-4 flex gap-8">
         <div className=" w-2/3 text-justify">
           <h4 className=" font-semibold">Description</h4>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc ut tincidunt luctus, nunc nisl
-            aliquam nisl, eget aliquam nisl nunc et nisl. Sed euismod, nunc ut tincidunt luctus, nunc nisl aliquam nisl,
-            eget aliquam nisl nunc et nisl.
-          </p>
+          <p>{idea?.description ?? 'No idea generated yet'}</p>
         </div>
         <div className="flex w-1/3 flex-col items-start gap-4 text-start">
           <div>
             <h4 className="font-semibold">Difficulty</h4>
-            <p>Easy</p>
+            <p>{idea?.difficulty ?? ''}</p>
+          </div>
+          <div>
+            <h4 className="font-semibold">Time to complete</h4>
+            <p>{idea?.timeToComplete ?? ''}</p>
           </div>
           <div>
             <h4 className="font-semibold">Keywords</h4>

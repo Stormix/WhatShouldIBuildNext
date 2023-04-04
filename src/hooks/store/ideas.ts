@@ -4,6 +4,7 @@ import { devtools, persist } from 'zustand/middleware';
 
 interface IdeaStore {
   generatedIdea: Idea | null;
+  setGeneratedIdea: (idea: Idea) => void;
 }
 
 export const useIdeasStore = create<IdeaStore>()(

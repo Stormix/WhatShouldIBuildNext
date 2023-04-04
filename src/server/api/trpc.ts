@@ -37,7 +37,8 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    prisma
+    prisma,
+    openai: openai
   };
 };
 
@@ -68,6 +69,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
+import { openai } from './openai';
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

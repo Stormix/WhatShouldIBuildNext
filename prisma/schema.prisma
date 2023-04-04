@@ -88,12 +88,14 @@ model Idea {
   id String @id @default(cuid())
   title String
   description String
-  authorId String
+  difficulty String
+  timeToComplete String
   createdAt DateTime @default(now())
+  authorId String?
   updatedAt DateTime @updatedAt
 
   components ComponentsOnIdeas[]
-  author User @relation(fields: [authorId], references: [id])
+  author User? @relation(fields: [authorId], references: [id])
 
   @@index([authorId])
 }
