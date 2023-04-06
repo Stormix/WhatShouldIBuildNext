@@ -1,26 +1,26 @@
 import { useIdeasStore } from '@/hooks/store/ideas';
-import type { Idea } from '@prisma/client';
+import type { GeneratedIdea } from '@/types/ideas';
 import { cl } from 'dynamic-class-list';
+import dynamic from 'next/dynamic';
 import type { FC } from 'react';
 import Card from '../atoms/Card';
 
 interface IdeaCardProps {
   className?: string;
-  idea: Idea;
+  idea: GeneratedIdea;
 }
 
 const IdeaCard: FC<IdeaCardProps> = ({ className }) => {
   const idea = useIdeasStore((state) => state.generatedIdea);
   return (
-    <Card className={cl(className, 'w-full')}>
-      <h3 className="text-start font-bold opacity-70">Idea</h3>
-      <h2 className="py-4 text-3xl font-semibold">{idea?.title ?? 'No idea generated yet'}</h2>
-      <div className="mt-4 flex gap-8">
-        <div className=" w-2/3 text-justify">
-          <h4 className=" font-semibold">Description</h4>
+    <Card className={cl(className ?? 'w-full')}>
+      <h3 className="text-start font-bold opacity-70">Idea #{idea?.number}</h3>
+      <div className="flex items-center gap-8">
+        <div className="flex-grow text-justify">
+          <h2 className="py-4 text-3xl font-semibold">{idea?.title ?? 'No idea generated yet'}</h2>
           <p>{idea?.description ?? 'No idea generated yet'}</p>
         </div>
-        <div className="flex w-1/3 flex-col items-start gap-4 text-start">
+        <div className="flex w-1/4 flex-col items-start gap-4 text-start">
           <div>
             <h4 className="font-semibold">Difficulty</h4>
             <p>{idea?.difficulty ?? ''}</p>
@@ -31,7 +31,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ className }) => {
           </div>
           <div>
             <h4 className="font-semibold">Keywords</h4>
-            <p>Web, T3, UwU</p>
+            <p>{idea?.keywords?.map((key) => `#${key}`)?.join(', ')}</p>
           </div>
         </div>
       </div>
@@ -39,4 +39,4 @@ const IdeaCard: FC<IdeaCardProps> = ({ className }) => {
   );
 };
 
-export default IdeaCard;
+export default dynamic(() => Promise.resolve(IdeaCard), { ssr: false });

@@ -1,19 +1,20 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-import { generateSchema } from '@/validation/generate';
-import { z } from 'zod';
-import IdeasService from '../services/ideas';
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+import CreditsService from '@/server/services/credits';
+import { generateInputSchema, generateOutputSchema } from '@/validation/generate';
+import { TRPCClientError } from '@trpc/client';
+import IdeasService from '../../services/ideas';
+
+interface OpenAIIdea {
+  idea: string;
+  difficulty: string;
+  timeToComplete: string;
+  description: string;
+}
 
 export const ideasRouter = createTRPCRouter({
-  generate: publicProcedure
-    .input(generateSchema)
-    .output(
-      z.object({
-        idea: z.string(),
-        difficulty: z.string(),
-        timeToComplete: z.string(),
-        description: z.string()
-      })
-    )
+  generate: protectedProcedure
+    .input(generateInputSchema)
+    .output(generateOutputSchema)
     .mutation(async ({ input, ctx }) => {
       try {
         const components = await ctx.prisma.component.findMany({
@@ -26,39 +27,72 @@ export const ideasRouter = createTRPCRouter({
 
         const prompt = IdeasService.componentsToPrompt(components);
 
-        const response = await ctx.openai.createCompletion({
-          model: 'text-davinci-003',
-          prompt: `Given the following prompt: ${prompt}, can you generate a development project Idea?
-        Make sure to return only one idea and it must include all the requirements in the original prompt.
-        Also make sure to proofread the idea and provide a description for it. You can use the following template in JSON:\n\n
-        \`\`\`
-        {
-          "idea": "Your idea here",
-          "description": "Your description here"
-          "timeToComplete": "",
-          "difficulty": ""
+        if (!prompt) {
+          throw new TRPCClientError('Invalid input');
         }
-        \`\`\`\n\n
-        You can also use the following difficulty levels: easy, medium, hard, and advanced.
-        The time to complete should be in hours.
-        \n\n
-        `,
-          temperature: 0,
-          max_tokens: 250
+
+        const DRY_RUN = true;
+        let rawResponse = '';
+
+        if (DRY_RUN) {
+          rawResponse = JSON.stringify({
+            idea: 'Your idea here',
+            description: 'Your description here',
+            timeToComplete: '1 hour',
+            difficulty: 'easy'
+          });
+        } else {
+          rawResponse = await IdeasService.generate(prompt);
+        }
+
+        await CreditsService.deduct(ctx.session.user.id, 1);
+
+        const openAIResponse = JSON.parse(rawResponse) satisfies OpenAIIdea;
+        const ideasCount = await ctx.prisma.idea.count({});
+
+        const idea = await ctx.prisma.idea.create({
+          data: {
+            title: openAIResponse.idea,
+            description: openAIResponse.description,
+            timeToComplete: openAIResponse.timeToComplete,
+            difficulty: openAIResponse.difficulty,
+            components: {
+              create: Object.values(input).map((id) => ({
+                component: {
+                  connect: {
+                    id
+                  }
+                }
+              }))
+            },
+            authorId: ctx.session.user.id,
+            number: ideasCount + 1
+          },
+          include: {
+            author: true
+          }
         });
 
-        const rawResponse = response.data.choices[0]?.text;
-
-        if (!rawResponse) {
-          throw new Error('No response from OpenAI');
-        }
-
-        const responseJSON = JSON.parse(rawResponse);
-
-        return responseJSON;
+        return {
+          id: idea.id,
+          title: idea.title,
+          difficulty: idea.difficulty,
+          timeToComplete: idea.timeToComplete,
+          description: idea.description,
+          number: idea.number,
+          createdAt: idea.createdAt,
+          updatedAt: idea.updatedAt,
+          author: {
+            id: idea.author.id,
+            name: idea.author.name!
+          },
+          keywords: components.map((component) => component.value)
+        };
       } catch (error) {
-        console.error((error as Error).message);
-        return null;
+        console.error('Failed to generate idea:', error);
+        // Refund credits
+        await CreditsService.reward(ctx.session.user.id, 1);
+        throw new TRPCClientError('Something went wrong: ' + (error as Error).message);
       }
     })
 });

@@ -1,4 +1,4 @@
-# HackIdeas - a project idea generator
+# What should I build next? - a project idea generator
 
 It's a simple web app that generates project ideas for you. It's a great way to get started with a new project, or to get unstuck if you're having trouble coming up with ideas.
 

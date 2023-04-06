@@ -6,6 +6,7 @@ import { type AppType } from 'next/app';
 import { api } from '@/utils/api';
 
 import MainLayout from '@/components/layouts/main';
+import { Toaster } from 'react-hot-toast';
 import '@/styles/globals.css';
 
 const App: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
@@ -13,6 +14,7 @@ const App: AppType<{ session: Session | null }> = ({ Component, pageProps: { ses
     <SessionProvider session={session}>
       <ThemeProvider attribute="class" storageKey="nightwind-mode" defaultTheme="dark">
         <MainLayout>
+          <Toaster position="bottom-center" reverseOrder={false} />
           <Component {...pageProps} />
         </MainLayout>
       </ThemeProvider>

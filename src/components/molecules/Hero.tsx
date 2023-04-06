@@ -5,7 +5,7 @@ import IdeaCard from './IdeaCard';
 const Hero = () => {
   const { generatedIdea } = useIdeasStore();
   return (
-    <div className="relative isolate flex h-screen px-6 pt-14 lg:px-8">
+    <div className="relative isolate flex flex-col justify-center px-6 pt-14 lg:px-8">
       <div className="h-128 absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 transform-gpu">
         <div className="absolute -left-4 top-0 h-72 w-72 animate-blob rounded-full opacity-70 mix-blend-multiply blur-xl filter bg-purple-300"></div>
         <div className="animation-delay-2000 absolute -right-4 top-0 h-72 w-72 animate-blob rounded-full opacity-70 mix-blend-multiply blur-xl filter bg-yellow-300"></div>
@@ -23,17 +23,17 @@ const Hero = () => {
           }}
         />
       </div>
-      <div className="z-10 m-auto flex flex-col items-center justify-center py-32 text-center sm:py-48 lg:py-56">
+      <div className="z-10 flex flex-col items-center justify-center py-32 text-center sm:py-48 lg:py-56">
         <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
           Generate your next project idea now
         </h1>
         <p className="mb-8 mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-          Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-          fugiat veniam occaecat fugiat aliqua.
+          The ultimate resource for developers looking for new project ideas. With thousands of unique combinations to
+          choose from, you&apos;re sure to find something that inspires you.
         </p>
         <div className="flex w-10/12 flex-col items-center gap-12">
           <GenerateForm />
-          {generatedIdea && <IdeaCard idea={generatedIdea} />}
+          {generatedIdea && <IdeaCard idea={generatedIdea} className="w-8/12" />}
         </div>
       </div>
       <div

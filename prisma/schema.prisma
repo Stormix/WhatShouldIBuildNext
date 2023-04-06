@@ -47,6 +47,7 @@ model User {
     accounts      Account[]
     sessions      Session[]
     ideas         Idea[]
+    credits       Int       @default(0)
 }
 
 model VerificationToken {
@@ -73,29 +74,32 @@ model Component {
 }
 
 model ComponentsOnIdeas {
-  id String @id @default(cuid())
   ideaId String
-  componentId String
-
   idea Idea @relation(fields: [ideaId], references: [id])
+
+  componentId String
   component Component @relation(fields: [componentId], references: [id])
+
 
   @@index([ideaId])
   @@index([componentId])
+  @@id([ideaId, componentId])
 }
 
 model Idea {
   id String @id @default(cuid())
   title String
-  description String
+  description String @db.LongText
   difficulty String
   timeToComplete String
   createdAt DateTime @default(now())
-  authorId String?
+  authorId String
   updatedAt DateTime @updatedAt
+  number Int
 
   components ComponentsOnIdeas[]
-  author User? @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id])
 
   @@index([authorId])
+  @@index([number])
 }

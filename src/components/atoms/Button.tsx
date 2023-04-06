@@ -41,7 +41,7 @@ const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
         {...(onClick && { onClick })}
       >
         {!loading && icon}
-        {loading && <Loading className="h-4 w-4" />}
+        {loading && <Loading className="h-3 w-3" />}
         {children}
       </button>
     );

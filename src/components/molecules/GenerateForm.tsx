@@ -6,27 +6,32 @@ import { useForm } from 'react-hook-form';
 
 import { useIdeasStore } from '@/hooks/store/ideas';
 import type { GenerateSchema } from '@/validation/generate';
-import { generateSchema } from '@/validation/generate';
+import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import Button, { ButtonVariant } from '../atoms/Button';
 import Card from '../atoms/Card';
 import Loading from '../atoms/Loading';
 import Select from '../atoms/Select';
 
 const GenerateForm = () => {
+  const { data: session, update } = useSession();
   const { setGeneratedIdea } = useIdeasStore();
   const { data, isLoading } = api.components.getAll.useQuery();
   const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation({
     onSuccess: (data) => {
-      setGeneratedIdea({
-        id: '',
-        title: data.idea,
-        description: data.description,
-        createdAt: new Date(),
-        difficulty: data.difficulty,
-        timeToComplete: data.timeToComplete,
-        authorId: '',
-        updatedAt: new Date()
+      update({
+        user: {
+          ...session?.user,
+          credits: Math.max(session?.user.credits ?? 0 - 1, 0)
+        }
+      });
+      setGeneratedIdea(data);
+    },
+    onError: (error) => {
+      toast.error(error.message, {
+        position: 'bottom-center'
       });
     }
   });
@@ -55,10 +60,21 @@ const GenerateForm = () => {
     setValue,
     formState: { errors }
   } = useForm<GenerateSchema>({
-    resolver: zodResolver(generateSchema)
+    resolver: zodResolver(generateInputSchema)
   });
 
   const onSubmit = (data: GenerateSchema) => {
+    if (!session?.user) {
+      return toast.error('Please login first!', {
+        position: 'bottom-center'
+      });
+    }
+    const credits = session.user.credits;
+    if (credits < 1) {
+      return toast.error('You do not have enough credits! Come back tomorrow!', {
+        position: 'bottom-center'
+      });
+    }
     if (!generating) generate(data);
   };
 
@@ -74,7 +90,8 @@ const GenerateForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card className="w-full items-center">
+      <Card className="flex w-full flex-col  gap-4">
+        <p className="text-left font-semibold text-black">1. Pick your components or randomize:</p>
         {components && (
           <div className="flex flex-row items-center justify-evenly gap-2">
             <span>Build</span>
@@ -94,9 +111,10 @@ const GenerateForm = () => {
             <Loading />
           </div>
         )}
-        <div className="flex flex-row items-center gap-4">
+        <p className="mt-4 text-left font-semibold text-black">2. Generate your idea:</p>
+        <div className="flex flex-row items-center justify-center  gap-4">
           <Button
-            className="group mt-8"
+            className="group"
             type="button"
             variant={ButtonVariant.Text}
             onClick={() => randomize()}
@@ -105,12 +123,12 @@ const GenerateForm = () => {
             Randomize
           </Button>
           <Button
-            className="group mt-8"
+            className="group"
             type="submit"
             loading={generating}
             icon={<SparklesIcon className="h-4 w-4 group-hover:animate-pulse" />}
           >
-            Generate a new idea
+            Generate
           </Button>
         </div>
       </Card>

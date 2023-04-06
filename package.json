@@ -1,5 +1,5 @@
 {
-  "name": "hack-ideas",
+  "name": "ideas",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,13 +27,14 @@
     "dynamic-class-list": "^2.0.2",
     "lodash": "^4.17.21",
     "next": "^13.2.4",
-    "next-auth": "4.20.1",
+    "next-auth": "^4.21.1",
     "next-themes": "^0.2.1",
     "nightwind": "^1.1.13",
     "openai": "^3.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
+    "react-hot-toast": "^2.4.0",
     "react-toggle-dark-mode": "^1.1.1",
     "superjson": "1.12.2",
     "zod": "^3.21.4",

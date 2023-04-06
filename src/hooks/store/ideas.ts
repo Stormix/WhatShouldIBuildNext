@@ -1,10 +1,10 @@
-import type { Idea } from '@prisma/client';
+import type { GeneratedIdea } from '@/types/ideas';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface IdeaStore {
-  generatedIdea: Idea | null;
-  setGeneratedIdea: (idea: Idea) => void;
+  generatedIdea: GeneratedIdea | null;
+  setGeneratedIdea: (idea: GeneratedIdea) => void;
 }
 
 export const useIdeasStore = create<IdeaStore>()(
@@ -12,7 +12,7 @@ export const useIdeasStore = create<IdeaStore>()(
     persist(
       (set) => ({
         generatedIdea: null,
-        setGeneratedIdea: (idea: Idea) => set({ generatedIdea: idea })
+        setGeneratedIdea: (idea) => set({ generatedIdea: idea })
       }),
       {
         name: 'idea-storage'

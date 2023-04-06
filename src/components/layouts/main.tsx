@@ -2,22 +2,23 @@ import Head from 'next/head';
 import { type PropsWithChildren } from 'react';
 import Footer from '../molecules/Footer';
 import Header from '../molecules/Header';
+import { APP_NAME } from '../../config/app';
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <div className="flex h-full w-full flex-col items-center">
         <Head>
-          <title>HackIdeas - Generate Random Development Project Ideas</title>
+          <title>{APP_NAME} - Generate Random Development Project Ideas</title>
           <meta
             name="description"
-            content="HackIdeas is a free tool that generates random development project ideas based on your preferences. Use it to kickstart your next hackathon project or find inspiration for your next side project."
+            content={`${APP_NAME} is a free tool that generates random development project ideas based on your preferences. Use it to kickstart your next hackathon project or find inspiration for your next side project.`}
           />
         </Head>
 
-        <main className="flex h-screen w-full flex-col">
+        <main className="flex w-full flex-col">
           <Header />
-          {children}
+          <div className="flex flex-grow flex-col">{children}</div>
           <Footer />
         </main>
       </div>

@@ -1,3 +1,4 @@
+import { APP_NAME } from '@/config/app';
 import { Popover, Transition } from '@headlessui/react';
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid';
 import {
@@ -31,8 +32,8 @@ const Header: FC = () => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Hack Ideas</span>
-            <span className="text-bold">Hack Ideas</span>
+            <span className="sr-only">{APP_NAME}</span>
+            <span className="text-bold">{APP_NAME}</span>
             {/* TODO: logo */}
           </a>
         </div>
