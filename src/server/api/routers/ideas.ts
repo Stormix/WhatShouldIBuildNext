@@ -66,7 +66,7 @@ export const ideasRouter = createTRPCRouter({
 
         await CreditsService.deduct(ctx.session.user.id, 1);
 
-        const openAIResponse = JSON.parse(rawResponse) satisfies OpenAIIdea;
+        const openAIResponse = JSON.parse(rawResponse) as OpenAIIdea;
         const ideasCount = await ctx.prisma.idea.count({});
 
         const idea = await ctx.prisma.idea.create({

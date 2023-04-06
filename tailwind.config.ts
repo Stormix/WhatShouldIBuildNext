@@ -1,6 +1,7 @@
 import { type Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
 
+/** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
@@ -10,9 +11,19 @@ export default {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans]
       },
       animation: {
-        blob: 'blob 7s infinite'
+        blob: 'blob 7s infinite',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out'
       },
       keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' }
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' }
+        },
         blob: {
           '0%': {
             transform: 'translate(0px, 0px) scale(1)'
@@ -30,5 +41,5 @@ export default {
       }
     }
   },
-  plugins: [require('nightwind'), require('@headlessui/tailwindcss')]
+  plugins: [require('nightwind'), require('@headlessui/tailwindcss'), require('tailwindcss-animate')]
 } satisfies Config;

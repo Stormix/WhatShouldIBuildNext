@@ -1,4 +1,4 @@
-import { cl } from 'dynamic-class-list';
+import { cn } from '@/utils/styles';
 import type { FC } from 'react';
 
 const Loading: FC<{ className?: string }> = ({ className }) => {
@@ -6,7 +6,7 @@ const Loading: FC<{ className?: string }> = ({ className }) => {
     <div role="status">
       <svg
         aria-hidden="true"
-        className={cl('mr-2 h-8 w-8 animate-spin fill-white text-gray-200 dark:text-gray-600', className)}
+        className={cn('mr-2 h-3 w-3 animate-spin fill-white text-white', className)}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

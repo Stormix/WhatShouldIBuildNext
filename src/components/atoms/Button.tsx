@@ -1,40 +1,51 @@
-import { cl } from 'dynamic-class-list';
+import { cn } from '@/utils/styles';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 import type { FC, ForwardedRef } from 'react';
 import { forwardRef } from 'react';
 import Loading from './Loading';
 
-export enum ButtonVariant {
-  Primary = 'primary',
-  Outline = 'outline',
-  Text = 'text'
-}
+const buttonVariants = cva(
+  'inline-flex gap-2 items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800',
+  {
+    variants: {
+      variant: {
+        default: 'bg-white text-black hover:bg-black hover:text-white focus-visible:outline-white  shadow-sm',
+        destructive: 'bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-600',
+        outline: 'bg-transparent border border-slate-200 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-100',
+        subtle: 'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100',
+        ghost:
+          'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-100 dark:hover:text-slate-100 data-[state=open]:bg-transparent dark:data-[state=open]:bg-transparent',
+        link: 'text-black hover:text-white focus-visible:outline-white'
+      },
+      size: {
+        default: 'h-10 py-2 px-4',
+        sm: 'h-9 px-2 rounded-md',
+        lg: 'h-11 px-8 rounded-md'
+      }
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default'
+    }
+  }
+);
 
-interface ButtonProps {
+interface ButtonProps extends VariantProps<typeof buttonVariants> {
   onClick?: () => void;
   loading?: boolean;
   className?: string;
   children: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
   ref?: ForwardedRef<HTMLButtonElement>;
-  variant?: ButtonVariant;
   icon?: React.ReactNode;
 }
 
-const variantClasses = {
-  [ButtonVariant.Primary]: 'bg-white text-black hover:bg-black hover:text-white focus-visible:outline-white  shadow-sm',
-  [ButtonVariant.Outline]: 'bg-transparent text-white hover:bg-white hover:text-black focus-visible:outline-white',
-  [ButtonVariant.Text]: ' text-black hover:text-white focus-visible:outline-white'
-};
-
 const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, loading, onClick, className, type, variant, icon }, ref) => {
+  ({ children, loading, onClick, className, type, variant, icon, size }, ref) => {
     return (
       <button
-        className={cl(
-          'flex max-w-fit items-center gap-2 rounded-md px-3.5 py-2.5 font-semibold transition-colors duration-150 ease-in',
-          className,
-          variantClasses[variant ?? ButtonVariant.Primary]
-        )}
+        className={cn(buttonVariants({ variant, size, className }))}
         disabled={loading}
         type={type ?? 'button'}
         ref={ref}

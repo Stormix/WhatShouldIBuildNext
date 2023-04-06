@@ -1,13 +1,5 @@
 import { z } from 'zod';
 
-export interface GenerateSchema {
-  what: string;
-  for: string;
-  using: string;
-  on: string;
-  but: string;
-}
-
 export const generateInputSchema = z.object({
   what: z.string(),
   for: z.string(),

@@ -4,8 +4,6 @@ import { openai } from '../api/openai';
 
 export default class IdeasService {
   static componentsToPrompt(components: Component[]) {
-    // const template = ``;
-
     const componentsMap = components.reduce((acc, component) => {
       acc[component.type] = component;
       return acc;

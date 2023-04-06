@@ -5,20 +5,23 @@ import { ComponentType } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 
 import { useIdeasStore } from '@/hooks/store/ideas';
-import type { GenerateSchema } from '@/validation/generate';
 import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import Button, { ButtonVariant } from '../atoms/Button';
+import type { z } from 'zod';
+import Button from '../atoms/Button';
 import Card from '../atoms/Card';
 import Loading from '../atoms/Loading';
-import Select from '../atoms/Select';
+import ComponentSelect from './WrappedSelect';
+
+type FormValues = z.TypeOf<typeof generateInputSchema>;
 
 const GenerateForm = () => {
   const { data: session, update } = useSession();
   const { setGeneratedIdea } = useIdeasStore();
   const { data, isLoading } = api.components.getAll.useQuery();
+
   const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation({
     onSuccess: (data) => {
       update({
@@ -54,16 +57,11 @@ const GenerateForm = () => {
     );
   };
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors }
-  } = useForm<GenerateSchema>({
+  const { handleSubmit, setValue, control } = useForm<FormValues>({
     resolver: zodResolver(generateInputSchema)
   });
 
-  const onSubmit = (data: GenerateSchema) => {
+  const onSubmit = (data: FormValues) => {
     if (!session?.user) {
       return toast.error('Please login first!', {
         position: 'bottom-center'
@@ -84,7 +82,7 @@ const GenerateForm = () => {
         components[componentType as ComponentType][
           Math.floor(Math.random() * components[componentType as ComponentType].length)
         ];
-      setValue(componentType.toLowerCase() as keyof GenerateSchema, component!.id);
+      setValue(componentType.toLowerCase() as keyof FormValues, component!.id);
     }
   };
 
@@ -95,15 +93,40 @@ const GenerateForm = () => {
         {components && (
           <div className="flex flex-row items-center justify-evenly gap-2">
             <span>Build</span>
-            <Select options={toOptions(components[ComponentType.What])} errors={errors.what} {...register('what')} />
+            <ComponentSelect<FormValues>
+              options={toOptions(components[ComponentType.What])}
+              placeholder="Select a value.."
+              control={control}
+              name="what"
+            />
             <span>for</span>
-            <Select options={toOptions(components[ComponentType.For])} errors={errors.for} {...register('for')} />
+            <ComponentSelect<FormValues>
+              options={toOptions(components[ComponentType.For])}
+              placeholder="Select a value.."
+              control={control}
+              name="for"
+            />
             <span>using</span>
-            <Select options={toOptions(components[ComponentType.Using])} errors={errors.using} {...register('using')} />
+            <ComponentSelect<FormValues>
+              options={toOptions(components[ComponentType.Using])}
+              placeholder="Select a value.."
+              control={control}
+              name="using"
+            />
             <span>and on</span>
-            <Select options={toOptions(components[ComponentType.On])} errors={errors.on} {...register('on')} />
+            <ComponentSelect<FormValues>
+              options={toOptions(components[ComponentType.On])}
+              placeholder="Select a value.."
+              control={control}
+              name="on"
+            />
             <span>but</span>
-            <Select options={toOptions(components[ComponentType.But])} errors={errors.but} {...register('but')} />
+            <ComponentSelect<FormValues>
+              options={toOptions(components[ComponentType.But])}
+              placeholder="Select a value.."
+              control={control}
+              name="but"
+            />
           </div>
         )}
         {isLoading && (
@@ -116,7 +139,7 @@ const GenerateForm = () => {
           <Button
             className="group"
             type="button"
-            variant={ButtonVariant.Text}
+            variant={'link'}
             onClick={() => randomize()}
             icon={<ArrowPathIcon className="h-4 w-4 group-hover:animate-spin" />}
           >
