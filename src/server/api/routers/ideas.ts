@@ -2,6 +2,9 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
 import CreditsService from '@/server/services/credits';
 import { generateInputSchema, generateOutputSchema } from '@/validation/generate';
 import { TRPCClientError } from '@trpc/client';
+import { TRPCError } from '@trpc/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import IdeasService from '../../services/ideas';
 
 interface OpenAIIdea {
@@ -10,6 +13,12 @@ interface OpenAIIdea {
   timeToComplete: string;
   description: string;
 }
+
+const rateLimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, '1 m'),
+  analytics: true
+});
 
 export const ideasRouter = createTRPCRouter({
   generate: protectedProcedure
@@ -29,6 +38,16 @@ export const ideasRouter = createTRPCRouter({
 
         if (!prompt) {
           throw new TRPCClientError('Invalid input');
+        }
+
+        const { success, reset } = await rateLimit.limit(ctx.session.user.id);
+        const duration = Math.ceil((reset - Date.now()) / 1000);
+
+        if (!success) {
+          throw new TRPCError({
+            code: 'TOO_MANY_REQUESTS',
+            message: `You have exceeded the rate limit. Please try again in ${duration}s.`
+          });
         }
 
         const DRY_RUN = true;
