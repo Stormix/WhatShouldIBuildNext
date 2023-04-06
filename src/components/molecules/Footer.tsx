@@ -1,4 +1,5 @@
 import { APP_NAME } from '@/config/app';
+import Logo from '../atoms/Logo';
 
 const Footer = () => {
   return (
@@ -7,7 +8,7 @@ const Footer = () => {
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <a href="https://ideas.stormix.dev" className="flex items-center">
-              <span className="self-center whitespace-nowrap text-2xl font-semibold ">{APP_NAME}</span>
+              <Logo />
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 sm:gap-6">

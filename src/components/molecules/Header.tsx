@@ -12,6 +12,7 @@ import type { FC } from 'react';
 import { Fragment } from 'react';
 import DarkModeSwitch from '../atoms/DarkModeSwitch';
 import UserProfile from '../atoms/UserProfile';
+import Logo from '../atoms/Logo';
 
 const products = [
   { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#', icon: ChartPieIcon },
@@ -32,9 +33,7 @@ const Header: FC = () => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">{APP_NAME}</span>
-            <span className="text-bold">{APP_NAME}</span>
-            {/* TODO: logo */}
+            <Logo />
           </a>
         </div>
         <Popover.Group className="hidden lg:flex lg:gap-x-12">

@@ -91,7 +91,7 @@ const GenerateForm = () => {
       <Card className="flex w-full flex-col  gap-4">
         <p className="text-left font-semibold text-black">1. Pick your components or randomize:</p>
         {components && (
-          <div className="flex flex-row items-center justify-evenly gap-2">
+          <div className="flex flex-row items-center justify-center gap-2">
             <span>Build</span>
             <ComponentSelect<FormValues>
               options={toOptions(components[ComponentType.What])}
@@ -138,18 +138,20 @@ const GenerateForm = () => {
         <div className="flex flex-row items-center justify-center  gap-4">
           <Button
             className="group"
+            size="lg"
             type="button"
-            variant={'link'}
+            variant="link"
             onClick={() => randomize()}
-            icon={<ArrowPathIcon className="h-4 w-4 group-hover:animate-spin" />}
+            icon={<ArrowPathIcon className="h-6 w-6 group-hover:animate-spin" />}
           >
             Randomize
           </Button>
           <Button
             className="group"
+            size="lg"
             type="submit"
             loading={generating}
-            icon={<SparklesIcon className="h-4 w-4 group-hover:animate-pulse" />}
+            icon={<SparklesIcon className="h-6 w-6 group-hover:animate-pulse" />}
           >
             Generate
           </Button>

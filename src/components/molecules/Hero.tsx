@@ -24,7 +24,7 @@ const Hero = () => {
             }}
           />
         </div>
-        <div className="z-10 flex flex-col items-center justify-center py-32 text-center sm:py-48 lg:py-56">
+        <div className="z-10 mt-56 flex flex-col items-center justify-center text-center">
           <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
             Generate your next project idea now
           </h1>

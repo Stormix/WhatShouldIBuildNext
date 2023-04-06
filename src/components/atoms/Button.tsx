@@ -6,7 +6,7 @@ import { forwardRef } from 'react';
 import Loading from './Loading';
 
 const buttonVariants = cva(
-  'inline-flex gap-2 items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800',
+  'inline-flex gap-2 items-center justify-center rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 dark:hover:bg-slate-800 dark:hover:text-slate-100 disabled:opacity-50 dark:focus:ring-slate-400 disabled:pointer-events-none dark:focus:ring-offset-slate-900 data-[state=open]:bg-slate-100 dark:data-[state=open]:bg-slate-800',
   {
     variants: {
       variant: {
@@ -19,9 +19,9 @@ const buttonVariants = cva(
         link: 'text-black hover:text-white focus-visible:outline-white'
       },
       size: {
-        default: 'h-10 py-2 px-4',
-        sm: 'h-9 px-2 rounded-md',
-        lg: 'h-11 px-8 rounded-md'
+        default: 'h-10 py-2 px-4 font-medium',
+        sm: 'h-9 px-2 rounded-md text-sm font-medium',
+        lg: 'h-14 px-12 text-lg rounded-md font-bold'
       }
     },
     defaultVariants: {
@@ -52,7 +52,7 @@ const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
         {...(onClick && { onClick })}
       >
         {!loading && icon}
-        {loading && <Loading className="h-3 w-3" />}
+        {loading && <Loading className="h-4 w-4" />}
         {children}
       </button>
     );

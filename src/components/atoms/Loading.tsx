@@ -6,7 +6,7 @@ const Loading: FC<{ className?: string }> = ({ className }) => {
     <div role="status">
       <svg
         aria-hidden="true"
-        className={cn('mr-2 h-3 w-3 animate-spin fill-white text-white', className)}
+        className={cn('mr-2 h-3 w-3 animate-spin ', className)}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
