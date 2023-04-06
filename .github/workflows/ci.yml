@@ -4,13 +4,14 @@ on: [push, pull_request]
 
 env:
   CI: true
-  DATABASE_URL: "dummy"
+  DATABASE_URL: "https://example.com"
   NEXTAUTH_SECRET: "dummy"
-  NEXTAUTH_URL: "dummy"
+  NEXTAUTH_URL: "https://example.com"
   DISCORD_CLIENT_ID: "dummy"
   DISCORD_CLIENT_SECRET: "dummy"
   GITHUB_ID: "dummy"
   GITHUB_SECRET: "dummy"
+  OPENAI_KEY: "dummy"
 
 
 jobs:
