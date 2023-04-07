@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <a href="https://ideas.stormix.dev" className="flex items-center">
-              <Logo />
+              <Logo footer />
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 sm:gap-6">

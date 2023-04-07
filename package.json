@@ -50,6 +50,7 @@
     "zustand": "^4.3.7"
   },
   "devDependencies": {
+    "@svgr/webpack": "^7.0.0",
     "@total-typescript/ts-reset": "^0.4.2",
     "@types/eslint": "^8.21.3",
     "@types/lodash": "^4.14.192",
