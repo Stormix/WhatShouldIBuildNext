@@ -73,6 +73,19 @@ export const ideasRouter = createTRPCRouter({
         nextCursor = nextItem!.id;
       }
 
+      const savedUserIdeas = await ctx.prisma.user.findUnique({
+        where: {
+          id: ctx.session?.user.id
+        },
+        select: {
+          savedIdeas: {
+            select: {
+              id: true
+            }
+          }
+        }
+      });
+
       return {
         ideas: ideas.map((idea) => ({
           id: idea.id,
@@ -87,7 +100,8 @@ export const ideasRouter = createTRPCRouter({
             id: idea.author.id,
             name: idea.author.name!
           },
-          keywords: idea.components.map((component) => component.component.value)
+          keywords: idea.components.map((component) => component.component.value),
+          saved: savedUserIdeas?.savedIdeas.some((savedIdea) => savedIdea.id === idea.id) ?? false
         })),
         nextCursor
       };
@@ -177,7 +191,8 @@ export const ideasRouter = createTRPCRouter({
             id: idea.author.id,
             name: idea.author.name!
           },
-          keywords: components.map((component) => component.value)
+          keywords: components.map((component) => component.value),
+          saved: false
         };
       } catch (error) {
         console.error('Failed to generate idea:', error);
@@ -185,5 +200,44 @@ export const ideasRouter = createTRPCRouter({
         await CreditsService.reward(ctx.session.user.id, 1);
         throw new TRPCClientError('Something went wrong: ' + (error as Error).message);
       }
+    }),
+  save: protectedProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const idea = await ctx.prisma.idea.findUnique({
+        where: {
+          id: input.id
+        }
+      });
+
+      if (!idea) {
+        throw new TRPCClientError('Invalid idea');
+      }
+
+      // if (idea.authorId === ctx.session.user.id) {
+      //   throw new TRPCClientError('You cannot save your own idea');
+      // }
+
+      const user = await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id
+        },
+        data: {
+          savedIdeas: {
+            connect: {
+              id: idea.id
+            }
+          }
+        },
+        include: {
+          savedIdeas: true
+        }
+      });
+
+      return user.savedIdeas;
     })
 });

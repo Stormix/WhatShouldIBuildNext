@@ -87,7 +87,7 @@ const GenerateForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <Card className="flex w-full flex-col  gap-4">
         <p className="text-left font-semibold text-black">1. Pick your components or randomize:</p>
         {components && (

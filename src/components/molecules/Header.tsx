@@ -17,7 +17,10 @@ const Header: FC = () => {
           <Link className="text-sm font-semibold leading-6 text-gray-900" href={'archive'}>
             Ideas Archive
           </Link>
-          <Link className="text-sm font-semibold leading-6 text-gray-900" href={'contact'}>
+          <Link className="text-sm font-semibold leading-6 text-gray-900" href={'/'}>
+            Leaderboard
+          </Link>
+          <Link className="text-sm font-semibold leading-6 text-gray-900" href={'/'}>
             Contact
           </Link>
         </div>

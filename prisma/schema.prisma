@@ -47,8 +47,9 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    ideas         Idea[]
+    ideas         Idea[]   @relation("author")
     credits       Int       @default(0)
+    savedIdeas    Idea[]   @relation("savedIdeas")
 }
 
 model VerificationToken {
@@ -99,7 +100,8 @@ model Idea {
   number Int
 
   components ComponentsOnIdeas[]
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], name: "author")
+  savedBy User[] @relation("savedIdeas")
 
   @@index([authorId])
   @@index([number])

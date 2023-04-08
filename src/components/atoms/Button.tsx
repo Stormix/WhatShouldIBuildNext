@@ -39,14 +39,15 @@ interface ButtonProps extends VariantProps<typeof buttonVariants> {
   type?: 'button' | 'submit' | 'reset';
   ref?: ForwardedRef<HTMLButtonElement>;
   icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, loading, onClick, className, type, variant, icon, size }, ref) => {
+  ({ children, loading, onClick, className, type, variant, icon, size, disabled }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
-        disabled={loading}
+        disabled={loading || disabled}
         type={type ?? 'button'}
         ref={ref}
         {...(onClick && { onClick })}

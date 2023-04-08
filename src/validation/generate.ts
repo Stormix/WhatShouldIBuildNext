@@ -21,5 +21,6 @@ export const generateOutputSchema = z.object({
     id: z.string(),
     name: z.string()
   }),
-  keywords: z.array(z.string())
+  keywords: z.array(z.string()),
+  saved: z.boolean()
 });

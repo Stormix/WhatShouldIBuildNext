@@ -31,7 +31,7 @@ const Hero: FC<HeroProps> = ({ children }) => {
         </div>
         <div className="z-10 mt-56 flex flex-col items-center justify-center text-center">
           {!children && (
-            <div className="flex w-10/12 flex-col items-center gap-12">
+            <div className="flex w-6/12 flex-col items-center gap-12">
               <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Generate your next project idea now
               </h1>
@@ -40,7 +40,7 @@ const Hero: FC<HeroProps> = ({ children }) => {
                 combinations to choose from, you&apos;re sure to find something that inspires you.
               </p>
               <GenerateForm />
-              {generatedIdea && <IdeaCard idea={generatedIdea} />}
+              {generatedIdea && <IdeaCard idea={generatedIdea} className="w-full" />}
             </div>
           )}
           {children}
