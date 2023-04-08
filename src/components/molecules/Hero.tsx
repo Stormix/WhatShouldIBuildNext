@@ -1,8 +1,13 @@
 import { useIdeasStore } from '@/hooks/store/ideas';
+import type { FC } from 'react';
 import GenerateForm from './GenerateForm';
 import IdeaCard from './IdeaCard';
 
-const Hero = () => {
+interface HeroProps {
+  children?: React.ReactNode;
+}
+
+const Hero: FC<HeroProps> = ({ children }) => {
   const { generatedIdea } = useIdeasStore();
   return (
     <>
@@ -25,17 +30,20 @@ const Hero = () => {
           />
         </div>
         <div className="z-10 mt-56 flex flex-col items-center justify-center text-center">
-          <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Generate your next project idea now
-          </h1>
-          <p className="mb-8 mt-6 max-w-2xl text-lg leading-8 text-gray-600">
-            The ultimate resource for developers looking for new project ideas. With thousands of unique combinations to
-            choose from, you&apos;re sure to find something that inspires you.
-          </p>
-          <div className="flex w-10/12 flex-col items-center gap-12">
-            <GenerateForm />
-            {generatedIdea && <IdeaCard idea={generatedIdea} className="w-8/12" />}
-          </div>
+          {!children && (
+            <div className="flex w-10/12 flex-col items-center gap-12">
+              <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Generate your next project idea now
+              </h1>
+              <p className="mb-8 mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+                The ultimate resource for developers looking for new project ideas. With thousands of unique
+                combinations to choose from, you&apos;re sure to find something that inspires you.
+              </p>
+              <GenerateForm />
+              {generatedIdea && <IdeaCard idea={generatedIdea} />}
+            </div>
+          )}
+          {children}
         </div>
         <div
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"

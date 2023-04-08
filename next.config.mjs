@@ -34,7 +34,8 @@ const config = {
   swcMinify: true,
   env: {
     NEXT_PUBLIC_COMMIT_HASH: commitHash,
-    NEXT_PUBLIC_COMMIT_TIMESTAMP: timestamp
+    NEXT_PUBLIC_COMMIT_TIMESTAMP: timestamp,
+    SENTRY_IGNORE_API_RESOLUTION_ERROR: '1'
   },
   images: {
     domains: ['cdn.discordapp.com', 'avatars.githubusercontent.com']
@@ -73,6 +74,9 @@ const config = {
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-hidden-source-map
     // for more information.
     hideSourceMaps: true
+  },
+  api: {
+    externalResolver: true
   }
 };
 

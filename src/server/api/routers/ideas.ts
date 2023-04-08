@@ -1,10 +1,11 @@
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc';
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc';
 import CreditsService from '@/server/services/credits';
 import { generateInputSchema, generateOutputSchema } from '@/validation/generate';
 import { TRPCClientError } from '@trpc/client';
 import { TRPCError } from '@trpc/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+import { z } from 'zod';
 import IdeasService from '../../services/ideas';
 
 interface OpenAIIdea {
@@ -21,6 +22,77 @@ const rateLimit = new Ratelimit({
 });
 
 export const ideasRouter = createTRPCRouter({
+  getAll: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+        filter: z.string().nullish()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+      const ideas = await ctx.prisma.idea.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        include: {
+          author: true,
+          components: {
+            include: {
+              component: true
+            }
+          }
+        },
+        cursor: !!cursor ? { id: cursor } : undefined,
+        orderBy: {
+          id: 'desc'
+        },
+        ...(input.filter
+          ? {
+              where: {
+                OR: [
+                  {
+                    description: {
+                      search: input.filter
+                    }
+                  },
+                  {
+                    title: {
+                      search: input.filter
+                    }
+                  }
+                ]
+              }
+            }
+          : {})
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (ideas.length > limit) {
+        const nextItem = ideas.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      return {
+        ideas: ideas.map((idea) => ({
+          id: idea.id,
+          title: idea.title,
+          difficulty: idea.difficulty,
+          timeToComplete: idea.timeToComplete,
+          description: idea.description,
+          number: idea.number,
+          createdAt: idea.createdAt,
+          updatedAt: idea.updatedAt,
+          author: {
+            id: idea.author.id,
+            name: idea.author.name!
+          },
+          keywords: idea.components.map((component) => component.component.value)
+        })),
+        nextCursor
+      };
+    }),
+
   generate: protectedProcedure
     .input(generateInputSchema)
     .output(generateOutputSchema)

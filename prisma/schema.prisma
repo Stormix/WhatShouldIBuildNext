@@ -6,6 +6,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 model Account {
@@ -102,4 +103,9 @@ model Idea {
 
   @@index([authorId])
   @@index([number])
+
+
+  @@fulltext([title])
+  @@fulltext([description])
+  @@fulltext([description, title])
 }

@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="z-20">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
-          <div className="mb-6 md:mb-0">
+          <div className="mb-12 ">
             <a href="https://ideas.stormix.dev" className="flex items-center">
               <Logo footer />
             </a>

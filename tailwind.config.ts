@@ -13,9 +13,14 @@ export default {
       animation: {
         blob: 'blob 7s infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        rotateColor: 'rotateColor 5s linear infinite'
       },
       keyframes: {
+        rotateColor: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' }
+        },
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' }
