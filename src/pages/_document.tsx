@@ -5,7 +5,8 @@ export default function Document() {
     <Html>
       <Head>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+        <meta property="og:image" content="https://whatshouldibuildnext.com/api/og" />
       </Head>
       <body>
         <Main />
