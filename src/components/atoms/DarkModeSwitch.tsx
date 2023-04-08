@@ -2,7 +2,7 @@ import { useTheme } from 'next-themes';
 import nightwind from 'nightwind/helper';
 import { DarkModeSwitch as DarkModeSwitchIcon } from 'react-toggle-dark-mode';
 
-enum Theme {
+export enum Theme {
   Light = 'light',
   Dark = 'dark'
 }

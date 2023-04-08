@@ -1,5 +1,5 @@
 import type { GeneratedIdea } from '@/types/ideas';
-import type { Component, ComponentsOnIdeas, Idea, User } from '@prisma/client';
+import type { Component, ComponentsOnIdeas, Idea, Rating, User } from '@prisma/client';
 
 export const ideaToIdeaDto = (
   idea: Idea & {
@@ -7,9 +7,15 @@ export const ideaToIdeaDto = (
     components: (ComponentsOnIdeas & {
       component: Component;
     })[];
+    ratings: Rating[];
   },
-  saved?: boolean
+  saved?: boolean,
+  rated?: boolean
 ): GeneratedIdea => {
+  const averageRating = idea.ratings?.length
+    ? idea.ratings.reduce((acc, rating) => acc + rating.rating.toNumber(), 0) / idea.ratings.length
+    : null;
+
   return {
     id: idea.id,
     title: idea.title,
@@ -24,6 +30,8 @@ export const ideaToIdeaDto = (
     author: {
       id: idea.authorId,
       name: idea.author?.name ?? ''
-    }
+    },
+    rating: averageRating,
+    ratedByThisUser: rated ?? false
   };
 };

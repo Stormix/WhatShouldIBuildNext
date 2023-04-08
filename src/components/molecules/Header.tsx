@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { FC } from 'react';
 import DarkModeSwitch from '../atoms/DarkModeSwitch';
 import Logo from '../atoms/Logo';
-import UserProfile from '../atoms/UserProfile';
+import UserDropdown from '../atoms/UserDropdown';
 
 const Header: FC = () => {
   return (
@@ -25,7 +25,7 @@ const Header: FC = () => {
           </Link>
         </div>
         <div className=" flex items-center  justify-end gap-4">
-          <UserProfile />
+          <UserDropdown />
           <DarkModeSwitch />
         </div>
       </nav>

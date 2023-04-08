@@ -30,7 +30,7 @@ const GenerateForm = () => {
           credits: Math.max(session?.user.credits ?? 0 - 1, 0)
         }
       });
-      setGeneratedIdea(data);
+      setGeneratedIdea(data.id);
     },
     onError: (error) => {
       toast.error(error.message, {
@@ -73,7 +73,10 @@ const GenerateForm = () => {
         position: 'bottom-center'
       });
     }
-    if (!generating) generate(data);
+    if (!generating) {
+      setGeneratedIdea(null);
+      generate(data);
+    }
   };
 
   const randomize = () => {
@@ -88,7 +91,7 @@ const GenerateForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-      <Card className="flex w-full flex-col  gap-4">
+      <Card className="flex w-full flex-col gap-4">
         <p className="text-left font-semibold text-black">1. Pick your components or randomize:</p>
         {components && (
           <div className="flex flex-row items-center justify-center gap-2">
@@ -130,8 +133,8 @@ const GenerateForm = () => {
           </div>
         )}
         {isLoading && (
-          <div>
-            <Loading />
+          <div className="flex w-full items-center justify-center">
+            <Loading className="h-8 w-8" />
           </div>
         )}
         <p className="mt-4 text-left font-semibold text-black">2. Generate your idea:</p>
@@ -142,7 +145,7 @@ const GenerateForm = () => {
             type="button"
             variant="link"
             onClick={() => randomize()}
-            icon={<ArrowPathIcon className="h-6 w-6 group-hover:animate-spin" />}
+            icon={<ArrowPathIcon className="h-5 w-5 group-hover:animate-spin" />}
           >
             Randomize
           </Button>
@@ -151,7 +154,7 @@ const GenerateForm = () => {
             size="lg"
             type="submit"
             loading={generating}
-            icon={<SparklesIcon className="h-6 w-6 group-hover:animate-pulse" />}
+            icon={<SparklesIcon className="h-5 w-5 group-hover:animate-pulse" />}
           >
             Generate
           </Button>

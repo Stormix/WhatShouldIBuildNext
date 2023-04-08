@@ -4,17 +4,33 @@ import { BookmarkIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from 'dynamic-class-list';
 import dynamic from 'next/dynamic';
 import type { FC } from 'react';
+import { toast } from 'react-hot-toast';
 import Button from '../atoms/Button';
 import Card from '../atoms/Card';
+import Rating from '../atoms/Rating';
 
 interface IdeaCardProps {
   className?: string;
   idea: GeneratedIdea;
   noSave?: boolean;
+  loading?: boolean;
 }
 
-const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave }) => {
+const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
+  const context = api.useContext();
   const { mutate: saveIdea, isLoading: saving, isSuccess: saved } = api.ideas.save.useMutation();
+  const { mutate: rate, isLoading: rating } = api.ideas.rate.useMutation({
+    onSuccess: () => {
+      context.ideas.getAll.invalidate();
+      context.ideas.getOne.invalidate({
+        id: idea?.id
+      });
+      toast.success('Rated !');
+    },
+    onError: (e) => {
+      toast.error(e.message);
+    }
+  });
 
   const alreadySaved = idea?.saved || saved || false;
 
@@ -28,20 +44,32 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave }) => {
       <div className="absolute -left-[50%] -top-[60%] hidden h-[500%] w-[285%] animate-rotateColor rounded bg-gradient-to-r from-black via-gray-700/40 to-white shadow-xl group-hover:block"></div>
 
       <Card
+        loading={loading}
         className={cl(className ?? 'w-full', 'block hover:bg-opacity-100')}
         footer={
-          <div className="flex justify-end">
+          <div className="flex items-center justify-between">
             {!noSave && (
-              <Button
-                type="button"
-                variant="link"
-                onClick={() => saveIdea({ id: idea?.id })}
-                icon={alreadySaved ? <CheckIcon className="h-5 w-5" /> : <BookmarkIcon className="h-6 w-6" />}
-                disabled={alreadySaved || saving}
-                loading={saving}
-              >
-                {alreadySaved ? 'Saved' : 'Save'}
-              </Button>
+              <>
+                <Rating
+                  loading={rating}
+                  disabled={rating}
+                  rating={idea.rating}
+                  readonly={idea.ratedByThisUser}
+                  onValueChange={(rating) => {
+                    rate({ id: idea?.id, rating });
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="link"
+                  onClick={() => saveIdea({ id: idea?.id })}
+                  icon={alreadySaved ? <CheckIcon className="h-5 w-5" /> : <BookmarkIcon className="h-6 w-6" />}
+                  disabled={alreadySaved || saving}
+                  loading={saving}
+                >
+                  {alreadySaved ? 'Saved' : 'Save'}
+                </Button>
+              </>
             )}
           </div>
         }

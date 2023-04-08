@@ -1,3 +1,4 @@
+import { formatNumber } from '@/utils/format';
 import { Menu, Transition } from '@headlessui/react';
 import { cl } from 'dynamic-class-list';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -5,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Fragment, useEffect } from 'react';
 
-const UserProfile = () => {
+const UserDropdown = () => {
   const { data: session, update } = useSession();
 
   // Polling the session every 1 hour
@@ -32,7 +33,7 @@ const UserProfile = () => {
     <Menu as="div" className="relative ml-3">
       <div className="flex flex-row items-center gap-4">
         <span>
-          {session.user.name} (credits: <b>{session.user.credits ?? 0}</b>)
+          {session.user.name} (credits: <b>{formatNumber(session.user.credits ?? 0)}</b>)
         </span>
         <Menu.Button className="flex rounded-full text-sm bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
           <span className="sr-only">Open user menu</span>
@@ -89,4 +90,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default UserDropdown;

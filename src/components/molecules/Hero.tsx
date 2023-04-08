@@ -1,4 +1,5 @@
 import { useIdeasStore } from '@/hooks/store/ideas';
+import { api } from '@/utils/api';
 import type { FC } from 'react';
 import GenerateForm from './GenerateForm';
 import IdeaCard from './IdeaCard';
@@ -8,7 +9,10 @@ interface HeroProps {
 }
 
 const Hero: FC<HeroProps> = ({ children }) => {
-  const { generatedIdea } = useIdeasStore();
+  const { generatedIdeaId } = useIdeasStore();
+  const { data: idea, isLoading: loading } = api.ideas.getOne.useQuery({
+    id: generatedIdeaId as string
+  });
   return (
     <>
       <div className="relative isolate flex flex-col justify-center px-6 pt-14 lg:px-8">
@@ -40,7 +44,7 @@ const Hero: FC<HeroProps> = ({ children }) => {
                 combinations to choose from, you&apos;re sure to find something that inspires you.
               </p>
               <GenerateForm />
-              {generatedIdea && <IdeaCard idea={generatedIdea} className="w-full" />}
+              {idea && <IdeaCard loading={loading} idea={idea} className="w-full" />}
             </div>
           )}
           {children}

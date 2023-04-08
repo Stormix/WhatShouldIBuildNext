@@ -22,5 +22,7 @@ export const generateOutputSchema = z.object({
     name: z.string()
   }),
   keywords: z.array(z.string()),
-  saved: z.boolean()
+  saved: z.boolean(),
+  rating: z.number().nullish(),
+  ratedByThisUser: z.boolean()
 });

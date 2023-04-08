@@ -1,18 +1,17 @@
-import type { GeneratedIdea } from '@/types/ideas';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
 interface IdeaStore {
-  generatedIdea: GeneratedIdea | null;
-  setGeneratedIdea: (idea: GeneratedIdea) => void;
+  generatedIdeaId: string | null;
+  setGeneratedIdea: (id: string | null) => void;
 }
 
 export const useIdeasStore = create<IdeaStore>()(
   devtools(
     persist(
       (set) => ({
-        generatedIdea: null,
-        setGeneratedIdea: (idea) => set({ generatedIdea: idea })
+        generatedIdeaId: null,
+        setGeneratedIdea: (id) => set({ generatedIdeaId: id })
       }),
       {
         name: 'idea-storage'

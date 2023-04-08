@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc';
 import CreditsService from '@/server/services/credits';
+import { ideaToIdeaDto } from '@/utils/ideas';
 import { generateInputSchema, generateOutputSchema } from '@/validation/generate';
 import { TRPCClientError } from '@trpc/client';
 import { TRPCError } from '@trpc/server';
@@ -41,7 +42,8 @@ export const ideasRouter = createTRPCRouter({
             include: {
               component: true
             }
-          }
+          },
+          ratings: true
         },
         cursor: !!cursor ? { id: cursor } : undefined,
         orderBy: {
@@ -87,24 +89,70 @@ export const ideasRouter = createTRPCRouter({
       });
 
       return {
-        ideas: ideas.map((idea) => ({
-          id: idea.id,
-          title: idea.title,
-          difficulty: idea.difficulty,
-          timeToComplete: idea.timeToComplete,
-          description: idea.description,
-          number: idea.number,
-          createdAt: idea.createdAt,
-          updatedAt: idea.updatedAt,
-          author: {
-            id: idea.author.id,
-            name: idea.author.name!
-          },
-          keywords: idea.components.map((component) => component.component.value),
-          saved: savedUserIdeas?.savedIdeas.some((savedIdea) => savedIdea.id === idea.id) ?? false
-        })),
+        ideas: ideas.map((idea) =>
+          ideaToIdeaDto(
+            idea,
+            savedUserIdeas?.savedIdeas.some((savedIdea) => savedIdea.id === idea.id) ?? false,
+            idea.ratings.some((rating) => rating.userId === ctx.session?.user.id)
+          )
+        ),
         nextCursor
       };
+    }),
+
+  getOne: publicProcedure
+
+    .input(
+      z.object({
+        id: z.string().nullish()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      if (!input.id) {
+        // skip
+        return null;
+      }
+
+      const idea = await ctx.prisma.idea.findUnique({
+        where: {
+          id: input.id
+        },
+        include: {
+          ratings: true,
+          components: {
+            include: {
+              component: true
+            }
+          },
+          author: true
+        }
+      });
+
+      if (!idea) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Idea not found'
+        });
+      }
+
+      const savedUserIdeas = await ctx.prisma.user.findUnique({
+        where: {
+          id: ctx.session?.user.id
+        },
+        select: {
+          savedIdeas: {
+            select: {
+              id: true
+            }
+          }
+        }
+      });
+
+      return ideaToIdeaDto(
+        idea,
+        savedUserIdeas?.savedIdeas.some((savedIdea) => savedIdea.id === idea.id) ?? false,
+        idea.ratings.some((rating) => rating.userId === ctx.session?.user.id)
+      );
     }),
 
   generate: protectedProcedure
@@ -174,26 +222,21 @@ export const ideasRouter = createTRPCRouter({
             number: ideasCount + 1
           },
           include: {
-            author: true
+            author: true,
+            components: {
+              include: {
+                component: true
+              }
+            },
+            ratings: true
           }
         });
 
-        return {
-          id: idea.id,
-          title: idea.title,
-          difficulty: idea.difficulty,
-          timeToComplete: idea.timeToComplete,
-          description: idea.description,
-          number: idea.number,
-          createdAt: idea.createdAt,
-          updatedAt: idea.updatedAt,
-          author: {
-            id: idea.author.id,
-            name: idea.author.name!
-          },
-          keywords: components.map((component) => component.value),
-          saved: false
-        };
+        return ideaToIdeaDto(
+          idea,
+          false,
+          idea.ratings.some((rating) => rating.userId === ctx.session?.user.id)
+        );
       } catch (error) {
         console.error('Failed to generate idea:', error);
         // Refund credits
@@ -201,6 +244,7 @@ export const ideasRouter = createTRPCRouter({
         throw new TRPCClientError('Something went wrong: ' + (error as Error).message);
       }
     }),
+
   save: protectedProcedure
     .input(
       z.object({
@@ -239,5 +283,41 @@ export const ideasRouter = createTRPCRouter({
       });
 
       return user.savedIdeas;
+    }),
+
+  rate: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        rating: z.number().min(1).max(5)
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const idea = await ctx.prisma.idea.findUnique({
+        where: {
+          id: input.id
+        },
+        include: {
+          ratings: true
+        }
+      });
+
+      if (!idea) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Idea not found' });
+      }
+
+      const rating = idea.ratings.find((rating) => rating.userId === ctx.session.user.id);
+
+      if (rating) {
+        throw new TRPCClientError("You've already rated this idea");
+      }
+
+      await ctx.prisma.rating.create({
+        data: {
+          rating: input.rating,
+          ideaId: idea.id,
+          userId: ctx.session.user.id
+        }
+      });
     })
 });
