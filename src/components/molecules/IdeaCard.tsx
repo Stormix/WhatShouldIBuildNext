@@ -10,9 +10,10 @@ import Card from '../atoms/Card';
 interface IdeaCardProps {
   className?: string;
   idea: GeneratedIdea;
+  noSave?: boolean;
 }
 
-const IdeaCard: FC<IdeaCardProps> = ({ className, idea }) => {
+const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave }) => {
   const { mutate: saveIdea, isLoading: saving, isSuccess: saved } = api.ideas.save.useMutation();
 
   const alreadySaved = idea?.saved || saved || false;
@@ -30,16 +31,18 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea }) => {
         className={cl(className ?? 'w-full', 'block hover:bg-opacity-100')}
         footer={
           <div className="flex justify-end">
-            <Button
-              type="button"
-              variant="link"
-              onClick={() => saveIdea({ id: idea?.id })}
-              icon={alreadySaved ? <CheckIcon className="h-5 w-5" /> : <BookmarkIcon className="h-6 w-6" />}
-              disabled={alreadySaved || saving}
-              loading={saving}
-            >
-              {alreadySaved ? 'Saved' : 'Save'}
-            </Button>
+            {!noSave && (
+              <Button
+                type="button"
+                variant="link"
+                onClick={() => saveIdea({ id: idea?.id })}
+                icon={alreadySaved ? <CheckIcon className="h-5 w-5" /> : <BookmarkIcon className="h-6 w-6" />}
+                disabled={alreadySaved || saving}
+                loading={saving}
+              >
+                {alreadySaved ? 'Saved' : 'Save'}
+              </Button>
+            )}
           </div>
         }
       >

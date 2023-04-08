@@ -2,6 +2,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { cl } from 'dynamic-class-list';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Fragment, useEffect } from 'react';
 
 const UserProfile = () => {
@@ -56,9 +57,12 @@ const UserProfile = () => {
         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md py-1 shadow-lg ring-1 ring-black ring-opacity-5 bg-white focus:outline-none">
           <Menu.Item>
             {({ active }) => (
-              <a href="#" className={cl(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm')}>
+              <Link
+                href={`/profile/${session.user.id}`}
+                className={cl(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm')}
+              >
                 Your Profile
-              </a>
+              </Link>
             )}
           </Menu.Item>
           <Menu.Item>

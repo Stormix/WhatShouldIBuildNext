@@ -1,5 +1,7 @@
 import { env } from '@/env.mjs';
 import { prisma } from '@/server/db';
+import type { GeneratedIdea } from '@/types/ideas';
+import { ideaToIdeaDto } from '@/utils/ideas';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { type GetServerSidePropsContext } from 'next';
 import { getServerSession, type DefaultSession, type NextAuthOptions } from 'next-auth';
@@ -18,6 +20,8 @@ declare module 'next-auth' {
     user: {
       id: string;
       credits: number;
+      savedIdeas: GeneratedIdea[];
+      ideas: GeneratedIdea[];
     } & DefaultSession['user'];
   }
 }
@@ -33,7 +37,44 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = user.id;
         session.user.credits = await CreditsService.balance(user.id);
+        session.user.savedIdeas = (
+          await prisma.idea.findMany({
+            take: 3,
+            where: {
+              savedBy: {
+                some: {
+                  id: user.id
+                }
+              }
+            },
+            include: {
+              author: true,
+              components: {
+                include: {
+                  component: true
+                }
+              }
+            }
+          })
+        ).map((idea) => ideaToIdeaDto(idea, true));
       }
+      session.user.ideas = (
+        await prisma.idea.findMany({
+          take: 3,
+          where: {
+            authorId: user.id
+          },
+          include: {
+            author: true,
+            components: {
+              include: {
+                component: true
+              }
+            }
+          }
+        })
+      ).map((idea) => ideaToIdeaDto(idea, false));
+
       return session;
     }
   },
