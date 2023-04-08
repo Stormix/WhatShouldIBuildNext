@@ -2,6 +2,7 @@ import type { GeneratedIdea } from '@/types/ideas';
 import { api } from '@/utils/api';
 import { BookmarkIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from 'dynamic-class-list';
+import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import type { FC } from 'react';
 import { toast } from 'react-hot-toast';
@@ -17,17 +18,23 @@ interface IdeaCardProps {
 }
 
 const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
+  const { update } = useSession();
   const context = api.useContext();
   const { mutate: saveIdea, isLoading: saving, isSuccess: saved } = api.ideas.save.useMutation();
+  const invalidate = () => {
+    context.ideas.getAll.invalidate();
+    context.ideas.getOne.invalidate({
+      id: idea?.id
+    });
+    update();
+  };
   const { mutate: rate, isLoading: rating } = api.ideas.rate.useMutation({
     onSuccess: () => {
-      context.ideas.getAll.invalidate();
-      context.ideas.getOne.invalidate({
-        id: idea?.id
-      });
+      invalidate();
       toast.success('Rated !');
     },
     onError: (e) => {
+      invalidate();
       toast.error(e.message);
     }
   });
@@ -58,6 +65,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
                   onValueChange={(rating) => {
                     rate({ id: idea?.id, rating });
                   }}
+                  ratings={idea.ratingsCount ?? 0}
                 />
                 <Button
                   type="button"

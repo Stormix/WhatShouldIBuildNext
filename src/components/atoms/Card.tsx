@@ -13,7 +13,7 @@ const Card: FC<CardProps> = ({ children, className, footer, loading }) => {
   return (
     <div
       className={cn(
-        'flex flex-col rounded-md bg-opacity-50 bg-clip-padding px-8 pt-8 backdrop-blur-2xl backdrop-filter bg-white',
+        'flex flex-col rounded-md bg-opacity-50 bg-clip-padding px-8 pt-8 shadow backdrop-blur-2xl backdrop-filter bg-white',
         className,
         { 'pb-8': !footer }
       )}

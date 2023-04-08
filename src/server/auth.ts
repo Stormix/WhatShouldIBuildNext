@@ -53,10 +53,17 @@ export const authOptions: NextAuthOptions = {
                 include: {
                   component: true
                 }
-              }
+              },
+              ratings: true
             }
           })
-        ).map((idea) => ideaToIdeaDto(idea, true));
+        ).map((idea) =>
+          ideaToIdeaDto(
+            idea,
+            true,
+            idea.ratings.some((rating) => rating.userId === user.id)
+          )
+        );
       }
       session.user.ideas = (
         await prisma.idea.findMany({
@@ -70,10 +77,17 @@ export const authOptions: NextAuthOptions = {
               include: {
                 component: true
               }
-            }
+            },
+            ratings: true
           }
         })
-      ).map((idea) => ideaToIdeaDto(idea, false));
+      ).map((idea) =>
+        ideaToIdeaDto(
+          idea,
+          false,
+          idea.ratings.some((rating) => rating.userId === user.id)
+        )
+      );
 
       return session;
     }

@@ -24,5 +24,6 @@ export const generateOutputSchema = z.object({
   keywords: z.array(z.string()),
   saved: z.boolean(),
   rating: z.number().nullish(),
+  ratingsCount: z.number(),
   ratedByThisUser: z.boolean()
 });

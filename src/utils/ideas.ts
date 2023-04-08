@@ -32,6 +32,7 @@ export const ideaToIdeaDto = (
       name: idea.author?.name ?? ''
     },
     rating: averageRating,
-    ratedByThisUser: rated ?? false
+    ratedByThisUser: rated ?? false,
+    ratingsCount: idea.ratings?.length ?? 0
   };
 };

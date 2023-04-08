@@ -11,9 +11,10 @@ interface RatingProps {
   onValueChange?: (value: number) => void;
   disabled: boolean;
   loading: boolean;
+  ratings?: number;
 }
 
-const Rating: FC<RatingProps> = ({ rating, readonly, onValueChange, disabled, loading }) => {
+const Rating: FC<RatingProps> = ({ rating, readonly, disabled, loading, ratings, onValueChange }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { refs, context } = useFloating({
@@ -45,7 +46,12 @@ const Rating: FC<RatingProps> = ({ rating, readonly, onValueChange, disabled, lo
         })}
       </div>
       {loading && <p className="ml-2 text-sm font-medium opacity-50 text-black">Saving...</p>}
-      {rating && !loading && <p className="ml-2 text-sm font-medium opacity-50 text-black">{rating} out of 5</p>}
+      {rating && !loading && (
+        <>
+          <p>({ratings})</p>
+          <p className="ml-2 text-sm font-medium opacity-50 text-black">{rating} out of 5</p>
+        </>
+      )}
       {!rating && !loading && <p className="ml-2 text-sm font-medium opacity-50 text-black">No rating yet</p>}
     </div>
   );

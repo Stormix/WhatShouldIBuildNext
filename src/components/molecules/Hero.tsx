@@ -43,7 +43,7 @@ const Hero: FC<HeroProps> = ({ children }) => {
                 The ultimate resource for developers looking for new project ideas. With thousands of unique
                 combinations to choose from, you&apos;re sure to find something that inspires you.
               </p>
-              <GenerateForm />
+              <GenerateForm loading={loading} />
               {idea && <IdeaCard loading={loading} idea={idea} className="w-full" />}
             </div>
           )}

@@ -8,6 +8,7 @@ import { useIdeasStore } from '@/hooks/store/ideas';
 import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
+import type { FC } from 'react';
 import toast from 'react-hot-toast';
 import type { z } from 'zod';
 import Button from '../atoms/Button';
@@ -17,19 +18,14 @@ import ComponentSelect from './WrappedSelect';
 
 type FormValues = z.TypeOf<typeof generateInputSchema>;
 
-const GenerateForm = () => {
+const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   const { data: session, update } = useSession();
   const { setGeneratedIdea } = useIdeasStore();
   const { data, isLoading } = api.components.getAll.useQuery();
 
   const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation({
     onSuccess: (data) => {
-      update({
-        user: {
-          ...session?.user,
-          credits: Math.max(session?.user.credits ?? 0 - 1, 0)
-        }
-      });
+      update();
       setGeneratedIdea(data.id);
     },
     onError: (error) => {
@@ -153,7 +149,7 @@ const GenerateForm = () => {
             className="group"
             size="lg"
             type="submit"
-            loading={generating}
+            loading={generating || loading}
             icon={<SparklesIcon className="h-5 w-5 group-hover:animate-pulse" />}
           >
             Generate
