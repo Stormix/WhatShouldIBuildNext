@@ -2,8 +2,10 @@ import Button from '@/components/atoms/Button';
 import Card from '@/components/atoms/Card';
 import Hero from '@/components/molecules/Hero';
 import IdeaCard from '@/components/molecules/IdeaCard';
+import { APP_NAME } from '@/config/app';
 import { type NextPage } from 'next';
 import { useSession } from 'next-auth/react';
+import { NextSeo } from 'next-seo';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
@@ -25,6 +27,10 @@ const Profile: NextPage = () => {
 
   return (
     <>
+      <NextSeo
+        title={`${session?.user.name ?? 'Profile'} - Generate Random Development Project Ideas}`}
+        description={`${APP_NAME} is a free tool that generates random development project ideas based on your preferences. Use it to kickstart your next hackathon project or find inspiration for your next side project.`}
+      />
       <Hero>
         <Card className="container w-full">
           <div className="flex items-center gap-8">
