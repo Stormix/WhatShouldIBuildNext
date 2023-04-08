@@ -1,13 +1,14 @@
+import { api } from '@/utils/api';
+import { Analytics } from '@vercel/analytics/react';
 import { type Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'next-themes';
 import { type AppType } from 'next/app';
+import { Toaster } from 'react-hot-toast';
 
-import { api } from '@/utils/api';
+import '@/styles/globals.css';
 
 import MainLayout from '@/components/layouts/main';
-import { Toaster } from 'react-hot-toast';
-import '@/styles/globals.css';
 
 const App: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
@@ -16,6 +17,7 @@ const App: AppType<{ session: Session | null }> = ({ Component, pageProps: { ses
         <MainLayout>
           <Toaster position="bottom-center" reverseOrder={false} />
           <Component {...pageProps} />
+          <Analytics />
         </MainLayout>
       </ThemeProvider>
     </SessionProvider>
