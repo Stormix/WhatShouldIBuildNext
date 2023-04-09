@@ -47,5 +47,11 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.10.1"
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true,
+      "tag": true
+    }
   }
 }
