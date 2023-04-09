@@ -39,6 +39,11 @@ jobs:
           NEXTAUTH_URL: http://example.com
           DISCORD_CLIENT_ID: dummy
           DISCORD_CLIENT_SECRET: dummy
+          GITHUB_ID: dummy
+          GITHUB_SECRET: dummy
+          OPENAI_KEY: dummy
+          RECAPTCHA_SECRET_KEY: dummy
+          NEXT_PUBLIC_SITE_URL: http://example.com
         run: |
           curl -sL https://sentry.io/get-cli/ | SENTRY_CLI_VERSION="2.2.0" bash
           yarn build
