@@ -187,7 +187,7 @@ export const ideasRouter = createTRPCRouter({
 
          let rawResponse = '';
 
-        if (!env.ENABLE_OPENAI) {
+        if (!Boolean(env.ENABLE_OPENAI)) {
           rawResponse = JSON.stringify({
             idea: 'Your idea here',
             description: 'Your description here',

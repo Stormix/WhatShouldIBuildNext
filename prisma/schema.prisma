@@ -83,7 +83,7 @@ model ComponentsOnIdeas {
   idea   Idea   @relation(fields: [ideaId], references: [id])
 
   componentId String
-  component   Component @relation(fields: [componentId], references: [id])
+  component   Component @relation(fields: [componentId], references: [id], onDelete: Cascade)
 
   @@id([ideaId, componentId])
   @@index([ideaId])
