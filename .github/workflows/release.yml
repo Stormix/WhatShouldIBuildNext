@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.0'
+      - name: Install dependencies
+        run: yarn install
+      - name: "Version"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "Anas Mazouni (via GitHub Actions)"
+          git config user.email "madadj4@gmail.com"
+          git remote set-url origin "https://$GITHUB_ACTOR:$GH_TOKEN@github.com/$GITHUB_REPOSITORY.git"
+          git reset --hard
+
+          yarn release
+
+          git add .
+          git commit -m "chore(release): new version $VERSION [skip ci]"
+          git tag -a "v$VERSION" -m "chore(release): new version $VERSION [skip ci]"
+          git push --follow-tags
+      - name: Create release on sentry
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: stormix
+          SENTRY_PROJECT: whatshouldibuildnext
+          DATABASE_URL: http://example.com
+          NEXTAUTH_SECRET: dummy
+          NEXTAUTH_URL: http://example.com
+          DISCORD_CLIENT_ID: dummy
+          DISCORD_CLIENT_SECRET: dummy
+        run: |
+          curl -sL https://sentry.io/get-cli/ | SENTRY_CLI_VERSION="2.2.0" bash
+          yarn build
+
+          VERSION=$(sed 's/.*"version": "\(.*\)".*/\1/;t;d' ./package.json)
+
+          sentry-cli releases new "$VERSION"
+          sentry-cli releases set-commits "$VERSION" --auto
+          sentry-cli releases files "$VERSION" upload-sourcemaps ./dist --rewrite
+          sentry-cli releases finalize "$VERSION"

@@ -12,7 +12,8 @@
     "seed": "ts-node prisma/seed.ts",
     "postbuild": "next-sitemap",
     "release": "standard-version",
-    "release:dry-run": "standard-version --dry-run"
+    "release:dry-run": "standard-version --dry-run",
+    "genversion": "genversion --es6 --semi src/version.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.22.3",
@@ -77,6 +78,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "genversion": "^3.1.1",
     "postcss": "^8.4.21",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.6",
@@ -88,5 +90,11 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.10.1"
+  },
+  "standard-version": {
+    "skip": {
+      "commit": true,
+      "tag": true
+    }
   }
 }
