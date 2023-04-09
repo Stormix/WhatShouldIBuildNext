@@ -28,7 +28,8 @@ const server = z.object({
 const client = z.object({
   NEXT_PUBLIC_COMMIT_HASH: z.string().optional(),
   NEXT_PUBLIC_COMMIT_TIMESTAMP: z.string().optional(),
-  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional()
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional(),
+  NEXT_PUBLIC_SITE_URL: z.string().url()
 });
 
 /**
@@ -51,7 +52,8 @@ const processEnv = {
   OPENAI_KEY: process.env.OPENAI_KEY,
   SENTRY_DSN: process.env.SENTRY_DSN,
   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
-  RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY
+  RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL
 };
 
 // Don't touch the part below

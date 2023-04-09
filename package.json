@@ -9,7 +9,8 @@
     "lint": "next lint",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@floating-ui/react": "^0.22.3",
@@ -41,6 +42,7 @@
     "next": "^13.2.4",
     "next-auth": "^4.21.1",
     "next-seo": "^6.0.0",
+    "next-sitemap": "^4.0.7",
     "next-themes": "^0.2.1",
     "nightwind": "^1.1.13",
     "openai": "^3.2.1",

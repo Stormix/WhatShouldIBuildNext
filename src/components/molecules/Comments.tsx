@@ -68,7 +68,7 @@ const Comments: FC<{
     }
 
     if (!executeRecaptcha) {
-      console.log('Execute recaptcha not yet available');
+      console.warn('Execute recaptcha not yet available');
       return;
     }
 

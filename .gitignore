@@ -43,3 +43,6 @@ yarn-error.log*
 *.env
 # Sentry
 .sentryclirc
+
+public/robots.txt
+public/sitemap*.xml
