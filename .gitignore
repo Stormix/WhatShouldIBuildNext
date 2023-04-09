@@ -41,5 +41,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 *.env
-
+# Sentry
 .sentryclirc
+
+public/robots.txt
+public/sitemap*.xml

@@ -1,0 +1,32 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  CI: true
+  DATABASE_URL: "https://example.com"
+  NEXTAUTH_SECRET: "dummy"
+  NEXTAUTH_URL: "https://example.com"
+  DISCORD_CLIENT_ID: "dummy"
+  DISCORD_CLIENT_SECRET: "dummy"
+  GITHUB_ID: "dummy"
+  GITHUB_SECRET: "dummy"
+  OPENAI_KEY: "dummy"
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Lint
+        run: yarn lint

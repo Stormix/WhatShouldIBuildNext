@@ -1,20 +1,31 @@
-import { type AppType } from "next/app";
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
+import { api } from '@/utils/api';
+import { Analytics } from '@vercel/analytics/react';
+import { type Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from 'next-themes';
+import { type AppType } from 'next/app';
+import { Toaster } from 'react-hot-toast';
 
-import { api } from "@/utils/api";
+import '@/styles/globals.css';
 
-import "@/styles/globals.css";
+import MainLayout from '@/components/layouts/main';
+import { env } from '@/env.mjs';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
-const MyApp: AppType<{ session: Session | null }> = ({
-  Component,
-  pageProps: { session, ...pageProps },
-}) => {
+const App: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <GoogleReCaptchaProvider reCaptchaKey={env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY as string}>
+      <SessionProvider session={session}>
+        <ThemeProvider attribute="class" storageKey="nightwind-mode" defaultTheme="dark">
+          <MainLayout>
+            <Toaster position="bottom-center" reverseOrder={false} />
+            <Component {...pageProps} />
+            <Analytics />
+          </MainLayout>
+        </ThemeProvider>
+      </SessionProvider>
+    </GoogleReCaptchaProvider>
   );
 };
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(App);

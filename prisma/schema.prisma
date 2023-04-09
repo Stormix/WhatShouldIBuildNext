@@ -1,60 +1,153 @@
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-// Necessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? // @db.Text
+  refresh_token_expires_in Int?
+  access_token             String? // @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? // @db.Text
+  session_state            String?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  ideas         Idea[]    @relation("author")
+  credits       Int       @default(0)
+  savedIdeas    Idea[]    @relation("savedIdeas")
+
+  givenRatings Rating[]
+  comments     Comment[]
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
+}
+
+enum ComponentType {
+  What
+  For
+  Using
+  On
+  But
+}
+
+model Component {
+  id    String              @id @default(cuid())
+  type  ComponentType
+  value String              @unique
+  ideas ComponentsOnIdeas[]
+}
+
+model ComponentsOnIdeas {
+  ideaId String
+  idea   Idea   @relation(fields: [ideaId], references: [id])
+
+  componentId String
+  component   Component @relation(fields: [componentId], references: [id])
+
+  @@id([ideaId, componentId])
+  @@index([ideaId])
+  @@index([componentId])
+}
+
+model Idea {
+  id             String   @id @default(cuid())
+  title          String
+  description    String   @db.LongText
+  difficulty     String
+  timeToComplete String
+  createdAt      DateTime @default(now())
+  authorId       String
+  updatedAt      DateTime @updatedAt
+  number         Int
+
+  components ComponentsOnIdeas[]
+  author     User                @relation(fields: [authorId], references: [id], name: "author")
+  savedBy    User[]              @relation("savedIdeas")
+
+  ratings Rating[]
+
+  comments Comment[]
+
+  @@index([authorId])
+  @@index([number])
+  @@fulltext([title])
+  @@fulltext([description])
+  @@fulltext([description, title])
+}
+
+model Rating {
+  id     String  @id @default(cuid())
+  ideaId String
+  idea   Idea    @relation(fields: [ideaId], references: [id])
+  userId String
+  user   User    @relation(fields: [userId], references: [id])
+  rating Decimal
+
+  @@unique([ideaId, userId])
+  @@index([ideaId])
+  @@index([userId])
+}
+
+
+model Comment {
+  id   String @id @default(cuid())
+  content String
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  idea   Idea   @relation(fields: [ideaId], references: [id])
+  ideaId String
+
+  children Comment[] @relation("comment_children")
+  parent   Comment?  @relation("comment_children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([ideaId])
+  @@index([authorId])
 }
