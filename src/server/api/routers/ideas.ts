@@ -187,15 +187,15 @@ export const ideasRouter = createTRPCRouter({
 
          let rawResponse = '';
 
-        if (!Boolean(env.ENABLE_OPENAI)) {
+        if (env.ENABLE_OPENAI?.toLowerCase() === "true") {
+          rawResponse = await IdeasService.generate(prompt);
+        } else {
           rawResponse = JSON.stringify({
             idea: 'Your idea here',
             description: 'Your description here',
             timeToComplete: '1 hour',
             difficulty: 'easy'
           });
-        } else {
-          rawResponse = await IdeasService.generate(prompt);
         }
 
         await CreditsService.deduct(ctx.session.user.id, 1);
