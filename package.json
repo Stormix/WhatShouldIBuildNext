@@ -1,6 +1,6 @@
 {
   "name": "ideas",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "build": "next build",
@@ -10,7 +10,9 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "seed": "ts-node prisma/seed.ts",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "release": "standard-version",
+    "release:dry-run": "standard-version --dry-run"
   },
   "dependencies": {
     "@floating-ui/react": "^0.22.3",
@@ -79,6 +81,7 @@
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.6",
     "prisma": "^4.11.0",
+    "standard-version": "^9.5.0",
     "tailwindcss": "^3.3.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
