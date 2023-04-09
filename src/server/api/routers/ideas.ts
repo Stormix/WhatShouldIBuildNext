@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc';
 import CreditsService from '@/server/services/credits';
 import { ideaToIdeaDto } from '@/utils/ideas';
@@ -184,10 +185,9 @@ export const ideasRouter = createTRPCRouter({
           });
         }
 
-        const DRY_RUN = true;
-        let rawResponse = '';
+         let rawResponse = '';
 
-        if (DRY_RUN) {
+        if (!env.ENABLE_OPENAI) {
           rawResponse = JSON.stringify({
             idea: 'Your idea here',
             description: 'Your description here',

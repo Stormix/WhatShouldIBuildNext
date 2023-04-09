@@ -18,7 +18,8 @@ const server = z.object({
   GITHUB_SECRET: z.string(),
   OPENAI_KEY: z.string(),
   SENTRY_DSN: z.string().optional(),
-  RECAPTCHA_SECRET_KEY: z.string()
+  RECAPTCHA_SECRET_KEY: z.string(),
+  ENABLE_OPENAI: z.string().optional()
 });
 
 /**
@@ -53,7 +54,8 @@ const processEnv = {
   SENTRY_DSN: process.env.SENTRY_DSN,
   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
   RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
-  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL
+  NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+  ENABLE_OPENAI: process.env.ENABLE_OPENAI
 };
 
 // Don't touch the part below
