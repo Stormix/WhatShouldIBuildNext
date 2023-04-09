@@ -34,12 +34,15 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: stormix
           SENTRY_PROJECT: whatshouldibuildnext
-
+          DATABASE_URL: http://example.com
+          NEXTAUTH_SECRET: dummy
+          NEXTAUTH_URL: http://example.com
+          DISCORD_CLIENT_ID: dummy
+          DISCORD_CLIENT_SECRET: dummy
         run: |
           curl -sL https://sentry.io/get-cli/ | SENTRY_CLI_VERSION="2.2.0" bash
           yarn build
 
-          cd packages/bot
           VERSION=$(sed 's/.*"version": "\(.*\)".*/\1/;t;d' ./package.json)
 
           sentry-cli releases new "$VERSION"
