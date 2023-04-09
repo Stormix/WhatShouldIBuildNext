@@ -17,7 +17,8 @@ const server = z.object({
   GITHUB_ID: z.string(),
   GITHUB_SECRET: z.string(),
   OPENAI_KEY: z.string(),
-  SENTRY_DSN: z.string().optional()
+  SENTRY_DSN: z.string().optional(),
+  RECAPTCHA_SECRET_KEY: z.string()
 });
 
 /**
@@ -26,7 +27,8 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_COMMIT_HASH: z.string().optional(),
-  NEXT_PUBLIC_COMMIT_TIMESTAMP: z.string().optional()
+  NEXT_PUBLIC_COMMIT_TIMESTAMP: z.string().optional(),
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional()
 });
 
 /**
@@ -47,7 +49,9 @@ const processEnv = {
   NEXT_PUBLIC_COMMIT_HASH: process.env.NEXT_PUBLIC_COMMIT_HASH,
   NEXT_PUBLIC_COMMIT_TIMESTAMP: process.env.NEXT_PUBLIC_COMMIT_TIMESTAMP,
   OPENAI_KEY: process.env.OPENAI_KEY,
-  SENTRY_DSN: process.env.SENTRY_DSN
+  SENTRY_DSN: process.env.SENTRY_DSN,
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+  RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY
 };
 
 // Don't touch the part below

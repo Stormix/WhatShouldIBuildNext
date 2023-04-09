@@ -24,7 +24,7 @@ const Idea: NextPage = () => {
         title={`Project Idea: ${idea?.title}`}
         description={`${(idea?.description ?? '').substring(0, 160)}...`}
       />
-      <div className="container mx-auto flex h-[80vh] flex-col items-center justify-center">
+      <div className="container mx-auto flex flex-col items-center justify-center">
         <Hero noPadding empty>
           <div className="flex flex-grow flex-col"></div>
         </Hero>

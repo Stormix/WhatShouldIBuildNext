@@ -1,14 +1,17 @@
+import { api } from '@/utils/api';
 import { cn } from '@/utils/styles';
 import { ChatBubbleLeftEllipsisIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import type { Comment, User } from '@prisma/client';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import type { FC } from 'react';
+import { toast } from 'react-hot-toast';
 import Button from './Button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './DropdownMenu';
 
 export type FullComment = Comment & {
   author: User;
+  children?: FullComment[];
 };
 
 interface CommentThreadProps {
@@ -19,6 +22,17 @@ interface CommentThreadProps {
 }
 
 const CommentActions: FC<{ comment: FullComment }> = ({ comment }) => {
+  const context = api.useContext();
+  const { mutate: deleteComment } = api.comments.deleteComment.useMutation({
+    onSuccess: () => {
+      context.comments.getAll.invalidate();
+      toast.success('Comment deleted');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -26,16 +40,29 @@ const CommentActions: FC<{ comment: FullComment }> = ({ comment }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>Edit comment</DropdownMenuItem>
-        <DropdownMenuItem>Delete comment</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            deleteComment({
+              id: comment.id
+            })
+          }
+        >
+          Delete comment
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
 
 const CommentComponent: FC<CommentThreadProps> = ({ comment, comments, reply, level = 0 }) => {
-  const children = comments?.filter((c) => c.parentId === comment.id);
+  const children = comment.children;
   return (
-    <div className={cn('flex flex-col gap-2', `pl-${level * 4}`)}>
+    <div
+      className={cn('flex flex-col gap-2')}
+      style={{
+        marginLeft: `${level * 2}rem`
+      }}
+    >
       <div className="flex flex-row gap-2">
         <div className="flex flex-grow flex-row items-center gap-2">
           <Image
@@ -50,27 +77,30 @@ const CommentComponent: FC<CommentThreadProps> = ({ comment, comments, reply, le
         </div>
         <CommentActions comment={comment} />
       </div>
-      <p className="text-black">{comment.content}</p>
-      <div className="flex flex-row gap-2">
+      <div className="py-2 text-black">{comment.content}</div>
+      <div className="flex flex-row gap-2 border-b border-opacity-20 pb-2 border-black">
         <Button
           variant="text"
+          size="text"
           onClick={() => reply(comment.id)}
           icon={<ChatBubbleLeftEllipsisIcon className="h-3 w-3" />}
         >
           Reply
         </Button>
       </div>
-      <div className="flex flex-col gap-8">
-        {children?.map((child) => (
-          <CommentComponent
-            key={child.id}
-            comment={child}
-            level={level + 1}
-            comments={comments}
-            reply={(id) => reply(id)}
-          />
-        ))}
-      </div>
+      {(children?.length ?? 0) > 0 && (
+        <div className="mt-4 flex flex-col gap-8">
+          {children?.map((child) => (
+            <CommentComponent
+              key={child.id}
+              comment={child}
+              level={level + 1}
+              comments={comments}
+              reply={() => reply(comment.id)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
