@@ -49,5 +49,3 @@ jobs:
           sentry-cli releases set-commits "$VERSION" --auto
           sentry-cli releases files "$VERSION" upload-sourcemaps ./dist --rewrite
           sentry-cli releases finalize "$VERSION"
-      - name: Deploy
-        run: caprover deploy -h ${{ secrets.CAPROVER_SERVER_PROD }} -p ${{ secrets.CAPROVER_PASSWORD_PROD }} -a bot -b main
