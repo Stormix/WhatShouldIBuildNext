@@ -3,11 +3,11 @@ import Logo from '../atoms/Logo';
 
 const Footer = () => {
   return (
-    <footer className="z-20">
+    <footer className=" z-20 flex w-full">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-12 ">
-            <a href="https://ideas.stormix.dev" className="flex items-center">
+            <a href="https://whatshouldibuildnext.com/" className="flex items-center">
               <Logo footer />
             </a>
           </div>
@@ -16,7 +16,7 @@ const Footer = () => {
               <h2 className="mb-6 text-sm font-semibold uppercase text-gray-900 ">Follow us</h2>
               <ul className="font-medium text-gray-600 ">
                 <li className="mb-4">
-                  <a href="https://github.com/Stormix/hack-ideas" className="hover:underline ">
+                  <a href="https://github.com/Stormix/ideas" className="hover:underline ">
                     Github
                   </a>
                 </li>

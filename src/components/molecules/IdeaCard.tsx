@@ -4,6 +4,7 @@ import { BookmarkIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from 'dynamic-class-list';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { toast } from 'react-hot-toast';
 import Button from '../atoms/Button';
@@ -40,6 +41,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
   });
 
   const alreadySaved = idea?.saved || saved || false;
+  const router = useRouter();
 
   return (
     <div
@@ -47,6 +49,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
         'group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-md p-[1px]',
         className
       )}
+      onClick={() => router.push(`/idea/${idea?.id}`)}
     >
       <div className="absolute -left-[50%] -top-[60%] hidden h-[500%] w-[285%] animate-rotateColor rounded bg-gradient-to-r from-black via-gray-700/40 to-white shadow-xl group-hover:block"></div>
 

@@ -1,21 +1,28 @@
 import { useIdeasStore } from '@/hooks/store/ideas';
 import { api } from '@/utils/api';
+import { cn } from '@/utils/styles';
 import type { FC } from 'react';
 import GenerateForm from './GenerateForm';
 import IdeaCard from './IdeaCard';
 
 interface HeroProps {
   children?: React.ReactNode;
+  empty?: boolean;
+  noPadding?: boolean;
 }
 
-const Hero: FC<HeroProps> = ({ children }) => {
+const Hero: FC<HeroProps> = ({ children, empty, noPadding }) => {
   const { generatedIdeaId } = useIdeasStore();
   const { data: idea, isLoading: loading } = api.ideas.getOne.useQuery({
     id: generatedIdeaId as string
   });
   return (
     <>
-      <div className="relative isolate flex flex-col justify-center px-6 pt-14 lg:px-8">
+      <div
+        className={cn('relative isolate flex flex-col justify-center px-6  lg:px-8', {
+          'pt-14': !noPadding
+        })}
+      >
         <div className="h-128 absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 transform-gpu">
           <div className="absolute -left-4 top-0 h-72 w-72 animate-blob rounded-full opacity-70 mix-blend-multiply blur-xl filter bg-purple-300"></div>
           <div className="animation-delay-2000 absolute -right-4 top-0 h-72 w-72 animate-blob rounded-full opacity-70 mix-blend-multiply blur-xl filter bg-yellow-300"></div>
@@ -34,7 +41,7 @@ const Hero: FC<HeroProps> = ({ children }) => {
           />
         </div>
         <div className="z-10 mt-56 flex flex-col items-center justify-center text-center">
-          {!children && (
+          {!children && !empty && (
             <div className="flex w-6/12 flex-col items-center gap-12">
               <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Generate your next project idea now

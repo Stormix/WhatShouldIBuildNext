@@ -52,6 +52,7 @@ model User {
   savedIdeas    Idea[]    @relation("savedIdeas")
 
   givenRatings Rating[]
+  comments     Comment[]
 }
 
 model VerificationToken {
@@ -106,6 +107,8 @@ model Idea {
 
   ratings Rating[]
 
+  comments Comment[]
+
   @@index([authorId])
   @@index([number])
   @@fulltext([title])
@@ -124,4 +127,27 @@ model Rating {
   @@unique([ideaId, userId])
   @@index([ideaId])
   @@index([userId])
+}
+
+
+model Comment {
+  id   String @id @default(cuid())
+  content String
+
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+
+  idea   Idea   @relation(fields: [ideaId], references: [id])
+  ideaId String
+
+  children Comment[] @relation("comment_children")
+  parent   Comment?  @relation("comment_children", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  parentId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
+  @@index([ideaId])
+  @@index([authorId])
 }
