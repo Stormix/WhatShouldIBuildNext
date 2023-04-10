@@ -1,10 +1,10 @@
 /** @type {import("prettier").Config} */
 const config = {
-  plugins: [require.resolve("prettier-plugin-tailwindcss")],
+  plugins: [require.resolve('prettier-plugin-tailwindcss')],
   semi: true,
-  trailingComma: "none",
+  trailingComma: 'none',
   singleQuote: true,
-  printWidth: 120,
+  printWidth: 120
 };
 
 module.exports = config;

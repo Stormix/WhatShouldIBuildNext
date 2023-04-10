@@ -49,7 +49,17 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
         'group relative flex cursor-pointer items-center justify-center overflow-hidden rounded-md p-[1px]',
         className
       )}
-      onClick={() => router.push(`/idea/${idea?.id}`)}
+      onClick={(e) => {
+        const ignoredClass = 'ignore-click';
+        const target = e.target as HTMLElement;
+
+        // If tarrget or a parent has the class, ignore the click
+        if (target.classList.contains(ignoredClass) || target.closest(`.${ignoredClass}`)) {
+          return;
+        }
+
+        router.push(`/idea/${idea?.id}`);
+      }}
     >
       <div className="absolute -left-[50%] -top-[60%] hidden h-[500%] w-[285%] animate-rotateColor rounded bg-gradient-to-r from-black via-gray-700/40 to-white shadow-xl group-hover:block"></div>
 
@@ -69,8 +79,10 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
                     rate({ id: idea?.id, rating });
                   }}
                   ratings={idea.ratingsCount ?? 0}
+                  className="ignore-click"
                 />
                 <Button
+                  className="ignore-click"
                   type="button"
                   variant="link"
                   onClick={() => saveIdea({ id: idea?.id })}

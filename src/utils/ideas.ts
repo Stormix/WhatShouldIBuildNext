@@ -36,3 +36,9 @@ export const ideaToIdeaDto = (
     ratingsCount: idea.ratings?.length ?? 0
   };
 };
+
+export const toOptions = (components: Component[] | undefined) =>
+  components?.map((component) => ({
+    value: component.id,
+    label: component.value
+  })) ?? [];

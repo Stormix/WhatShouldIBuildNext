@@ -57,50 +57,51 @@ const CommentActions: FC<{ comment: FullComment }> = ({ comment }) => {
 const CommentComponent: FC<CommentThreadProps> = ({ comment, comments, reply, level = 0 }) => {
   const children = comment.children;
   return (
-    <div
-      className={cn('flex flex-col gap-2')}
-      style={{
-        marginLeft: `${level * 2}rem`
-      }}
-    >
-      <div className="flex flex-row gap-2">
-        <div className="flex flex-grow flex-row items-center gap-2">
+    <div className={cn('flex flex-col gap-2')}>
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-col justify-start">
           <Image
-            className="rounded-full"
+            className="flex rounded-full"
             src={comment.author.image as string}
             alt={comment.author.name as string}
             width={40}
             height={40}
           />
-          <p className="font-semibold text-black">{comment.author.name}</p>
-          <span className="opacity-70 text-black">{format(comment.createdAt, 'dd/MM/yyyy HH:mm:ss')}</span>
         </div>
-        <CommentActions comment={comment} />
-      </div>
-      <div className="py-2 text-black">{comment.content}</div>
-      <div className="flex flex-row gap-2 border-b border-opacity-20 pb-2 border-black">
-        <Button
-          variant="text"
-          size="text"
-          onClick={() => reply(comment.id)}
-          icon={<ChatBubbleLeftEllipsisIcon className="h-3 w-3" />}
-        >
-          Reply
-        </Button>
-      </div>
-      {(children?.length ?? 0) > 0 && (
-        <div className="mt-4 flex flex-col gap-8">
-          {children?.map((child) => (
-            <CommentComponent
-              key={child.id}
-              comment={child}
-              level={level + 1}
-              comments={comments}
-              reply={() => reply(comment.id)}
-            />
-          ))}
+        <div className="flex flex-grow flex-col">
+          <div className="flex flex-row gap-2">
+            <div className="flex flex-grow flex-row items-center gap-2">
+              <p className="font-semibold text-black">{comment.author.name}</p>
+              <span className="opacity-70 text-black">{format(comment.createdAt, 'dd/MM/yyyy HH:mm:ss')}</span>
+            </div>
+            <CommentActions comment={comment} />
+          </div>
+          <div className="py-2 text-black">{comment.content}</div>
+          <div className="flex flex-row gap-2 pb-2">
+            <Button
+              variant="text"
+              size="text"
+              onClick={() => reply(comment.id)}
+              icon={<ChatBubbleLeftEllipsisIcon className="h-3 w-3" />}
+            >
+              Reply
+            </Button>
+          </div>
+          {(children?.length ?? 0) > 0 && (
+            <div className="mt-4 flex flex-col gap-8">
+              {children?.map((child) => (
+                <CommentComponent
+                  key={child.id}
+                  comment={child}
+                  level={level + 1}
+                  comments={comments}
+                  reply={() => reply(comment.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

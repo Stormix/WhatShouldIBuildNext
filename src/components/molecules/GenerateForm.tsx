@@ -5,6 +5,7 @@ import { ComponentType } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 
 import { useIdeasStore } from '@/hooks/store/ideas';
+import { toOptions } from '@/utils/ideas';
 import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
@@ -44,15 +45,6 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
     return acc;
   }, {} as Record<ComponentType, Component[]>);
 
-  const toOptions = (components: Component[] | undefined) => {
-    return (
-      components?.map((component) => ({
-        value: component.id,
-        label: component.value
-      })) ?? []
-    );
-  };
-
   const { handleSubmit, setValue, control } = useForm<FormValues>({
     resolver: zodResolver(generateInputSchema)
   });
@@ -90,7 +82,7 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
       <Card className="flex w-full flex-col gap-4">
         <p className="text-left font-semibold text-black">1. Pick your components or randomize:</p>
         {components && (
-          <div className="flex flex-row items-center justify-center gap-2">
+          <div className="flex flex-row flex-wrap items-center justify-center gap-2">
             <span>Build</span>
             <ComponentSelect<FormValues>
               options={toOptions(components[ComponentType.What])}
