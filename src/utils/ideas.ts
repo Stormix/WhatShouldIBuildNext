@@ -13,7 +13,7 @@ export const ideaToIdeaDto = (
   rated?: boolean
 ): GeneratedIdea => {
   const averageRating = idea.ratings?.length
-    ? idea.ratings.reduce((acc, rating) => acc + rating.rating.toNumber(), 0) / idea.ratings.length
+    ? idea.ratings.reduce((acc, rating) => acc + rating.rating, 0) / idea.ratings.length
     : null;
 
   return {

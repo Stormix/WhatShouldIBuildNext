@@ -185,9 +185,9 @@ export const ideasRouter = createTRPCRouter({
           });
         }
 
-         let rawResponse = '';
+        let rawResponse = '';
 
-        if (env.ENABLE_OPENAI?.toLowerCase() === "true") {
+        if (env.ENABLE_OPENAI?.toLowerCase() === 'true') {
           rawResponse = await IdeasService.generate(prompt);
         } else {
           rawResponse = JSON.stringify({

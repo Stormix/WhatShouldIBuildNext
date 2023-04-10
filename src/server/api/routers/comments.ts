@@ -22,10 +22,14 @@ export const commentsRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
       z.object({
-        ideaId: z.string()
+        ideaId: z.string().nullish()
       })
     )
     .query(async ({ ctx, input }) => {
+      if (!input.ideaId) {
+        return;
+      }
+
       const comments = await ctx.prisma.comment.findMany({
         where: {
           ideaId: input.ideaId,

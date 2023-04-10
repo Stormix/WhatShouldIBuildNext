@@ -122,7 +122,7 @@ model Rating {
   idea   Idea    @relation(fields: [ideaId], references: [id])
   userId String
   user   User    @relation(fields: [userId], references: [id])
-  rating Decimal
+  rating Int
 
   @@unique([ideaId, userId])
   @@index([ideaId])

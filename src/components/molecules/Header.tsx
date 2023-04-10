@@ -9,9 +9,7 @@ const Header: FC = () => {
     <header className="absolute inset-x-0 top-0 z-50">
       <nav className="container mx-auto flex items-center justify-between p-6 lg:px-8" aria-label="Global">
         <div className="flex">
-          <a href="#" className="-m-1.5 p-1.5">
-            <Logo />
-          </a>
+          <Logo />
         </div>
         <div className="flex flex-grow  items-center  justify-center gap-8">
           <Link className="text-sm font-semibold leading-6 text-gray-900" href={'archive'}>
