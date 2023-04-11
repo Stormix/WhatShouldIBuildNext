@@ -8,6 +8,7 @@ export const ideaToIdeaDto = (
       component: Component;
     })[];
     ratings: Rating[];
+    savedBy?: User[];
   },
   saved?: boolean,
   rated?: boolean
@@ -33,7 +34,8 @@ export const ideaToIdeaDto = (
     },
     rating: averageRating,
     ratedByThisUser: rated ?? false,
-    ratingsCount: idea.ratings?.length ?? 0
+    ratingsCount: idea.ratings?.length ?? 0,
+    saveCount: idea.savedBy?.length ?? 0
   };
 };
 

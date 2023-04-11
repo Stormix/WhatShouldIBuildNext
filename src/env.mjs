@@ -19,7 +19,11 @@ const server = z.object({
   OPENAI_KEY: z.string(),
   SENTRY_DSN: z.string().optional(),
   RECAPTCHA_SECRET_KEY: z.string(),
-  ENABLE_OPENAI: z.string().optional()
+  ENABLE_OPENAI: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  TWITTER_ID: z.string(),
+  TWITTER_SECRET: z.string()
 });
 
 /**
@@ -55,7 +59,11 @@ const processEnv = {
   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
   RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
-  ENABLE_OPENAI: process.env.ENABLE_OPENAI
+  ENABLE_OPENAI: process.env.ENABLE_OPENAI,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  TWITTER_ID: process.env.TWITTER_ID,
+  TWITTER_SECRET: process.env.TWITTER_SECRET
 };
 
 // Don't touch the part below

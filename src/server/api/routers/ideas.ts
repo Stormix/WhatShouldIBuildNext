@@ -101,6 +101,52 @@ export const ideasRouter = createTRPCRouter({
       };
     }),
 
+  leaderboard: publicProcedure.query(async ({ ctx }) => {
+    const ideas = await ctx.prisma.idea.findMany({
+      include: {
+        author: true,
+        components: {
+          include: {
+            component: true
+          }
+        },
+        ratings: true,
+        savedBy: true
+      }
+    });
+
+    // Sort by average rating and then by number of saves
+
+    ideas.sort((a, b) => {
+      const aRating = (a.ratings?.reduce((acc, rating) => acc + rating.rating, 0) ?? 0) / (a.ratings.length || 1);
+      const bRating = (b.ratings?.reduce((acc, rating) => acc + rating.rating, 0) ?? 0) / (b.ratings.length || 1);
+      const aSaves = a.savedBy.length;
+      const bSaves = b.savedBy.length;
+
+      if (aRating > bRating) {
+        return -1;
+      }
+
+      if (aRating < bRating) {
+        return 1;
+      }
+
+      if (aSaves > bSaves) {
+        return -1;
+      }
+
+      if (aSaves < bSaves) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    return {
+      ideas: ideas.slice(0, 100).map((idea) => ideaToIdeaDto(idea, false, false))
+    };
+  }),
+
   getOne: publicProcedure
 
     .input(

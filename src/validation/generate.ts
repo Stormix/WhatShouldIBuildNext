@@ -25,5 +25,6 @@ export const generateOutputSchema = z.object({
   saved: z.boolean(),
   rating: z.number().nullish(),
   ratingsCount: z.number(),
-  ratedByThisUser: z.boolean()
+  ratedByThisUser: z.boolean(),
+  saveCount: z.number()
 });
