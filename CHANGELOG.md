@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.8 (2023-04-11)
+
+
+### Features
+
+* learderboard page ([3fb39f7](https://github.com/Stormix/ideas/commit/3fb39f7b7c7feeb625b1f661ea723ecb3bf97c8f))
+
 ### 0.1.7 (2023-04-10)
 
 
