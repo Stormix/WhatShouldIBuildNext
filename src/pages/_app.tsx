@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 
 import '@/styles/globals.css';
 
+import FeedbackModal from '@/components/atoms/FeedbackModal';
 import MainLayout from '@/components/layouts/main';
 import { env } from '@/env.mjs';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
@@ -21,6 +22,7 @@ const App: AppType<{ session: Session | null }> = ({ Component, pageProps: { ses
             <Toaster position="bottom-center" reverseOrder={false} />
             <Component {...pageProps} />
             <Analytics />
+            <FeedbackModal />
           </MainLayout>
         </ThemeProvider>
       </SessionProvider>

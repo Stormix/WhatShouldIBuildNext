@@ -3645,6 +3645,11 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+feeder-react-feedback@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/feeder-react-feedback/-/feeder-react-feedback-0.0.6.tgz#78a2044da24da217f5fa760cdbf841474ebb8546"
+  integrity sha512-BdilgLncuOdoFFC0Da3wYMIYODSxZaH3vUS4662QUTzKOGrGrc63yDywRFw2x4b30Kie3kwD4z3rXcaTznq7Mg==
+
 fflate@^0.7.3:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/fflate/-/fflate-0.7.4.tgz#61587e5d958fdabb5a9368a302c25363f4f69f50"

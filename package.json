@@ -40,6 +40,7 @@
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
     "dynamic-class-list": "^2.0.2",
+    "feeder-react-feedback": "^0.0.6",
     "lodash": "^4.17.21",
     "lru-cache": "^8.0.5",
     "next": "^13.2.4",

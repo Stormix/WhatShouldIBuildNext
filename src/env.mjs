@@ -34,7 +34,8 @@ const client = z.object({
   NEXT_PUBLIC_COMMIT_HASH: z.string().optional(),
   NEXT_PUBLIC_COMMIT_TIMESTAMP: z.string().optional(),
   NEXT_PUBLIC_RECAPTCHA_SITE_KEY: z.string().optional(),
-  NEXT_PUBLIC_SITE_URL: z.string().url()
+  NEXT_PUBLIC_SITE_URL: z.string().url(),
+  NEXT_PUBLIC_FEEDER_PROJECT_ID: z.string().optional()
 });
 
 /**
@@ -63,7 +64,8 @@ const processEnv = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   TWITTER_ID: process.env.TWITTER_ID,
-  TWITTER_SECRET: process.env.TWITTER_SECRET
+  TWITTER_SECRET: process.env.TWITTER_SECRET,
+  NEXT_PUBLIC_FEEDER_PROJECT_ID: process.env.NEXT_PUBLIC_FEEDER_PROJECT_ID
 };
 
 // Don't touch the part below
