@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.13 (2023-04-13)
+
+
+### Bug Fixes
+
+* small bug fixes ([2d4a870](https://github.com/Stormix/ideas/commit/2d4a870e4581ed35737fbeba2172a497dae3024e))
+
 ### 0.1.12 (2023-04-13)
 
 ### 0.1.11 (2023-04-13)
