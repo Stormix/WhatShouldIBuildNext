@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.9 (2023-04-13)
+
+
+### Features
+
+* feedback modal ([a5859aa](https://github.com/Stormix/ideas/commit/a5859aaafc8d46bfc8bf938f51a6c0fd30442076))
+
 ### 0.1.8 (2023-04-11)
 
 
