@@ -38,7 +38,7 @@ const config = {
     SENTRY_IGNORE_API_RESOLUTION_ERROR: '1'
   },
   images: {
-    domains: ['cdn.discordapp.com', 'avatars.githubusercontent.com']
+    domains: ['cdn.discordapp.com', 'avatars.githubusercontent.com', 'api.producthunt.com']
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -75,7 +75,7 @@ const config = {
     // for more information.
     hideSourceMaps: true,
     disableServerWebpackPlugin: true,
-    disableClientWebpackPlugin: true,
+    disableClientWebpackPlugin: true
   }
 };
 

@@ -6,9 +6,20 @@ const Footer = () => {
     <footer className=" z-20 flex w-full">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
-          <div className="mb-12 ">
+          <div className="mb-12 flex flex-col gap-12">
             <a href="https://whatshouldibuildnext.com/" className="flex items-center">
               <Logo footer />
+            </a>
+            <a
+              href="https://www.producthunt.com/posts/what-should-i-build-next?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-what&#0045;should&#0045;i&#0045;build&#0045;next"
+              target="_blank"
+            >
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=389063&theme=dark"
+                alt="What&#0032;should&#0032;I&#0032;build&#0032;next&#0063; - AI&#0032;powered&#0032;project&#0032;idea&#0032;generator | Product Hunt"
+                width="250"
+                height="54"
+              />
             </a>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 sm:gap-6">
