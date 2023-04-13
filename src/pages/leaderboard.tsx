@@ -11,7 +11,7 @@ const Leaderboard: NextPage = () => {
   return (
     <>
       <NextSeo
-        title={`Ideas leaderboard - Generate Random Development Project Ideas}`}
+        title={`Ideas leaderboard - Generate Random Development Project Ideas`}
         description={`${APP_NAME} is a free tool that generates random development project ideas based on your preferences. Use it to kickstart your next hackathon project or find inspiration for your next side project.`}
       />
       <Hero>

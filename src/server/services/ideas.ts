@@ -35,7 +35,8 @@ export default class IdeasService {
           The time to complete should be in hours.
           \n\n
           `,
-      temperature: 0.5,
+      temperature: 0.9,
+      presence_penalty: 0.6,
       max_tokens: 250
     });
 

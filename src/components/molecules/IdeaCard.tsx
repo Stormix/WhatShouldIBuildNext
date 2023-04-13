@@ -110,7 +110,7 @@ const IdeaCard: FC<IdeaCardProps> = ({ className, idea, noSave, loading }) => {
             </div>
             <div>
               <h4 className="font-semibold">Time to complete</h4>
-              <p>{idea?.timeToComplete ?? ''}</p>
+              <p>{idea?.timeToComplete ?? ''} hours</p>
             </div>
             <div>
               <h4 className="font-semibold">Keywords</h4>
