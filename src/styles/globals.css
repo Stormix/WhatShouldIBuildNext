@@ -45,3 +45,8 @@
     transform: scale(1.0);
   }
 }
+
+.frf-trigger-button {
+  left: 48px;
+  right: unset;
+}
