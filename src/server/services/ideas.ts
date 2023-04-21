@@ -8,33 +8,35 @@ export default class IdeasService {
       acc[component.type] = component;
       return acc;
     }, {} as Record<ComponentType, Component>);
-
-    const prompt = `Build ${componentsMap[ComponentType.What].value} for ${
-      componentsMap[ComponentType.For].value
-    } using ${componentsMap[ComponentType.Using].value} and deploy on ${componentsMap[ComponentType.On].value} but ${
-      componentsMap[ComponentType.But].value
-    }`;
-
+    const what = componentsMap[ComponentType.What].value;
+    const on = componentsMap[ComponentType.On].value;
+    const for_ = componentsMap[ComponentType.For].value;
+    const using = componentsMap[ComponentType.Using].value;
+    const but = componentsMap[ComponentType.But]?.value;
+    const prompt = `Build ${what} for ${for_} using ${using} and deploy on ${on}`;
+    if (but) return `${prompt} but ${but}`;
     return prompt;
   }
 
   static async generate(prompt: string) {
+    console.log(prompt);
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: `Given the following prompt: ${prompt} generate a development project Idea. Return only one idea. It must include all the requirements.
-          Use the following template in JSON:\n\n
-          \`\`\`
-          {
-            "idea": "Your idea here",
-            "description": "Your description here"
-            "timeToComplete": "",
-            "difficulty": ""
-          }
-          \`\`\`\n\n
-          You can also use the following difficulty levels: easy, medium, hard, and advanced.
-          The time to complete should be in hours.
-          \n\n
-          `,
+      prompt: `You're an AI developer assistant and your job is to generate sensible project ideas based on user prompts.
+      Here's a prompt: ${prompt}. Return only one idea. It must include all the requirements and add as much detail as possible.
+      Use the following template in JSON:\n\n
+      \`\`\`
+      {
+        "idea": "Your idea here",
+        "description": "Your description here"
+        "timeToComplete": "",
+        "difficulty": ""
+      }
+      \`\`\`\n\n
+      You can also use the following difficulty levels: easy, medium, hard, and advanced.
+      The time to complete should be in hours.
+      \n\n
+      `,
       temperature: 0.9,
       presence_penalty: 0.6,
       max_tokens: 250

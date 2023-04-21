@@ -43,7 +43,7 @@ const Hero: FC<HeroProps> = ({ children, empty, noPadding }) => {
         <div className="z-10 mt-56 flex flex-col items-center justify-center text-center">
           {!children && !empty && (
             <div className="flex w-6/12 flex-col items-center gap-12">
-              <h1 className="max-w-2xl text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+              <h1 className="max-w-2xl scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Generate your next project idea now
               </h1>
               <p className="mb-8 mt-6 max-w-2xl text-lg leading-8 text-gray-600">

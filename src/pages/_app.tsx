@@ -6,7 +6,7 @@ import { ThemeProvider } from 'next-themes';
 import { type AppType } from 'next/app';
 import { Toaster } from 'react-hot-toast';
 
-import '@/styles/globals.css';
+import '@/styles/main.scss';
 
 import FeedbackModal from '@/components/atoms/FeedbackModal';
 import MainLayout from '@/components/layouts/main';

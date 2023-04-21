@@ -116,7 +116,6 @@ export const ideasRouter = createTRPCRouter({
     });
 
     // Sort by average rating and then by number of saves
-
     ideas.sort((a, b) => {
       const aRating = (a.ratings?.reduce((acc, rating) => acc + rating.rating, 0) ?? 0) / (a.ratings.length || 1);
       const bRating = (b.ratings?.reduce((acc, rating) => acc + rating.rating, 0) ?? 0) / (b.ratings.length || 1);

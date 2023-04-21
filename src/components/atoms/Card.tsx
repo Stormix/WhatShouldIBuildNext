@@ -19,7 +19,7 @@ const Card: FC<CardProps> = ({ children, className, footer, loading }) => {
       )}
     >
       {loading && (
-        <div className="flex items-center justify-center ">
+        <div className="flex items-center justify-center">
           <Loading />
         </div>
       )}

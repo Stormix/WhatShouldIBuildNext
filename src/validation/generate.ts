@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 export const generateInputSchema = z.object({
-  what: z.string(),
-  for: z.string(),
-  using: z.string(),
-  on: z.string(),
-  but: z.string()
+  what: z.string().nonempty(),
+  for: z.string().nonempty(),
+  using: z.string().nonempty(),
+  on: z.string().nonempty(),
+  but: z.string().optional()
 });
 
 export const generateOutputSchema = z.object({

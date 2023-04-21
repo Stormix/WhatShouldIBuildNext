@@ -10,11 +10,14 @@ import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import type { z } from 'zod';
 import Button from '../atoms/Button';
 import Card from '../atoms/Card';
 import Loading from '../atoms/Loading';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
+import { Switch } from '../atoms/switch';
 import ComponentSelect from './WrappedSelect';
 
 type FormValues = z.TypeOf<typeof generateInputSchema>;
@@ -23,6 +26,7 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   const { data: session, update } = useSession();
   const { setGeneratedIdea } = useIdeasStore();
   const { data, isLoading } = api.components.getAll.useQuery();
+  const [challengeMode, setChallengeMode] = useState(false);
 
   const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation({
     onSuccess: (data) => {
@@ -63,6 +67,7 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
     }
     if (!generating) {
       setGeneratedIdea(null);
+      if (!challengeMode) delete data.but;
       generate(data);
     }
   };
@@ -111,13 +116,17 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
               control={control}
               name="on"
             />
-            <span>but</span>
-            <ComponentSelect<FormValues>
-              options={toOptions(components[ComponentType.But])}
-              placeholder="Select a value.."
-              control={control}
-              name="but"
-            />
+            {challengeMode && (
+              <>
+                <span>but</span>
+                <ComponentSelect<FormValues>
+                  options={toOptions(components[ComponentType.But])}
+                  placeholder="Select a value.."
+                  control={control}
+                  name="but"
+                />
+              </>
+            )}
           </div>
         )}
         {isLoading && (
@@ -125,24 +134,36 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
             <Loading className="h-8 w-8" />
           </div>
         )}
+        <div className="mt-4 flex gap-4">
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="italic">Challenge Mode: </div>
+            </TooltipTrigger>
+            <TooltipContent className="Tooltip">
+              <p className="max-w-md text-sm">
+                Challenge mode adds a &quot;but&quot; component to your idea. This adds some restrictions to the idea,
+                making it more challenging to build.
+              </p>
+            </TooltipContent>
+          </Tooltip>
+          <Switch checked={challengeMode} onCheckedChange={setChallengeMode} />
+        </div>
         <p className="mt-4 text-left font-semibold text-black">2. Generate your idea:</p>
         <div className="flex flex-row items-center justify-center  gap-4">
           <Button
             className="group"
-            size="lg"
             type="button"
             variant="link"
             onClick={() => randomize()}
-            icon={<ArrowPathIcon className="h-5 w-5 group-hover:animate-spin" />}
+            icon={<ArrowPathIcon className="h-4 w-4 group-hover:animate-spin" />}
           >
             Randomize
           </Button>
           <Button
             className="group"
-            size="lg"
             type="submit"
             loading={generating || loading}
-            icon={<SparklesIcon className="h-5 w-5 group-hover:animate-pulse" />}
+            icon={<SparklesIcon className="h-4 w-4 group-hover:animate-pulse" />}
           >
             Generate
           </Button>
