@@ -16,8 +16,8 @@ import type { z } from 'zod';
 import Button from '../atoms/Button';
 import Card from '../atoms/Card';
 import Loading from '../atoms/Loading';
+import { Switch } from '../atoms/Switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
-import { Switch } from '../atoms/switch';
 import ComponentSelect from './WrappedSelect';
 
 type FormValues = z.TypeOf<typeof generateInputSchema>;
