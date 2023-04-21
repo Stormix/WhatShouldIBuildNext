@@ -24,6 +24,7 @@ jobs:
           git reset --hard
 
           yarn release
+          VERSION=$(sed 's/.*"version": "\(.*\)".*/\1/;t;d' ./package.json)
 
           git add .
           git commit -m "chore(release): new version $VERSION [skip ci]"
