@@ -7,7 +7,6 @@
 
 import { withSentryConfig } from '@sentry/nextjs';
 import { execSync } from 'child_process';
-import path from 'path';
 
 const commitHash = execSync('git rev-parse --short HEAD').toString()?.replace('\n', '');
 const timestamp = execSync('git log -1 --format=%ct').toString()?.replace('\n', '');
@@ -77,9 +76,6 @@ const config = {
     hideSourceMaps: true,
     disableServerWebpackPlugin: true,
     disableClientWebpackPlugin: true
-  },
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')]
   }
 };
 
