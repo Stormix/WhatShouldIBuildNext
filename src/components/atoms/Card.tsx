@@ -1,15 +1,13 @@
 import { cn } from '@/utils/styles';
 import type { FC } from 'react';
-import Loading from './Loading';
 
 interface CardProps {
   children: React.ReactNode;
   className?: string;
   footer?: React.ReactNode;
-  loading?: boolean;
 }
 
-const Card: FC<CardProps> = ({ children, className, footer, loading }) => {
+const Card: FC<CardProps> = ({ children, className, footer }) => {
   return (
     <div
       className={cn(
@@ -18,11 +16,6 @@ const Card: FC<CardProps> = ({ children, className, footer, loading }) => {
         { 'pb-8': !footer }
       )}
     >
-      {loading && (
-        <div className="flex items-center justify-center">
-          <Loading />
-        </div>
-      )}
       {children}
       {footer && <div className="mt-8 pb-4">{footer}</div>}
     </div>
