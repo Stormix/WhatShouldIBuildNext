@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.17 (2023-04-21)
+
+
+### Features
+
+* skeleton loading ([8e7a1e6](https://github.com/Stormix/ideas/commit/8e7a1e66866d8773b2828393d76a6d90acacc3da))
+
 ### 0.1.16 (2023-04-21)
 
 
