@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.1 (2023-04-26)
+
+
+### Bug Fixes
+
+* dark theme switch and footer colors ([087feaf](https://github.com/Stormix/ideas/commit/087feaf332abf8dc99e4861830cd345818f78faa))
+
 ## 0.2.0 (2023-04-26)
 
 
