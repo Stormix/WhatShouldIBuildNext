@@ -24,7 +24,7 @@ const Header: FC = () => {
               <div className="flex w-full items-center justify-between md:w-auto">
                 <Logo />
                 <div className="-mr-2 flex items-center md:hidden">
-                  <PopoverTrigger className="inline-flex items-center justify-center rounded-md bg-gray-50 p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                  <PopoverTrigger className="inline-flex items-center justify-center rounded-md">
                     <span className="sr-only">Open main menu</span>
                     <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                   </PopoverTrigger>
@@ -46,17 +46,13 @@ const Header: FC = () => {
         </div>
         <PopoverContent>
           <div className="overflow-hidden">
-            <PopoverTrigger className="float-right inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none">
+            <PopoverTrigger className="float-right inline-flex items-center justify-center rounded-md ">
               <span className="sr-only">Close main menu</span>
               <XMarkIcon className="h-6 w-6" aria-hidden="true" />
             </PopoverTrigger>
             <div className="space-y-1 px-2 pb-3 pt-2">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                >
+                <Link key={item.name} href={item.href} className="block rounded-md px-3 py-2 text-base font-medium">
                   {item.name}
                 </Link>
               ))}
