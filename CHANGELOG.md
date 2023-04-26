@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 0.2.0 (2023-04-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* complete redesign
+
+### Features
+
+* complete redesign ([22842b3](https://github.com/Stormix/ideas/commit/22842b3068040ba763f10e51e208265cc8c2905e))
+
 ### 0.1.20 (2023-04-21)
 
 ### 0.1.19 (2023-04-21)
