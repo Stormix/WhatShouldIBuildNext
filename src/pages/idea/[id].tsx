@@ -1,7 +1,7 @@
 import Loading from '@/components/atoms/Loading';
 import Comments from '@/components/molecules/Comments';
 import Hero from '@/components/molecules/Hero';
-import IdeaCard from '@/components/molecules/IdeaCard';
+import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
 import { api } from '@/utils/api';
 import { type NextPage } from 'next';
@@ -30,9 +30,7 @@ const Idea: NextPage = () => {
         }
       />
       <div className="container mx-auto flex flex-col items-center justify-center">
-        <Hero noPadding empty>
-          <div className="flex flex-grow flex-col"></div>
-        </Hero>
+        <Hero noPadding empty />
         {isLoading && (
           <div className="flex w-full items-center justify-center">
             <Loading className="h-6 w-6" />

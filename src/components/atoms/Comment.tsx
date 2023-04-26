@@ -71,12 +71,12 @@ const CommentComponent: FC<CommentThreadProps> = ({ comment, comments, reply, le
         <div className="flex flex-grow flex-col">
           <div className="flex flex-row gap-2">
             <div className="flex flex-grow flex-row items-center gap-2">
-              <p className="font-semibold text-black">{comment.author.name}</p>
-              <span className="opacity-70 text-black">{format(comment.createdAt, 'dd/MM/yyyy HH:mm:ss')}</span>
+              <p className="font-semibold ">{comment.author.name}</p>
+              <span className="opacity-70 ">{format(comment.createdAt, 'dd/MM/yyyy HH:mm:ss')}</span>
             </div>
             <CommentActions comment={comment} />
           </div>
-          <div className="py-2 text-black">{comment.content}</div>
+          <div className="py-2 ">{comment.content}</div>
           <div className="flex flex-row gap-2 pb-2">
             <Button
               variant="text"

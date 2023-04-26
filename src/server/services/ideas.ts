@@ -8,18 +8,19 @@ export default class IdeasService {
       acc[component.type] = component;
       return acc;
     }, {} as Record<ComponentType, Component>);
+
     const what = componentsMap[ComponentType.What].value;
     const on = componentsMap[ComponentType.On].value;
     const for_ = componentsMap[ComponentType.For].value;
     const using = componentsMap[ComponentType.Using].value;
     const but = componentsMap[ComponentType.But]?.value;
     const prompt = `Build ${what} for ${for_} using ${using} and deploy on ${on}`;
+
     if (but) return `${prompt} but ${but}`;
     return prompt;
   }
 
   static async generate(prompt: string) {
-    console.log(prompt);
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
       prompt: `You're an AI developer assistant and your job is to generate sensible project ideas based on user prompts.

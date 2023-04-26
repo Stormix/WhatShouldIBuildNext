@@ -16,7 +16,7 @@ const Star: React.FC<IconProps> = ({ className, half, onClick }) => {
   return (
     <svg
       aria-hidden="true"
-      className={cn('h-5 w-5 text-black', className)}
+      className={cn('h-5 w-5 ', className)}
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"

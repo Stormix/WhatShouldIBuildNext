@@ -14,7 +14,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import type { z } from 'zod';
 import Button from '../atoms/Button';
-import Card from '../atoms/Card';
+import { Card, CardContent } from '../atoms/Card';
 import Loading from '../atoms/Loading';
 import { Switch } from '../atoms/Switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
@@ -83,91 +83,93 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-      <Card className="flex w-full flex-col gap-4">
-        <p className="text-left font-semibold text-black">1. Pick your components or randomize:</p>
-        {components && (
-          <div className="flex flex-row flex-wrap items-center justify-center gap-2">
-            <span>Build</span>
-            <ComponentSelect<FormValues>
-              options={toOptions(components[ComponentType.What])}
-              placeholder="Select a value.."
-              control={control}
-              name="what"
-            />
-            <span>for</span>
-            <ComponentSelect<FormValues>
-              options={toOptions(components[ComponentType.For])}
-              placeholder="Select a value.."
-              control={control}
-              name="for"
-            />
-            <span>using</span>
-            <ComponentSelect<FormValues>
-              options={toOptions(components[ComponentType.Using])}
-              placeholder="Select a value.."
-              control={control}
-              name="using"
-            />
-            <span>and on</span>
-            <ComponentSelect<FormValues>
-              options={toOptions(components[ComponentType.On])}
-              placeholder="Select a value.."
-              control={control}
-              name="on"
-            />
-            {challengeMode && (
-              <>
-                <span>but</span>
-                <ComponentSelect<FormValues>
-                  options={toOptions(components[ComponentType.But])}
-                  placeholder="Select a value.."
-                  control={control}
-                  name="but"
-                />
-              </>
-            )}
+    <form onSubmit={handleSubmit(onSubmit)} className="flex h-full w-full">
+      <Card className="z-20 flex h-full w-full ">
+        <CardContent className="flex w-full flex-col gap-4">
+          <p className="text-left font-semibold ">1. Pick your components or randomize:</p>
+          {components && (
+            <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+              <span>Build</span>
+              <ComponentSelect<FormValues>
+                options={toOptions(components[ComponentType.What])}
+                placeholder="Select a value.."
+                control={control}
+                name="what"
+              />
+              <span>for</span>
+              <ComponentSelect<FormValues>
+                options={toOptions(components[ComponentType.For])}
+                placeholder="Select a value.."
+                control={control}
+                name="for"
+              />
+              <span>using</span>
+              <ComponentSelect<FormValues>
+                options={toOptions(components[ComponentType.Using])}
+                placeholder="Select a value.."
+                control={control}
+                name="using"
+              />
+              <span>and on</span>
+              <ComponentSelect<FormValues>
+                options={toOptions(components[ComponentType.On])}
+                placeholder="Select a value.."
+                control={control}
+                name="on"
+              />
+              {challengeMode && (
+                <>
+                  <span>but</span>
+                  <ComponentSelect<FormValues>
+                    options={toOptions(components[ComponentType.But])}
+                    placeholder="Select a value.."
+                    control={control}
+                    name="but"
+                  />
+                </>
+              )}
+            </div>
+          )}
+          {isLoading && (
+            <div className="flex w-full items-center justify-center">
+              <Loading className="h-8 w-8" />
+            </div>
+          )}
+          <div className="mt-4 flex gap-4">
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="italic">Challenge Mode: </div>
+              </TooltipTrigger>
+              <TooltipContent className="Tooltip">
+                <p className="max-w-md text-sm">
+                  Challenge mode adds a &quot;but&quot; component to your idea. This adds some restrictions to the idea,
+                  making it more challenging to build.
+                </p>
+              </TooltipContent>
+            </Tooltip>
+            <Switch checked={challengeMode} onCheckedChange={setChallengeMode} />
           </div>
-        )}
-        {isLoading && (
-          <div className="flex w-full items-center justify-center">
-            <Loading className="h-8 w-8" />
+          <p className="mt-4 text-left font-semibold ">2. Generate your idea:</p>
+          <div className="flex flex-row items-center justify-center  gap-4">
+            <Button
+              className="group"
+              type="button"
+              variant="link"
+              onClick={() => randomize()}
+              icon={<ArrowPathIcon className="h-4 w-4 group-hover:animate-spin" />}
+            >
+              Randomize
+            </Button>
+            <Button
+              className="group"
+              type="submit"
+              loading={generating || loading}
+              icon={<SparklesIcon className="h-4 w-4 group-hover:animate-pulse" />}
+            >
+              Generate
+            </Button>
           </div>
-        )}
-        <div className="mt-4 flex gap-4">
-          <Tooltip>
-            <TooltipTrigger>
-              <div className="italic">Challenge Mode: </div>
-            </TooltipTrigger>
-            <TooltipContent className="Tooltip">
-              <p className="max-w-md text-sm">
-                Challenge mode adds a &quot;but&quot; component to your idea. This adds some restrictions to the idea,
-                making it more challenging to build.
-              </p>
-            </TooltipContent>
-          </Tooltip>
-          <Switch checked={challengeMode} onCheckedChange={setChallengeMode} />
-        </div>
-        <p className="mt-4 text-left font-semibold text-black">2. Generate your idea:</p>
-        <div className="flex flex-row items-center justify-center  gap-4">
-          <Button
-            className="group"
-            type="button"
-            variant="link"
-            onClick={() => randomize()}
-            icon={<ArrowPathIcon className="h-4 w-4 group-hover:animate-spin" />}
-          >
-            Randomize
-          </Button>
-          <Button
-            className="group"
-            type="submit"
-            loading={generating || loading}
-            icon={<SparklesIcon className="h-4 w-4 group-hover:animate-pulse" />}
-          >
-            Generate
-          </Button>
-        </div>
+        </CardContent>
       </Card>
     </form>
   );

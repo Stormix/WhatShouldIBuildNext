@@ -1,7 +1,7 @@
 import Button from '@/components/atoms/Button';
-import Card from '@/components/atoms/Card';
+import { Card, CardContent } from '@/components/atoms/Card';
 import Hero from '@/components/molecules/Hero';
-import IdeaCard from '@/components/molecules/IdeaCard';
+import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
 import { type NextPage } from 'next';
 import { useSession } from 'next-auth/react';
@@ -33,19 +33,21 @@ const Profile: NextPage = () => {
       />
       <Hero>
         <Card className="container w-full">
-          <div className="flex items-center gap-8">
-            <Image
-              width={128}
-              height={128}
-              className="rounded-full"
-              src={session?.user.image as string}
-              alt={session?.user.name as string}
-            />
-            <div className="ml-4 flex flex-col items-start justify-center">
-              <h1 className="text-3xl font-bold text-gray-900">{session?.user.name}</h1>
-              <h2 className="text-xl text-gray-900">Credits: {session?.user.credits ?? 0}</h2>
+          <CardContent>
+            <div className="flex items-center gap-8">
+              <Image
+                width={128}
+                height={128}
+                className="rounded-full"
+                src={session?.user.image as string}
+                alt={session?.user.name as string}
+              />
+              <div className="ml-4 flex flex-col items-start justify-center">
+                <h1 className="text-3xl font-bold">{session?.user.name}</h1>
+                <h2 className="text-xl">Credits: {session?.user.credits ?? 0}</h2>
+              </div>
             </div>
-          </div>
+          </CardContent>
         </Card>
       </Hero>
       <div className="container z-30 mx-auto mb-24 mt-12">

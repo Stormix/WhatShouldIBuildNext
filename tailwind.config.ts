@@ -20,6 +20,7 @@ export default {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        strip: 'hsl(var(--strip))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))'
@@ -93,5 +94,5 @@ export default {
       }
     }
   },
-  plugins: [require('nightwind'), require('@headlessui/tailwindcss'), require('tailwindcss-animate')]
+  plugins: [require('tailwindcss-animate')]
 } satisfies Config;

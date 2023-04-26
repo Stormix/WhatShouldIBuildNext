@@ -10,11 +10,12 @@ import { useForm, useFormState } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import type { z } from 'zod';
 import Button from '../atoms/Button';
-import Card from '../atoms/Card';
+import { Card, CardContent } from '../atoms/Card';
 import type { FullComment } from '../atoms/Comment';
 import CommentComponent from '../atoms/Comment';
 import Loading from '../atoms/Loading';
 import { Textarea } from '../atoms/Textarea';
+
 type FormValues = z.TypeOf<typeof addCommentSchema>;
 
 const Comments: FC<{
@@ -81,62 +82,64 @@ const Comments: FC<{
 
   return (
     <Card>
-      <div className="mx-auto flex w-full flex-col gap-4 px-4">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-black lg:text-2xl">Discussion ({comments.length})</h2>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="mb-6 flex flex-col gap-4">
-          <h3 className="text-lg font-bold text-black lg:text-2xl">
-            {parentId ? `Replying to ${parent?.author?.name}: ${parent?.content.substring(0, 85)}...` : 'Add comment'}
-          </h3>
-          <Textarea
-            id="comment"
-            placeholder="Write a comment..."
-            required
-            onChange={(e) => {
-              setValue('content', e.target.value);
-            }}
-          />
-          {errors.content && <p className="text-red-500">{errors.content.message}</p>}
-          <div className="flex items-center justify-start gap-4">
-            <Button type="submit" className=" w-fit" loading={commenting}>
-              {parentId ? 'Post reply' : 'Post comment'}
-            </Button>
-            {parentId && (
-              <Button
-                type="button"
-                variant={'text'}
-                className=" w-fit"
-                onClick={() => {
-                  setParentId(undefined);
-                  setValue('parentId', undefined);
-                }}
-              >
-                Cancel
+      <CardContent>
+        <div className="mx-auto flex w-full flex-col gap-4 px-4">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-lg font-bold  lg:text-2xl">Discussion ({comments.length})</h2>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="mb-6 flex flex-col gap-4">
+            <h3 className="text-lg font-bold  lg:text-2xl">
+              {parentId ? `Replying to ${parent?.author?.name}: ${parent?.content.substring(0, 85)}...` : 'Add comment'}
+            </h3>
+            <Textarea
+              id="comment"
+              placeholder="Write a comment..."
+              required
+              onChange={(e) => {
+                setValue('content', e.target.value);
+              }}
+            />
+            {errors.content && <p className="text-red-500">{errors.content.message}</p>}
+            <div className="flex items-center justify-start gap-4">
+              <Button type="submit" className=" w-fit" loading={commenting}>
+                {parentId ? 'Post reply' : 'Post comment'}
               </Button>
-            )}
-          </div>
-        </form>
-        {loading && (
-          <div className="flex items-center justify-center">
-            <Loading />
-          </div>
-        )}
-        {comments.length > 0 && (
-          <div className="flex max-h-96 flex-col gap-8 overflow-auto">
-            {sortComments(comments).map((comment) => (
-              <CommentComponent
-                key={comment.id}
-                comment={comment}
-                comments={comments}
-                reply={(id) => {
-                  setParentId(id);
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+              {parentId && (
+                <Button
+                  type="button"
+                  variant={'text'}
+                  className=" w-fit"
+                  onClick={() => {
+                    setParentId(undefined);
+                    setValue('parentId', undefined);
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
+            </div>
+          </form>
+          {loading && (
+            <div className="flex items-center justify-center">
+              <Loading />
+            </div>
+          )}
+          {comments.length > 0 && (
+            <div className="flex max-h-96 flex-col gap-8 overflow-auto">
+              {sortComments(comments).map((comment) => (
+                <CommentComponent
+                  key={comment.id}
+                  comment={comment}
+                  comments={comments}
+                  reply={(id) => {
+                    setParentId(id);
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </CardContent>
     </Card>
   );
 };

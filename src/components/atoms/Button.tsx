@@ -10,20 +10,18 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-black text-white hover:bg-white hover:text-black focus-visible:outline-white  shadow-sm data-[state=open]:bg-slate-100 ',
-        destructive: 'bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-600',
-        outline: 'bg-transparent border border-slate-200 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-100',
-        subtle: 'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-100',
-        ghost:
-          'bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 dark:text-slate-100 dark:hover:text-slate-100 data-[state=open]:bg-transparent dark:data-[state=open]:bg-transparent',
-        link: 'text-black hover:text-white focus-visible:outline-white  data-[state=open]:bg-slate-100 ',
-        text: '  text-black hover:opacity-50 data-[state=open]:transparent'
+        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border border-input hover:bg-accent hover:text-secondary-foreground',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        ghost: 'hover:bg-accent hover:text-secondary-foreground',
+        link: 'underline-offset-4 hover:underline text-primary',
+        text: 'underline-offset-4 hover:underline text-primary'
       },
       size: {
-        default: 'h-10 py-2 px-4 font-medium',
-        sm: 'h-9 px-2 rounded-md text-sm font-medium',
-        lg: 'h-14 px-12 text-lg rounded-md font-bold',
+        default: 'h-10 py-2 px-4',
+        sm: 'h-9 px-3 rounded-md',
+        lg: 'h-11 px-8 rounded-md',
         text: 'font-medium'
       }
     },

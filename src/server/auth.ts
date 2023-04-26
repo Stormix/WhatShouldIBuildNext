@@ -1,3 +1,4 @@
+import { FREE_CREDITS_ON_SIGNUP } from '@/config/app';
 import { env } from '@/env.mjs';
 import { prisma } from '@/server/db';
 import type { GeneratedIdea } from '@/types/ideas';
@@ -10,6 +11,7 @@ import GitHubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import TwitterProvider from 'next-auth/providers/twitter';
 import CreditsService from './services/credits';
+
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -102,7 +104,7 @@ export const authOptions: NextAuthOptions = {
     async createUser(message) {
       const balance = await CreditsService.balance(message.user.id);
       if (!balance) {
-        await CreditsService.reward(message.user.id, 3);
+        await CreditsService.reward(message.user.id, FREE_CREDITS_ON_SIGNUP);
       }
     }
   },

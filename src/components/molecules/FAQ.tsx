@@ -36,17 +36,31 @@ const FAQ = () => {
       question: 'How did you come up with the idea for this project?',
       answer:
         'This project idea generator idea was suggest, spec-ed and outlined by ChatGPT, a large language model trained by OpenAI based on the GPT-3.5 architecture. Check out the project repo on GitHub for more info.'
+    },
+    {
+      question: 'I keep getting this error: "Error: Request failed with status code 429". What does it mean?',
+      answer:
+        'This error means that you have exceeded the number of requests allowed by the API. Please wait a few minutes and try again.'
+    },
+    {
+      question: 'I keep getting this error: "We couldn\'t parse the response from OpenAI.". What does it mean?',
+      answer:
+        "This error means that the response from OpenAI was not in the expected format. Please try again. If the error persists, please contact us on our Discord server.You'll also get extra credits everytime you run into this issue."
+    },
+    {
+      question: 'I have a question that is not listed here. How can I contact you?',
+      answer: 'You can contact us on our Discord server.'
     }
   ];
 
   return (
-    <div className="z-20 flex flex-col items-center justify-center px-6 py-14 lg:px-8">
+    <div className="z-20 flex w-full max-w-full flex-col items-center justify-center px-6 py-14 lg:px-8">
       <h2 className="mb-8 text-center text-3xl font-bold">Frequently Asked Questions</h2>
-      <Accordion type="single" collapsible className="w-6/12">
+      <Accordion type="single" collapsible className="">
         {faq.map((qa, index) => (
           <AccordionItem value={`faq-${index}`} key={index}>
             <AccordionTrigger>{qa.question}</AccordionTrigger>
-            <AccordionContent>{qa.answer}</AccordionContent>
+            <AccordionContent className=" whitespace-pre-wrap">{qa.answer}</AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>

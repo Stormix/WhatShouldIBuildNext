@@ -17,7 +17,6 @@ const MainLayout = ({ children }: PropsWithChildren) => {
         </Head>
 
         <main className="flex w-full flex-col">
-          <Header />
           <div className="flex flex-grow flex-col">{children}</div>
           <Footer />
         </main>

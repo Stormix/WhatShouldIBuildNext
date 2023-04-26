@@ -27,7 +27,7 @@ const Rating: FC<RatingProps> = ({ rating, readonly, disabled, loading, ratings,
   const { getReferenceProps } = useInteractions([hover]);
   const ratingValue = rating ?? 0;
   return (
-    <div className="mb-3 flex  items-center">
+    <div className="mb-3 flex items-center">
       <div className="flex flex-row-reverse items-center" ref={refs.setReference} {...getReferenceProps()}>
         {Array.from({ length: 5 }, (_, i) => {
           const isHalf = parseInt(ratingValue.toString()) !== rating && ratingValue < 5 - i && ratingValue > 5 - i - 1;
@@ -45,14 +45,14 @@ const Rating: FC<RatingProps> = ({ rating, readonly, disabled, loading, ratings,
           );
         })}
       </div>
-      {loading && <p className="ml-2 text-sm font-medium opacity-50 text-black">Saving...</p>}
+      {loading && <p className="ml-2 text-sm font-medium text-black opacity-50">Saving...</p>}
       {rating && !loading && (
         <>
           <p>({ratings})</p>
-          <p className="ml-2 text-sm font-medium opacity-50 text-black">{rating} out of 5</p>
+          <p className="ml-2 text-sm font-medium text-black opacity-50">{rating} out of 5</p>
         </>
       )}
-      {!rating && !loading && <p className="ml-2 text-sm font-medium opacity-50 text-black">No rating yet</p>}
+      {!rating && !loading && <p className="muted ml-2">No rating yet</p>}
     </div>
   );
 };

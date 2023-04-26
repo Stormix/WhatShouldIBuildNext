@@ -24,8 +24,8 @@ const Footer = () => {
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 sm:gap-6">
             <div>
-              <h2 className="mb-6 text-sm font-semibold uppercase text-gray-900 ">Follow us</h2>
-              <ul className="font-medium text-gray-600 ">
+              <h2 className="mb-6 text-sm font-semibold uppercase ">Follow us</h2>
+              <ul className="font-medium text-secondary ">
                 <li className="mb-4">
                   <a href="https://github.com/Stormix/ideas" className="hover:underline ">
                     Github
@@ -39,8 +39,8 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h2 className="mb-6 text-sm font-semibold uppercase text-gray-900 ">Legal</h2>
-              <ul className="font-medium text-gray-600 ">
+              <h2 className="mb-6 text-sm font-semibold uppercase ">Legal</h2>
+              <ul className="font-medium text-secondary ">
                 <li className="mb-4">
                   <a href="#" className="hover:underline">
                     Privacy Policy

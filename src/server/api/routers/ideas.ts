@@ -245,7 +245,14 @@ export const ideasRouter = createTRPCRouter({
 
         await CreditsService.deduct(ctx.session.user.id, 1);
 
-        const openAIResponse = JSON.parse(rawResponse) as OpenAIIdea;
+        let openAIResponse: OpenAIIdea | null = null;
+
+        try {
+          openAIResponse = JSON.parse(rawResponse) as OpenAIIdea;
+        } catch (e) {
+          throw new TRPCClientError("We couldn't parse the response from OpenAI. Generating again usually fixes this.");
+        }
+
         const ideasCount = await ctx.prisma.idea.count({});
 
         const idea = await ctx.prisma.idea.create({
@@ -285,7 +292,7 @@ export const ideasRouter = createTRPCRouter({
       } catch (error) {
         console.error('Failed to generate idea:', error);
         // Refund credits
-        await CreditsService.reward(ctx.session.user.id, 1);
+        await CreditsService.reward(ctx.session.user.id, 2);
         throw new TRPCClientError('Something went wrong: ' + (error as Error).message);
       }
     }),
