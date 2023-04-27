@@ -24,6 +24,7 @@ jobs:
           git reset --hard
 
           yarn release
+          yarn genversion
           VERSION=$(sed 's/.*"version": "\(.*\)".*/\1/;t;d' ./package.json)
 
           git add .

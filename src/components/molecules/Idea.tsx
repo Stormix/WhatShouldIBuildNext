@@ -61,11 +61,11 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
     >
       <CardContent className="flex flex-col gap-4">
         <h3 className="text-start font-bold opacity-70">Idea #{idea?.number}</h3>
-        <div className="flex flex-col gap-8 md:flex-row md:items-center ">
+        <div className="flex flex-col gap-8 md:flex-row  ">
           <div className="flex-grow text-justify">
             <h2 className="py-4 text-3xl font-semibold">
               {loading && <Skeleton className="h-6 rounded-full" />}
-              {!loading && (idea?.title ?? 'No idea generated yet')}
+              {!loading && idea?.title}
             </h2>
             {loading && (
               <div className="mt-6 flex flex-col gap-2">
@@ -74,9 +74,9 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
                 <Skeleton className="h-4 rounded-full" />
               </div>
             )}
-            {!loading && <p>{idea?.description ?? 'No idea generated yet'}</p>}
+            {!loading && <p>{idea?.description}</p>}
           </div>
-          <div className="flex flex-col items-start gap-4 text-start md:w-1/4">
+          <div className="flex flex-col items-start gap-4 text-start md:w-2/5">
             <div>
               <h4 className="font-semibold">Difficulty</h4>
               {loading ? <Skeleton className="mt-2 h-4 rounded-full" /> : <p>{idea?.difficulty ?? ''}</p>}
@@ -88,7 +88,7 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
               ) : (
                 <p>
                   {idea?.timeToComplete ?? ''}
-                  {idea?.timeToComplete?.toLowerCase()?.includes('hours') ? '' : ' hours'}
+                  {idea?.timeToComplete?.toLowerCase()?.includes('hour') ? '' : ' hour(s)'}
                 </p>
               )}
             </div>

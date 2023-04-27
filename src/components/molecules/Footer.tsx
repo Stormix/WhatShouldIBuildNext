@@ -1,4 +1,5 @@
 import { APP_NAME } from '@/config/app';
+import { version } from '@/version';
 import Logo from '../atoms/Logo';
 
 const Footer = () => {
@@ -58,7 +59,7 @@ const Footer = () => {
         <hr className="my-6 " />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="muted text-sm ">
-            © {new Date().getFullYear()} {APP_NAME}. A project by{' '}
+            © {new Date().getFullYear()} {APP_NAME} (v{version}). A project by{' '}
             <a href="https://stormix.co/" className="font-bold hover:underline">
               Stormix
             </a>

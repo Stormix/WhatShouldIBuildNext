@@ -39,10 +39,12 @@ const Rating: FC<RatingProps> = ({ rating, readonly, disabled, loading, ratings,
             <Star
               key={i}
               className={cn(
-                'peer h-5 w-5 ',
-                ratingValue > 5 - i - 1 && readonly ? 'text-accent' : 'text-secondary dark:text-foreground',
+                'peer h-5 w-5',
+                ratingValue > 5 - i - 1 && readonly
+                  ? 'text-accent'
+                  : 'text-forground opacity-30 hover:text-accent hover:opacity-100',
                 {
-                  'hover:text-accent peer-hover:text-accent': !readonly
+                  'hover:text-accent hover:opacity-100 peer-hover:text-accent peer-hover:opacity-100': !readonly
                 }
               )}
               half={isHalf && readonly}
