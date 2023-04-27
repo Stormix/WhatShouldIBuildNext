@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.6 (2023-04-27)
+
+
+### Features
+
+* vitest ([87079a7](https://github.com/Stormix/ideas/commit/87079a7d4c1976f123878afd482abcf74245e60b))
+
 ### 0.2.5 (2023-04-27)
 
 ### 0.2.4 (2023-04-27)
