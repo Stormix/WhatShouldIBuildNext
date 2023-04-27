@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.2.2 (2023-04-27)
+
+
+### Features
+
+* more design changes + sentry ([261997d](https://github.com/Stormix/ideas/commit/261997d9661c01b827e11803b701fbb188371442))
+
 ### 0.2.1 (2023-04-26)
 
 
