@@ -14,6 +14,8 @@ jobs:
           node-version: '18.0'
       - name: Install dependencies
         run: yarn install
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
       - name: "Version"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
