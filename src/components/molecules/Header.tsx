@@ -5,6 +5,7 @@ import Logo from '../atoms/Logo';
 import UserDropdown from '../atoms/UserDropdown';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../atoms/Button';
 import { Popover, PopoverContent, PopoverTrigger } from '../atoms/Popover';
 
@@ -12,9 +13,12 @@ const Header: FC = () => {
   const navigation = [
     { name: 'Ideas Leaderboard', href: '/leaderboard' },
     { name: 'Project Ideas', href: '/archive' },
-    { name: 'FAQ', href: '#' },
+    { name: 'FAQ', href: '/faq' },
     { name: 'Pricing', href: '#' }
   ];
+
+  const { data: session, update } = useSession();
+
   return (
     <>
       <Popover>
@@ -56,10 +60,17 @@ const Header: FC = () => {
                   {item.name}
                 </Link>
               ))}
+              {!session && (
+                <a className="block rounded-md px-3 py-2 text-base font-medium" href="#" onClick={() => signIn()}>
+                  Log in
+                </a>
+              )}
             </div>
-            <Button className="mx-4 mb-4" size={'sm'}>
-              Log in
-            </Button>
+            {session && (
+              <Button className="mx-4 mb-4" size={'sm'} onClick={() => signOut()}>
+                Sign out
+              </Button>
+            )}
           </div>
         </PopoverContent>
       </Popover>

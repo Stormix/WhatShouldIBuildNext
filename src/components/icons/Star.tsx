@@ -1,5 +1,6 @@
 import { cn } from '@/utils/styles';
 import { useTheme } from 'next-themes';
+import type { MouseEventHandler } from 'react';
 import React from 'react';
 import colors from 'tailwindcss/colors';
 import { Theme } from '../atoms/DarkModeSwitch';
@@ -7,7 +8,7 @@ import { Theme } from '../atoms/DarkModeSwitch';
 export interface IconProps {
   className?: string;
   half?: boolean;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<SVGSVGElement>;
 }
 
 const Star: React.FC<IconProps> = ({ className, half, onClick }) => {
@@ -20,7 +21,7 @@ const Star: React.FC<IconProps> = ({ className, half, onClick }) => {
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
-      onClick={() => onClick?.()}
+      onClick={(e) => onClick?.(e)}
     >
       {half && (
         <defs>

@@ -1,5 +1,5 @@
 import Loading from '@/components/atoms/Loading';
-import Hero from '@/components/molecules/Hero';
+import Hero from '@/components/molecules/Home';
 import { APP_NAME } from '@/config/app';
 import { api } from '@/utils/api';
 import { ArrowTopRightOnSquareIcon, BookmarkIcon, StarIcon } from '@heroicons/react/24/outline';

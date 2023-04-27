@@ -3,7 +3,7 @@ import Logo from '../atoms/Logo';
 
 const Footer = () => {
   return (
-    <footer className=" z-20 flex w-full">
+    <footer className=" z-20 mt-24 flex w-full">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-12 flex flex-col gap-12">

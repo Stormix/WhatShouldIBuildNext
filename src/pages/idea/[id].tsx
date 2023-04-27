@@ -1,6 +1,6 @@
 import Loading from '@/components/atoms/Loading';
 import Comments from '@/components/molecules/Comments';
-import Hero from '@/components/molecules/Hero';
+import Hero from '@/components/molecules/Home';
 import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
 import { api } from '@/utils/api';

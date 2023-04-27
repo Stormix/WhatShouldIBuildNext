@@ -1,6 +1,8 @@
+import { cn } from '@/utils/styles';
+import type { FC } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../atoms/Accordion';
 
-const FAQ = () => {
+const FAQ: FC<{ className?: string }> = ({ className }) => {
   const faq = [
     {
       question: 'How does the project idea generator work?',
@@ -54,17 +56,14 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="z-20 flex w-full max-w-full flex-col items-center justify-center px-6 py-14 lg:px-8">
-      <h2 className="mb-8 text-center text-3xl font-bold">Frequently Asked Questions</h2>
-      <Accordion type="single" collapsible className="">
-        {faq.map((qa, index) => (
-          <AccordionItem value={`faq-${index}`} key={index}>
-            <AccordionTrigger>{qa.question}</AccordionTrigger>
-            <AccordionContent className=" whitespace-pre-wrap">{qa.answer}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </div>
+    <Accordion type="single" collapsible className={cn('flex w-full flex-col', className)}>
+      {faq.map((qa, index) => (
+        <AccordionItem value={`faq-${index}`} key={index}>
+          <AccordionTrigger>{qa.question}</AccordionTrigger>
+          <AccordionContent className=" whitespace-pre-wrap">{qa.answer}</AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 };
 

@@ -129,12 +129,8 @@ const Hero: FC<HeroProps> = ({ children, empty, noPadding }) => {
       )}
 
       {!children && !empty && idea && (
-        <div
-          className={cn('mx-auto max-w-7xl px-4  sm:px-6', {
-            'mt-24': !noPadding
-          })}
-        >
-          <Idea loading={loading} idea={idea} />{' '}
+        <div className={cn('mx-auto mt-4 max-w-7xl px-4 sm:px-6')}>
+          <Idea loading={loading} idea={idea} />
         </div>
       )}
     </div>

@@ -120,7 +120,7 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
             <Button
               className="ignore-click"
               type="button"
-              variant="link"
+              variant="text"
               onClick={() => saveIdea({ id: idea?.id })}
               icon={alreadySaved ? <CheckIcon className="h-5 w-5" /> : <BookmarkIcon className="h-6 w-6" />}
               disabled={alreadySaved || saving}

@@ -1,6 +1,6 @@
 import Button from '@/components/atoms/Button';
 import { Card, CardContent } from '@/components/atoms/Card';
-import Hero from '@/components/molecules/Hero';
+import Hero from '@/components/molecules/Home';
 import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
 import { type NextPage } from 'next';
