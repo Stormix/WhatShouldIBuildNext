@@ -1,3 +1,4 @@
+import { FREE_CREDITS_ON_SIGNUP, FREE_DAILY_CREDITS } from '@/config/app';
 import { cn } from '@/utils/styles';
 import type { FC } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../atoms/Accordion';
@@ -11,8 +12,7 @@ const FAQ: FC<{ className?: string }> = ({ className }) => {
     },
     {
       question: 'How many credits do users get on sign up?',
-      answer:
-        'Users get 3 credits on sign up. Each credit allows them to generate one project idea. Active users are awarded 1 credit every 24 hours.'
+      answer: `Users get ${FREE_CREDITS_ON_SIGNUP} credits on sign up. Each credit allows them to generate one project idea. Active users are awarded ${FREE_DAILY_CREDITS} credit every 24 hours.`
     },
     {
       question: 'Can users use multiple credits at once to generate multiple project ideas?',

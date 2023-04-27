@@ -1,3 +1,4 @@
+import { FREE_DAILY_CREDITS } from '@/config/app';
 import { prisma } from '@/server/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -16,7 +17,7 @@ export default async function handler(request: NextApiRequest, response: NextApi
     },
     data: {
       credits: {
-        increment: 1
+        increment: FREE_DAILY_CREDITS
       }
     }
   });

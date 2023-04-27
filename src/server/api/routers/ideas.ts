@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/
 import CreditsService from '@/server/services/credits';
 import { ideaToIdeaDto } from '@/utils/ideas';
 import { generateInputSchema, generateOutputSchema } from '@/validation/generate';
+import * as Sentry from '@sentry/node';
 import { TRPCClientError } from '@trpc/client';
 import { TRPCError } from '@trpc/server';
 import { Ratelimit } from '@upstash/ratelimit';
@@ -250,6 +251,12 @@ export const ideasRouter = createTRPCRouter({
         try {
           openAIResponse = JSON.parse(rawResponse) as OpenAIIdea;
         } catch (e) {
+          Sentry.captureMessage('Failed to parse OpenAI response', {
+            extra: {
+              rawResponse,
+              error: e
+            }
+          });
           throw new TRPCClientError("We couldn't parse the response from OpenAI. Generating again usually fixes this.");
         }
 
@@ -291,6 +298,11 @@ export const ideasRouter = createTRPCRouter({
         );
       } catch (error) {
         console.error('Failed to generate idea:', error);
+        Sentry.captureException(error, {
+          extra: {
+            input
+          }
+        });
         // Refund credits
         await CreditsService.reward(ctx.session.user.id, 2);
         throw new TRPCClientError('Something went wrong: ' + (error as Error).message);
