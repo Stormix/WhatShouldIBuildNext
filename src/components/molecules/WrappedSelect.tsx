@@ -27,6 +27,7 @@ function ComponentSelect<T extends FieldValues>(props: SelectProps<T>) {
   return (
     <div className="flex flex-col">
       <Controller
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         control={control as any}
         name={name}
         render={({ field: { onChange, value }, fieldState }) => (

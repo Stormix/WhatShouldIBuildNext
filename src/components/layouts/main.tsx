@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { type PropsWithChildren } from 'react';
 import { APP_NAME } from '../../config/app';
 import Footer from '../molecules/Footer';
-import Header from '../molecules/Header';
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (

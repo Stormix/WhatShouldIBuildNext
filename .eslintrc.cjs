@@ -32,7 +32,8 @@ const config = {
     '@typescript-eslint/ban-ts-comment': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'off',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'warn',
+    '@next/next/no-img-element': 'off'
   }
 };
 

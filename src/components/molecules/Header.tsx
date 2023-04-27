@@ -17,7 +17,7 @@ const Header: FC = () => {
     { name: 'Pricing', href: '#' }
   ];
 
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
 
   return (
     <>
