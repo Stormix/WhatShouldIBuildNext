@@ -23,7 +23,9 @@ const server = z.object({
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
   TWITTER_ID: z.string(),
-  TWITTER_SECRET: z.string()
+  TWITTER_SECRET: z.string(),
+  EMAIL_SERVER: z.string(),
+  EMAIL_FROM: z.string()
 });
 
 /**
@@ -65,7 +67,9 @@ const processEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   TWITTER_ID: process.env.TWITTER_ID,
   TWITTER_SECRET: process.env.TWITTER_SECRET,
-  NEXT_PUBLIC_FEEDER_PROJECT_ID: process.env.NEXT_PUBLIC_FEEDER_PROJECT_ID
+  NEXT_PUBLIC_FEEDER_PROJECT_ID: process.env.NEXT_PUBLIC_FEEDER_PROJECT_ID,
+  EMAIL_SERVER: process.env.EMAIL_SERVER,
+  EMAIL_FROM: process.env.EMAIL_FROM
 };
 
 // Don't touch the part below

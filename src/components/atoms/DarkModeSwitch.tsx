@@ -8,8 +8,6 @@ export enum Theme {
 
 const DarkModeSwitch = () => {
   const { theme, setTheme } = useTheme();
-  console.log(theme);
-
   const toggle = () => {
     setTheme(theme === Theme.Dark ? Theme.Light : Theme.Dark);
   };

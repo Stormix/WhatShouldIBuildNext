@@ -5,7 +5,7 @@ import type { FC, ForwardedRef } from 'react';
 import { forwardRef } from 'react';
 import Loading from './Loading';
 
-const buttonVariants = cva(
+export const buttonVariants = cva(
   'cursor-pointer inline-flex gap-2 items-center justify-center rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2  disabled:opacity-50  disabled:pointer-events-none',
   {
     variants: {
