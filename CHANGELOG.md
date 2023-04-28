@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2023-04-28)
+
+
+### Features
+
+* replace next auth default page ([b72b859](https://github.com/Stormix/ideas/commit/b72b8594ac371cefbfb2dd50ff2ffce8f0752a77))
+
 ### 1.0.1 (2023-04-27)
 
 ### 0.2.10 (2023-04-27)
