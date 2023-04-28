@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.2 (2023-04-28)
+
+
+### Bug Fixes
+
+* favicon and hide email button ([1d914ce](https://github.com/Stormix/ideas/commit/1d914cebd4131772d76558e5a8cd4a9730630ba7))
+
 ### 1.1.1 (2023-04-28)
 
 ## 1.1.0 (2023-04-28)
