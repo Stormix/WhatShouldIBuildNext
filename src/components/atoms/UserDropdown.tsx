@@ -59,7 +59,7 @@ const UserDropdown = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem>
-          <a href="#" onClick={() => signOut()}>
+          <a href="javascript:;" onClick={() => signOut()}>
             Log out
           </a>
         </DropdownMenuItem>

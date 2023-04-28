@@ -72,22 +72,24 @@ export function UserAuthForm({ className, providers, ...props }: UserAuthFormPro
         </div>
       </div>
 
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <Button
-            className="w-full"
-            variant="outline"
-            type="button"
-            size={'lg'}
-            disabled={isLoading}
-            loading={isLoading}
-            icon={icons[provider.id]?.()}
-            onClick={() => signIn(provider.id)}
-          >
-            Sign in with {provider.name}
-          </Button>
-        </div>
-      ))}
+      {Object.values(providers)
+        .filter((provider) => provider.id !== 'email')
+        .map((provider) => (
+          <div key={provider.name}>
+            <Button
+              className="w-full"
+              variant="outline"
+              type="button"
+              size={'lg'}
+              disabled={isLoading}
+              loading={isLoading}
+              icon={icons[provider.id]?.()}
+              onClick={() => signIn(provider.id)}
+            >
+              Sign in with {provider.name}
+            </Button>
+          </div>
+        ))}
     </div>
   );
 }
