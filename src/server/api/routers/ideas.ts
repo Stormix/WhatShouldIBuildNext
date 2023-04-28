@@ -148,7 +148,6 @@ export const ideasRouter = createTRPCRouter({
   }),
 
   getOne: publicProcedure
-
     .input(
       z.object({
         id: z.string().nullish()
@@ -181,23 +180,24 @@ export const ideasRouter = createTRPCRouter({
           message: 'Idea not found'
         });
       }
-
-      const savedUserIdeas = await ctx.prisma.user.findUnique({
-        where: {
-          id: ctx.session?.user.id
-        },
-        select: {
-          savedIdeas: {
-            select: {
-              id: true
+      let savedUserIdeas = null;
+      if (ctx.session) {
+        savedUserIdeas = await ctx.prisma.user.findUnique({
+          where: {
+            id: ctx.session?.user.id
+          },
+          select: {
+            savedIdeas: {
+              select: {
+                id: true
+              }
             }
           }
-        }
-      });
-
+        });
+      }
       return ideaToIdeaDto(
         idea,
-        savedUserIdeas?.savedIdeas.some((savedIdea) => savedIdea.id === idea.id) ?? false,
+        savedUserIdeas?.savedIdeas?.some((savedIdea) => savedIdea.id === idea.id) ?? false,
         idea.ratings.some((rating) => rating.userId === ctx.session?.user.id)
       );
     }),
