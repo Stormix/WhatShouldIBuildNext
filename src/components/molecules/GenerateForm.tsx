@@ -7,17 +7,19 @@ import { useForm } from 'react-hook-form';
 import { useIdeasStore } from '@/hooks/store/ideas';
 import { toOptions } from '@/utils/ideas';
 import { generateInputSchema } from '@/validation/generate';
-import { ArrowPathIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, Cog6ToothIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import type { z } from 'zod';
+import { AlertDialog, AlertDialogTrigger } from '../atoms/AlertDialog';
 import Button from '../atoms/Button';
 import { Card, CardContent } from '../atoms/Card';
 import Loading from '../atoms/Loading';
 import { Switch } from '../atoms/Switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
+import FormSettings from './FormSettings';
 import ComponentSelect from './WrappedSelect';
 
 type FormValues = z.TypeOf<typeof generateInputSchema>;
@@ -27,6 +29,9 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   const { setGeneratedIdea } = useIdeasStore();
   const { data, isLoading } = api.components.getAll.useQuery();
   const [challengeMode, setChallengeMode] = useState(false);
+
+  // const savedSettings = localStorage.getItem('settings');
+  // const savedValues = savedSettings ? (JSON.parse(savedSettings) as FormValues) : undefined;
 
   const { mutate: generate, isLoading: generating } = api.ideas.generate.useMutation({
     onSuccess: (data) => {
@@ -81,7 +86,7 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
       setValue(componentType.toLowerCase() as keyof FormValues, component!.id);
     }
   };
-
+  const [open, setOpen] = useState(false);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex h-full w-full">
       <Card className="z-20 flex h-full w-full ">
@@ -128,6 +133,12 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
                   />
                 </>
               )}
+              <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogTrigger>
+                  <Button variant={'outline'} icon={<Cog6ToothIcon className="h-5 w-5" />} />
+                </AlertDialogTrigger>
+                <FormSettings components={components} open={open} onClose={() => setOpen(false)} />
+              </AlertDialog>
             </div>
           )}
           {isLoading && (
