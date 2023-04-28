@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.1.3 (2023-04-28)
+
+
+### Bug Fixes
+
+* don't fetch a user if you're not signin ([7671b6b](https://github.com/Stormix/ideas/commit/7671b6b26cc3f92c6d5ce681cd600a1e9050437a))
+
 ### 1.1.2 (2023-04-28)
 
 
