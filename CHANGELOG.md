@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.1 (2023-05-03)
+
+
+### Bug Fixes
+
+* modal height on desktop ([bad75c0](https://github.com/Stormix/ideas/commit/bad75c01be803764b993587499835791aefa4f8f))
+
 ## 1.2.0 (2023-05-03)
 
 
