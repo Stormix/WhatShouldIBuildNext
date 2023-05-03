@@ -99,7 +99,7 @@ const FormSettings: FC<{
   return (
     <>
       <form className="flex h-full w-full">
-        <AlertDialogContent className="mt-96 h-screen overflow-auto md:mt-2 md:h-full">
+        <AlertDialogContent className="mt-96 h-screen overflow-auto md:mt-2 md:h-fit">
           <AlertDialogHeader>
             <AlertDialogTitle>Settings</AlertDialogTitle>
             <AlertDialogDescription>
