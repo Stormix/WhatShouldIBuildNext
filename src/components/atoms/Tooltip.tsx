@@ -140,6 +140,7 @@ export const TooltipContent = React.forwardRef<HTMLDivElement, React.HTMLProps<H
       <div
         ref={ref}
         style={{
+          zIndex: 60,
           position: context.strategy,
           top: context.y ?? 0,
           left: context.x ?? 0,

@@ -1,3 +1,5 @@
+import type { ComponentSettings } from '@/hooks/useComponentSettings';
+import type { ValueOf } from '@/types/generic';
 import type { GeneratedIdea } from '@/types/ideas';
 import type { Component, ComponentsOnIdeas, Idea, Rating, User } from '@prisma/client';
 
@@ -39,8 +41,10 @@ export const ideaToIdeaDto = (
   };
 };
 
-export const toOptions = (components: Component[] | undefined) =>
-  components?.map((component) => ({
-    value: component.id,
-    label: component.value
-  })) ?? [];
+export const toOptions = (components: ValueOf<ComponentSettings> | undefined) =>
+  components
+    ?.filter((component) => component.enabled)
+    ?.map((component) => ({
+      value: component.id,
+      label: component.value
+    })) ?? [];

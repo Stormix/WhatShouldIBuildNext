@@ -36,7 +36,7 @@ interface ButtonProps extends VariantProps<typeof buttonVariants> {
   onClick?: () => void;
   loading?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   type?: 'button' | 'submit' | 'reset';
   ref?: ForwardedRef<HTMLButtonElement>;
   icon?: React.ReactNode;
@@ -55,7 +55,7 @@ const Button: FC<ButtonProps> = forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {!loading && icon}
         {loading && <Loading className="h-4 w-4" />}
-        {children}
+        {children ?? null}
       </button>
     );
   }

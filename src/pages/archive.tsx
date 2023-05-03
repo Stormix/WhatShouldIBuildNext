@@ -1,5 +1,6 @@
 import Button from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { Separator } from '@/components/atoms/Separator';
 import Hero from '@/components/molecules/Home';
 import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
@@ -34,7 +35,7 @@ const Archive: NextPage = () => {
       </Hero>
       <div className="container mx-auto mb-12 grid grid-cols-1 gap-8">
         {isLoading && <p>Loading...</p>}
-        <hr className="border-black" />
+        <Separator />
         <div className="flex flex-row justify-end">
           <Input
             type="text"

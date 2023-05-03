@@ -1,3 +1,4 @@
+import { cn } from '@/utils/styles';
 import type { Control, FieldValues } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../atoms/Select';
@@ -12,10 +13,11 @@ interface SelectProps<T extends FieldValues> {
   control: Control<T, unknown>;
   name: string;
   placeholder?: string;
+  className?: string;
 }
 
 function ComponentSelect<T extends FieldValues>(props: SelectProps<T>) {
-  const { options, control, name, placeholder } = props;
+  const { options, control, name, placeholder, className } = props;
   const processedOptions =
     options?.map((opt) => {
       if (typeof opt === 'string') {
@@ -25,7 +27,7 @@ function ComponentSelect<T extends FieldValues>(props: SelectProps<T>) {
     }) ?? [];
 
   return (
-    <div className="flex flex-col">
+    <div className={cn('flex flex-col', className)}>
       <Controller
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         control={control as any}
@@ -43,7 +45,7 @@ function ComponentSelect<T extends FieldValues>(props: SelectProps<T>) {
               }
               value={value}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className={cn('w-[180px]', className)}>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
