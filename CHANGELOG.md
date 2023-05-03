@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.2.0 (2023-05-03)
+
+
+### Features
+
+* form settings & seo urls ([74b254c](https://github.com/Stormix/ideas/commit/74b254cbccd0f8afd990d61f6b265b3a1eadf403))
+
 ### 1.1.3 (2023-04-28)
 
 
