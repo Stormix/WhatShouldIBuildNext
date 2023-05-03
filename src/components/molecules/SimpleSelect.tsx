@@ -25,9 +25,13 @@ function SimpleSelect(props: SelectProps) {
 
   return (
     <div className={cn('flex flex-col', className)}>
-      <Select onValueChange={(value) => onSelect(processedOptions.find((opt) => opt.value === value)!)}>
+      <Select
+        onValueChange={(value) => {
+          onSelect?.(processedOptions.find((opt) => opt.value === value)!);
+        }}
+      >
         <SelectTrigger className={cn('w-[180px]', className)}>
-          <SelectValue placeholder={placeholder} />
+          <SelectValue placeholder={placeholder}>{placeholder}</SelectValue>
         </SelectTrigger>
         <SelectContent>
           {processedOptions.map((opt) => (

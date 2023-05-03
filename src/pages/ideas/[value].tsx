@@ -1,4 +1,7 @@
+'use client';
+
 import Button from '@/components/atoms/Button';
+import Loading from '@/components/atoms/Loading';
 import { Separator } from '@/components/atoms/Separator';
 import Hero from '@/components/molecules/Home';
 import Idea from '@/components/molecules/Idea';
@@ -51,7 +54,6 @@ export const getStaticProps: GetStaticProps<{ value: string }> = async (context)
   }
 
   const component = await helpers.ideas.getByComponent.fetch({ component: componentValue });
-
   if (!component) {
     return {
       notFound: true
@@ -71,7 +73,8 @@ export const getStaticProps: GetStaticProps<{ value: string }> = async (context)
 
 function PrefilledPage(props: InferGetStaticPropsType<typeof getStaticProps>) {
   const { value } = props;
-  const { data: component, isLoading: isLoadingComponent } = api.components.getOne.useQuery({ value });
+  const { data: component, isLoading: isLoadingComponent, error } = api.components.getOne.useQuery({ value });
+
   const { isLoading, data, fetchNextPage, isFetching, isFetchingNextPage, hasNextPage } =
     api.ideas.getByComponent.useInfiniteQuery(
       {
@@ -86,26 +89,39 @@ function PrefilledPage(props: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <NextSeo
-        title={`Project Ideas using ${component?.value ?? value} - ${APP_NAME}`}
+        title={`Project Ideas using ${component?.value ?? '🤔'} - ${APP_NAME}`}
         description={`${APP_NAME} is a free tool that generates random development project ideas based on your preferences. Use it to kickstart your next hackathon project or find inspiration for your next side project.`}
       />
       <Hero>
-        <h1 className="max-w-2xl text-4xl font-bold tracking-tight">{`Project Ideas using ${
-          component?.value ?? value
-        }`}</h1>
-        <p className="mb-8 mt-6 max-w-2xl text-lg leading-8">
-          List of user generated ideas using {component?.value ?? value}. You can also generate your own{' '}
-          <Link href={`/?using=${component?.id}`} className="text-accent">
-            here
-          </Link>
-          .
-        </p>
+        <h1 className="text-4xl font-bold tracking-tight">{`Project Ideas using ${component?.value ?? '🤔'}`}</h1>
+        {component?.value && (
+          <p className="mb-8 mt-6 text-lg leading-8">
+            List of user generated ideas using {component?.value ?? '🤔'}. You can also generate your own{' '}
+            <Link href={`/?using=${component?.id}`} className="text-accent">
+              here
+            </Link>
+            .
+          </p>
+        )}
+        {!component?.value && <p className="mb-8 mt-6 max-w-2xl text-lg leading-8">What are you trying to do? </p>}
       </Hero>
-      <div className="container mx-auto mb-12 grid grid-cols-1 gap-8">
-        {isLoading && isLoadingComponent && <p>Loading...</p>}
+      <div className="container mx-auto mb-12 grid min-w-fit max-w-7xl grid-cols-1 gap-8">
         <Separator />
+        {!(isLoading || isLoadingComponent) && (!component || !data) && (
+          <p>
+            No ideas found ¯\_(ツ)_/¯. Generate your own{' '}
+            <Link href={`/?using=${component?.id}`} className="text-accent">
+              here
+            </Link>
+            .
+          </p>
+        )}
+        {(isLoading || isLoadingComponent) && (
+          <div className="flex items-center gap-4">
+            <Loading className="h-4 w-4" /> <span>Loading...</span>
+          </div>
+        )}
         {data && data.pages.map((page) => page.ideas.map((idea) => <Idea key={idea.id} idea={idea} />))}
-        {(!data || !data?.pages?.length) && <p>No ideas found</p>}
         {hasNextPage && (
           <Button
             className="mx-auto w-fit"

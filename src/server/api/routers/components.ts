@@ -1,4 +1,5 @@
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 export const componentRouter = createTRPCRouter({
@@ -15,7 +16,9 @@ export const componentRouter = createTRPCRouter({
     });
 
     if (!component) {
-      return null;
+      throw new TRPCError({
+        code: 'NOT_FOUND'
+      });
     }
 
     return component;

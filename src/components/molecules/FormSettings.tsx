@@ -1,3 +1,6 @@
+import type { ComponentSettings } from '@/hooks/useComponentSettings';
+import useComponentSettings from '@/hooks/useComponentSettings';
+import { api } from '@/utils/api';
 import { cn } from '@/utils/styles';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,55 +27,61 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
 import SimpleSelect from './SimpleSelect';
 
 const FormSettings: FC<{
-  components: Record<ComponentType, Component[]>;
   open: boolean;
   onClose: () => void;
-}> = ({ components, onClose }) => {
+  challengeMode: boolean;
+}> = ({ onClose, challengeMode: challengeModeDefault }) => {
   const schema = z.object({
-    ...Object.keys(components).reduce((acc, curr) => {
-      acc[curr as ComponentType] = z.array(z.object({ id: z.string(), value: z.string(), enabled: z.boolean() }));
+    ...Object.values(ComponentType).reduce((acc, curr) => {
+      acc[curr] = z.array(z.object({ id: z.string(), value: z.string(), enabled: z.boolean() }));
       return acc;
     }, {} as Record<ComponentType, z.ZodArray<z.ZodObject<{ id: z.ZodString; value: z.ZodString; enabled: z.ZodBoolean }>>>)
   });
+  const [challengeMode, setChallengeMode] = useState(challengeModeDefault);
+  const { data } = api.components.getAll.useQuery();
+  const { isEnabled } = useComponentSettings();
 
-  type FormValues = z.TypeOf<typeof schema>;
-
-  const savedSettings = localStorage.getItem('settings');
-  const savedValues = savedSettings ? (JSON.parse(savedSettings) as FormValues) : undefined;
+  const components = data?.reduce((acc, curr) => {
+    if (!acc[curr.type]) {
+      acc[curr.type] = [];
+    }
+    acc[curr.type].push(curr);
+    return acc;
+  }, {} as Record<ComponentType, Component[]>);
 
   const defaultValues = {
-    ...Object.keys(components).reduce((acc, curr) => {
-      acc[curr as ComponentType] = components[curr as ComponentType].map((c) => ({
-        id: c.id,
-        value: c.value,
-        enabled: savedValues?.[curr as ComponentType]?.find((v) => v.id === c.id)?.enabled ?? true
-      }));
+    ...Object.values(ComponentType).reduce((acc, curr) => {
+      const type = curr as ComponentType;
+      acc[type] =
+        components?.[type]?.map((c) => ({
+          id: c.id,
+          value: c.value,
+          enabled: isEnabled(type, c.id)
+        })) ?? [];
       return acc;
     }, {} as Record<ComponentType, { id: string; value: string; enabled: boolean }[]>)
   };
 
-  const [challengeMode, setChallengeMode] = useState(false);
-  const { handleSubmit, setValue, getValues, watch } = useForm<FormValues>({
+  const { handleSubmit, setValue, getValues, watch } = useForm<ComponentSettings>({
     resolver: zodResolver(schema),
     defaultValues
   });
 
-  // Watch for changes and re-render
-  watch();
-
   const values = getValues();
 
   const remove = (type: ComponentType, id: string) => {
-    const component = components[type].find((c) => c.id === id) as Component;
-    setValue(type, [...(values[type]?.filter((v) => v.id !== id) ?? []), { ...component, enabled: false }]);
+    const component = components?.[type].find((c) => c.id === id);
+    if (component)
+      setValue(type, [...(values[type]?.filter((v) => v.id !== id) ?? []), { ...component, enabled: false }]);
   };
 
   const add = (type: ComponentType, id: string) => {
-    const component = components[type].find((c) => c.id === id) as Component;
-    setValue(type, [...(values[type]?.filter((v) => v.id !== id) ?? []), { ...component, enabled: true }]);
+    const component = components?.[type].find((c) => c.id === id);
+    if (component)
+      setValue(type, [...(values[type]?.filter((v) => v.id !== id) ?? []), { ...component, enabled: true }]);
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: ComponentSettings) => {
     // Save to local storage
     try {
       localStorage.setItem('settings', JSON.stringify(data));
@@ -84,14 +93,17 @@ const FormSettings: FC<{
     }
   };
 
+  // Watch for changes and re-render
+  watch();
+
   return (
     <>
       <form className="flex h-full w-full">
-        <AlertDialogContent>
+        <AlertDialogContent className="mt-96 h-screen overflow-auto md:mt-2 md:h-full">
           <AlertDialogHeader>
             <AlertDialogTitle>Settings</AlertDialogTitle>
             <AlertDialogDescription>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col  items-center justify-between md:flex-row">
                 <p>Customize the idea generator settings:</p>
                 <div className="flex items-center gap-4">
                   <div className="italic">Challenge mode options: </div>
@@ -99,12 +111,11 @@ const FormSettings: FC<{
                 </div>
               </div>
               <div
-                className={cn('grid grid-cols-4 gap-4 py-4', {
-                  'grid-cols-5': challengeMode
+                className={cn('grid grid-cols-1 gap-4 py-4 md:grid-cols-4 ', {
+                  'md:grid-cols-5': challengeMode
                 })}
               >
-                {(Object.keys(components) as ComponentType[])
-                  .sort((a, b) => (a > b ? -1 : 1))
+                {Object.values(ComponentType)
                   .filter((type) => (challengeMode ? true : type !== ComponentType.But))
                   .map((type) => (
                     <div className="flex flex-col" key={type}>
@@ -124,7 +135,7 @@ const FormSettings: FC<{
                           add(type, value.value);
                         }}
                       />
-                      <ScrollArea className="h-72 rounded-md border">
+                      <ScrollArea className="h-24 rounded-md  border md:h-72">
                         <div className="px-2 py-2">
                           {values[type as ComponentType]
                             .filter((v) => v.enabled)
@@ -144,7 +155,9 @@ const FormSettings: FC<{
                                     </TooltipContent>
                                   </Tooltip>
                                 </div>
-                                {index < components[type as ComponentType].length - 1 && <Separator className="my-2" />}
+                                {components && index < components[type as ComponentType].length - 1 && (
+                                  <Separator className="my-2" />
+                                )}
                               </Fragment>
                             ))}
                         </div>
