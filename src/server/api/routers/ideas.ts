@@ -5,7 +5,6 @@ import { ideaToIdeaDto } from '@/utils/ideas';
 import { generateInputSchema, generateOutputSchema } from '@/validation/generate';
 import * as Sentry from '@sentry/node';
 import { TRPCClientError } from '@trpc/client';
-import { TRPCError } from '@trpc/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { z } from 'zod';
@@ -77,18 +76,109 @@ export const ideasRouter = createTRPCRouter({
         nextCursor = nextItem!.id;
       }
 
-      const savedUserIdeas = await ctx.prisma.user.findUnique({
-        where: {
-          id: ctx.session?.user.id
-        },
-        select: {
-          savedIdeas: {
+      const savedUserIdeas = ctx.session
+        ? await ctx.prisma.user.findUnique({
+            where: {
+              id: ctx.session?.user.id
+            },
             select: {
-              id: true
+              savedIdeas: {
+                select: {
+                  id: true
+                }
+              }
+            }
+          })
+        : null;
+
+      return {
+        ideas: ideas.map((idea) =>
+          ideaToIdeaDto(
+            idea,
+            savedUserIdeas?.savedIdeas.some((savedIdea) => savedIdea.id === idea.id) ?? false,
+            idea.ratings.some((rating) => rating.userId === ctx.session?.user.id)
+          )
+        ),
+        nextCursor
+      };
+    }),
+
+  getByComponent: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+        component: z.string().nullish()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 50;
+      const { cursor } = input;
+
+      if (!input.component) {
+        return {
+          ideas: [],
+          nextCursor: undefined
+        };
+      }
+
+      const component = await ctx.prisma.component.findUnique({
+        where: {
+          value: input.component
+        }
+      });
+
+      if (!component) {
+        return {
+          ideas: [],
+          nextCursor: undefined
+        };
+      }
+
+      const ideas = await ctx.prisma.idea.findMany({
+        take: limit + 1, // get an extra item at the end which we'll use as next cursor
+        include: {
+          author: true,
+          components: {
+            include: {
+              component: true
+            }
+          },
+          ratings: true
+        },
+        cursor: !!cursor ? { id: cursor } : undefined,
+        orderBy: {
+          id: 'desc'
+        },
+        where: {
+          components: {
+            some: {
+              componentId: component?.id as string
             }
           }
         }
       });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (ideas.length > limit) {
+        const nextItem = ideas.pop();
+        nextCursor = nextItem!.id;
+      }
+
+      const savedUserIdeas = ctx.session
+        ? await ctx.prisma.user.findUnique({
+            where: {
+              id: ctx.session?.user.id
+            },
+            select: {
+              savedIdeas: {
+                select: {
+                  id: true
+                }
+              }
+            }
+          })
+        : null;
 
       return {
         ideas: ideas.map((idea) =>
@@ -148,7 +238,6 @@ export const ideasRouter = createTRPCRouter({
   }),
 
   getOne: publicProcedure
-
     .input(
       z.object({
         id: z.string().nullish()
@@ -176,24 +265,23 @@ export const ideasRouter = createTRPCRouter({
       });
 
       if (!idea) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Idea not found'
-        });
+        throw new TRPCClientError('Idea not found');
       }
 
-      const savedUserIdeas = await ctx.prisma.user.findUnique({
-        where: {
-          id: ctx.session?.user.id
-        },
-        select: {
-          savedIdeas: {
+      const savedUserIdeas = ctx.session
+        ? await ctx.prisma.user.findUnique({
+            where: {
+              id: ctx.session?.user.id
+            },
             select: {
-              id: true
+              savedIdeas: {
+                select: {
+                  id: true
+                }
+              }
             }
-          }
-        }
-      });
+          })
+        : null;
 
       return ideaToIdeaDto(
         idea,
@@ -225,10 +313,7 @@ export const ideasRouter = createTRPCRouter({
         const duration = Math.ceil((reset - Date.now()) / 1000);
 
         if (!success) {
-          throw new TRPCError({
-            code: 'TOO_MANY_REQUESTS',
-            message: `You have exceeded the rate limit. Please try again in ${duration}s.`
-          });
+          throw new TRPCClientError(`You have exceeded the rate limit. Please try again in ${duration}s.`);
         }
 
         let rawResponse = '';
@@ -326,10 +411,6 @@ export const ideasRouter = createTRPCRouter({
         throw new TRPCClientError('Invalid idea');
       }
 
-      // if (idea.authorId === ctx.session.user.id) {
-      //   throw new TRPCClientError('You cannot save your own idea');
-      // }
-
       const user = await ctx.prisma.user.update({
         where: {
           id: ctx.session.user.id
@@ -367,7 +448,7 @@ export const ideasRouter = createTRPCRouter({
       });
 
       if (!idea) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'Idea not found' });
+        throw new TRPCClientError('Idea not found');
       }
 
       const rating = idea.ratings.find((rating) => rating.userId === ctx.session.user.id);

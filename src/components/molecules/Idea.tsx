@@ -4,6 +4,7 @@ import { BookmarkIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from 'dynamic-class-list';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { toast } from 'react-hot-toast';
@@ -97,7 +98,13 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
               {loading ? (
                 <Skeleton className="mt-2 h-4 rounded-full" />
               ) : (
-                <p>{idea?.keywords?.map((key) => `#${key}`)?.join(', ')}</p>
+                <p className="flex gap-2">
+                  {idea?.keywords?.map((key, i) => (
+                    <Link href={`/ideas/${key}`} key={key} className="text-sm font-semibold">
+                      #{key}
+                    </Link>
+                  ))}
+                </p>
               )}
             </div>
           </div>
