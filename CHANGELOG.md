@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.3.0 (2023-05-05)
+
+
+### Features
+
+* cookie consent and legal pages ([b0ad0fd](https://github.com/Stormix/ideas/commit/b0ad0fd9b45a94234a2003550fdb21c576c9ad6e))
+
 ### 1.2.1 (2023-05-03)
 
 
