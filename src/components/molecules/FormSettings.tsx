@@ -6,6 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Component } from '@prisma/client';
 import { ComponentType } from '@prisma/client';
+import mixpanel from 'mixpanel-browser';
 import type { FC } from 'react';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -82,6 +83,7 @@ const FormSettings: FC<{
   };
 
   const onSubmit = (data: ComponentSettings) => {
+    mixpanel.track('Updated settings');
     // Save to local storage
     try {
       localStorage.setItem('settings', JSON.stringify(data));

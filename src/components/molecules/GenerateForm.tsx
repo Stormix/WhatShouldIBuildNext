@@ -9,6 +9,7 @@ import useComponentSettings from '@/hooks/useComponentSettings';
 import { toOptions } from '@/utils/ideas';
 import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, Cog6ToothIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import mixpanel from 'mixpanel-browser';
 import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 import { useState } from 'react';
@@ -59,6 +60,7 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   });
 
   const onSubmit = (data: FormValues) => {
+    mixpanel.track('Clicked Generate');
     if (!session?.user) {
       return toast.error('Please login first!', {
         position: 'bottom-center'
@@ -78,6 +80,8 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   };
 
   const randomize = () => {
+    mixpanel.track('Clicked randomize');
+
     for (const componentType in components) {
       const component =
         components[componentType as ComponentType][
@@ -132,7 +136,13 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
                   />
                 </>
               )}
-              <AlertDialog open={open} onOpenChange={setOpen}>
+              <AlertDialog
+                open={open}
+                onOpenChange={(opened) => {
+                  mixpanel.track('Clicked settings');
+                  setOpen(opened);
+                }}
+              >
                 <AlertDialogTrigger>
                   <Button variant={'outline'} icon={<Cog6ToothIcon className="h-5 w-5" />} />
                 </AlertDialogTrigger>
@@ -157,7 +167,15 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
                 </p>
               </TooltipContent>
             </Tooltip>
-            <Switch checked={challengeMode} onCheckedChange={setChallengeMode} />
+            <Switch
+              checked={challengeMode}
+              onCheckedChange={(checked) => {
+                mixpanel.track('Toggled challenge mode', {
+                  challengeModeEnabled: checked
+                });
+                setChallengeMode(checked);
+              }}
+            />
           </div>
           <p className="mt-4 text-left font-semibold ">2. Generate your idea:</p>
           <div className="flex flex-row items-center justify-center  gap-4">

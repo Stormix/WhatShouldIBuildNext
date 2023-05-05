@@ -2,6 +2,7 @@ import type { GeneratedIdea } from '@/types/ideas';
 import { api } from '@/utils/api';
 import { BookmarkIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { cl } from 'dynamic-class-list';
+import mixpanel from 'mixpanel-browser';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -57,6 +58,9 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
           return;
         }
 
+        mixpanel.track('Clicked Idea', {
+          id: idea?.id
+        });
         router.push(`/idea/${idea?.id}`);
       }}
     >
@@ -120,6 +124,7 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
               readonly={idea.ratedByThisUser}
               onValueChange={(rating) => {
                 rate({ id: idea?.id, rating });
+                mixpanel.track('Rated Idea', { rating, id: idea?.id });
               }}
               ratings={idea.ratingsCount ?? 0}
               className="ignore-click"
@@ -128,7 +133,10 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
               className="ignore-click"
               type="button"
               variant="text"
-              onClick={() => saveIdea({ id: idea?.id })}
+              onClick={() => {
+                saveIdea({ id: idea?.id });
+                mixpanel.track('Saved Idea', { id: idea?.id });
+              }}
               icon={alreadySaved ? <CheckIcon className="h-5 w-5" /> : <BookmarkIcon className="h-6 w-6" />}
               disabled={alreadySaved || saving}
               loading={saving}

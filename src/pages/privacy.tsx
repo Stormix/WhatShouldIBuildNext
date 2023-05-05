@@ -1,9 +1,14 @@
 import Hero from '@/components/molecules/Home';
 import { APP_NAME } from '@/config/app';
+import mixpanel from 'mixpanel-browser';
 import { type NextPage } from 'next';
 import { NextSeo } from 'next-seo';
+import { useEffect } from 'react';
 
 const PrivacyPolicy: NextPage = () => {
+  useEffect(() => {
+    mixpanel.track('Viewed Privacy Policy');
+  }, []);
   return (
     <>
       <NextSeo

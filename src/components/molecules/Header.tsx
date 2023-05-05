@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import type { FC } from 'react';
+import { useEffect } from 'react';
 import DarkModeSwitch from '../atoms/DarkModeSwitch';
 import Logo from '../atoms/Logo';
 import UserDropdown from '../atoms/UserDropdown';
 
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import mixpanel from 'mixpanel-browser';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Button from '../atoms/Button';
 import { Popover, PopoverContent, PopoverTrigger } from '../atoms/Popover';
@@ -13,11 +15,21 @@ const Header: FC = () => {
   const navigation = [
     { name: 'Ideas Leaderboard', href: '/leaderboard' },
     { name: 'Project Ideas', href: '/archive' },
-    { name: 'FAQ', href: '/faq' },
-    { name: 'Pricing', href: '#' }
+    { name: 'FAQ', href: '/faq' }
   ];
 
   const { data: session } = useSession();
+
+  useEffect(() => {
+    if (session && session.user.email) {
+      mixpanel.identify(session.user.email);
+      mixpanel.people.set({
+        $email: session.user.email,
+        $name: session.user.name,
+        $last_login: new Date()
+      });
+    }
+  }, [session]);
 
   return (
     <>

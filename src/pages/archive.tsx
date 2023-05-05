@@ -6,9 +6,10 @@ import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
 import { api } from '@/utils/api';
 import { debounce } from 'lodash';
+import mixpanel from 'mixpanel-browser';
 import { type NextPage } from 'next';
 import { NextSeo } from 'next-seo';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Archive: NextPage = () => {
   const [filter, setFilter] = useState('');
@@ -22,6 +23,10 @@ const Archive: NextPage = () => {
         getNextPageParam: (lastPage) => lastPage.nextCursor
       }
     );
+
+  useEffect(() => {
+    mixpanel.track('Viewed Archive');
+  }, []);
 
   return (
     <>

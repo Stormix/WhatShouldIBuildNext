@@ -1,4 +1,5 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
+import mixpanel from 'mixpanel-browser';
 import { useTheme } from 'next-themes';
 
 export enum Theme {
@@ -10,6 +11,7 @@ const DarkModeSwitch = () => {
   const { theme, setTheme } = useTheme();
   const toggle = () => {
     setTheme(theme === Theme.Dark ? Theme.Light : Theme.Dark);
+    mixpanel.track('Toggle theme', { theme: theme === Theme.Dark ? Theme.Light : Theme.Dark });
   };
 
   return (

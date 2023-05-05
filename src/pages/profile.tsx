@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/atoms/Card';
 import Hero from '@/components/molecules/Home';
 import IdeaCard from '@/components/molecules/Idea';
 import { APP_NAME } from '@/config/app';
+import mixpanel from 'mixpanel-browser';
 import { type NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import { NextSeo } from 'next-seo';
@@ -24,6 +25,10 @@ const Profile: NextPage = () => {
     window.addEventListener('visibilitychange', visibilityHandler, false);
     return () => window.removeEventListener('visibilitychange', visibilityHandler, false);
   }, [update]);
+
+  useEffect(() => {
+    mixpanel.track('Viewed Profile');
+  }, []);
 
   return (
     <>

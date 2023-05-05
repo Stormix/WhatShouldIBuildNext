@@ -1,12 +1,16 @@
 import Hero from '@/components/molecules/Home';
 import { APP_NAME } from '@/config/app';
+import mixpanel from 'mixpanel-browser';
 import { type NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const TermsAndConditions: NextPage = () => {
-  const router = useRouter();
+  useEffect(() => {
+    mixpanel.track('Viewed Terms and Conditions');
+  }, []);
+
   return (
     <>
       <NextSeo

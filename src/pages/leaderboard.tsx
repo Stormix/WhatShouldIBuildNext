@@ -3,11 +3,17 @@ import Hero from '@/components/molecules/Home';
 import { APP_NAME } from '@/config/app';
 import { api } from '@/utils/api';
 import { ArrowTopRightOnSquareIcon, BookmarkIcon, StarIcon } from '@heroicons/react/24/outline';
+import mixpanel from 'mixpanel-browser';
 import { type NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
+import { useEffect } from 'react';
 const Leaderboard: NextPage = () => {
   const { isLoading, data } = api.ideas.leaderboard.useQuery();
+
+  useEffect(() => {
+    mixpanel.track('Viewed Leaderboard');
+  }, []);
 
   return (
     <>
