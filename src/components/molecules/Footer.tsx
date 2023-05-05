@@ -1,5 +1,6 @@
 import { APP_NAME } from '@/config/app';
 import { version } from '@/version';
+import Link from 'next/link';
 import Logo from '../atoms/Logo';
 
 const Footer = () => {
@@ -43,14 +44,14 @@ const Footer = () => {
               <h2 className="mb-6 text-sm font-semibold uppercase ">Legal</h2>
               <ul className="font-medium">
                 <li className="mb-4">
-                  <a href="#" className="hover:underline">
+                  <Link href="/privacy" className="hover:underline">
                     Privacy Policy
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:underline">
+                  <Link href="/terms" className="hover:underline">
                     Terms &amp; Conditions
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

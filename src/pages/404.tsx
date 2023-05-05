@@ -5,7 +5,7 @@ import { type NextPage } from 'next';
 import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 
-const FAQPage: NextPage = () => {
+const NotFoundPage: NextPage = () => {
   const router = useRouter();
   return (
     <>
@@ -28,4 +28,4 @@ const FAQPage: NextPage = () => {
   );
 };
 
-export default FAQPage;
+export default NotFoundPage;

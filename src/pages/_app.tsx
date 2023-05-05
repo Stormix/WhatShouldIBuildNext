@@ -10,7 +10,9 @@ import '@/styles/main.scss';
 
 import FeedbackModal from '@/components/atoms/FeedbackModal';
 import MainLayout from '@/components/layouts/main';
+import { CONSENT_COOKIE_NAME } from '@/config/app';
 import { env } from '@/env.mjs';
+import { hasCookie } from 'cookies-next';
 import type { NextPage } from 'next';
 import type { ReactElement, ReactNode } from 'react';
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
@@ -31,7 +33,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppPropsWithLa
         <ThemeProvider attribute="class" storageKey="nightwind-mode" defaultTheme="dark">
           <Toaster position="bottom-center" reverseOrder={false} />
           {getLayout(<Component {...pageProps} />)}
-          <Analytics />
+          {hasCookie(CONSENT_COOKIE_NAME) && <Analytics />}
           <FeedbackModal />
         </ThemeProvider>
       </SessionProvider>

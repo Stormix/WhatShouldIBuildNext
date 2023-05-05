@@ -42,7 +42,7 @@ const Rating: FC<RatingProps> = ({ rating, readonly, disabled, loading, ratings,
                 'peer h-5 w-5',
                 ratingValue > 5 - i - 1 && readonly
                   ? 'text-accent'
-                  : 'text-forground opacity-30 hover:text-accent hover:opacity-100',
+                  : 'text-foreground opacity-30 hover:text-accent hover:opacity-100',
                 {
                   'hover:text-accent hover:opacity-100 peer-hover:text-accent peer-hover:opacity-100': !readonly
                 }

@@ -46,6 +46,7 @@
     "@vercel/og": "^0.5.4",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
+    "cookies-next": "^2.1.1",
     "date-fns": "^2.30.0",
     "dynamic-class-list": "^2.0.2",
     "feeder-react-feedback": "^0.0.6",

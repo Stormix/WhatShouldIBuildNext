@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { type PropsWithChildren } from 'react';
 import { APP_NAME } from '../../config/app';
+import CookieConsent from '../atoms/CookieConsent';
 import Footer from '../molecules/Footer';
 
 const MainLayout = ({ children }: PropsWithChildren) => {
@@ -18,6 +19,7 @@ const MainLayout = ({ children }: PropsWithChildren) => {
         <main className="flex w-full flex-col">
           <div className="flex flex-grow flex-col">{children}</div>
           <Footer />
+          <CookieConsent />
         </main>
       </div>
     </>
