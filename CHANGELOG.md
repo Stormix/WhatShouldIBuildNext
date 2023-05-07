@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.4.0 (2023-05-07)
+
+
+### Features
+
+* better prompt + open ai params WHA-39 ([c13c7f2](https://github.com/Stormix/ideas/commit/c13c7f2fa1e77684cbc44a1190235b06d8532f20))
+
 ### 1.3.1 (2023-05-05)
 
 ## 1.3.0 (2023-05-05)
