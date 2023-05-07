@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ComponentType } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 
+import { defaultParams } from '@/config/prompt';
 import { useIdeasStore } from '@/hooks/store/ideas';
 import type { ComponentSettings } from '@/hooks/useComponentSettings';
 import useComponentSettings from '@/hooks/useComponentSettings';
@@ -55,7 +56,18 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   }, {} as ComponentSettings);
 
   const { handleSubmit, setValue, control, getValues } = useForm<GenerateInput>({
-    resolver: zodResolver(generateInputSchema)
+    resolver: zodResolver(generateInputSchema),
+    defaultValues: {
+      what: '',
+      for: '',
+      using: '',
+      on: '',
+      but: '',
+      options: {
+        temperature: defaultParams.temperature,
+        presencePenalty: defaultParams.presence_penalty
+      }
+    }
   });
 
   const onSubmit = (data: GenerateInput) => {

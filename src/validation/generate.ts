@@ -1,10 +1,12 @@
 import { ComponentType } from '@prisma/client';
 import { z } from 'zod';
 
-export const generateOptionsSchema = z.object({
-  temperature: z.number().optional(),
-  presencePenalty: z.number().optional()
-});
+export const generateOptionsSchema = z
+  .object({
+    temperature: z.number().optional(),
+    presencePenalty: z.number().optional()
+  })
+  .optional();
 
 export const generateInputSchema = z.object({
   what: z.string().nonempty(),
