@@ -58,11 +58,6 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   const { handleSubmit, setValue, control, getValues } = useForm<GenerateInput>({
     resolver: zodResolver(generateInputSchema),
     defaultValues: {
-      what: '',
-      for: '',
-      using: '',
-      on: '',
-      but: '',
       options: {
         temperature: defaultParams.temperature,
         presencePenalty: defaultParams.presence_penalty
