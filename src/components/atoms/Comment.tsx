@@ -60,13 +60,15 @@ const CommentComponent: FC<CommentThreadProps> = ({ comment, comments, reply, le
     <div className={cn('flex flex-col gap-2')}>
       <div className="flex flex-row gap-4">
         <div className="flex flex-col justify-start">
-          <Image
-            className="flex rounded-full"
-            src={comment.author.image as string}
-            alt={comment.author.name as string}
-            width={40}
-            height={40}
-          />
+          {comment?.author?.image && (
+            <Image
+              className="flex rounded-full"
+              src={comment.author.image as string}
+              alt={comment.author.name as string}
+              width={40}
+              height={40}
+            />
+          )}
         </div>
         <div className="flex flex-grow flex-col">
           <div className="flex flex-row gap-2">

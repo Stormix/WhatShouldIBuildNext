@@ -40,13 +40,15 @@ const Profile: NextPage = () => {
         <Card className="container w-full">
           <CardContent>
             <div className="flex items-center gap-8">
-              <Image
-                width={128}
-                height={128}
-                className="rounded-full"
-                src={session?.user.image as string}
-                alt={session?.user.name as string}
-              />
+              {session?.user.image && (
+                <Image
+                  width={128}
+                  height={128}
+                  className="rounded-full"
+                  src={session?.user.image as string}
+                  alt={session?.user.name as string}
+                />
+              )}
               <div className="ml-4 flex flex-col items-start justify-center">
                 <h1 className="text-3xl font-bold">{session?.user.name}</h1>
                 <h2 className="text-xl">Credits: {session?.user.credits ?? 0}</h2>
