@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.4 (2023-05-07)
+
+
+### Bug Fixes
+
+* WHATSHOULDIBUILDNEXT-6S ([f8c7098](https://github.com/Stormix/ideas/commit/f8c7098593709954598b223ffe3e126b1930ff7e))
+
 ### 1.4.3 (2023-05-07)
 
 
