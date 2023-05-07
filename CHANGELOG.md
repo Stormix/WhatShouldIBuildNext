@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.4.2 (2023-05-07)
+
+
+### Bug Fixes
+
+* make options optional ([c0b3d74](https://github.com/Stormix/ideas/commit/c0b3d74f53ce89b36ac111ad4a8d2fa04fa501a1))
+
 ### 1.4.1 (2023-05-07)
 
 
