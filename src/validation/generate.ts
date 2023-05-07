@@ -1,12 +1,21 @@
+import { ComponentType } from '@prisma/client';
 import { z } from 'zod';
+
+export const generateOptionsSchema = z.object({
+  temperature: z.number().min(0).max(1).optional(),
+  presencePenalty: z.number().min(0).max(1).optional()
+});
 
 export const generateInputSchema = z.object({
   what: z.string().nonempty(),
   for: z.string().nonempty(),
   using: z.string().nonempty(),
   on: z.string().nonempty(),
-  but: z.string().optional()
+  but: z.string().optional(),
+  options: generateOptionsSchema
 });
+
+export type GenerateInput = z.TypeOf<typeof generateInputSchema>;
 
 export const generateOutputSchema = z.object({
   id: z.string(),
@@ -27,4 +36,12 @@ export const generateOutputSchema = z.object({
   ratingsCount: z.number(),
   ratedByThisUser: z.boolean(),
   saveCount: z.number()
+});
+
+export const generateSettingsSchema = z.object({
+  ...Object.values(ComponentType).reduce((acc, curr) => {
+    acc[curr] = z.array(z.object({ id: z.string(), value: z.string(), enabled: z.boolean() }));
+    return acc;
+  }, {} as Record<ComponentType, z.ZodArray<z.ZodObject<{ id: z.ZodString; value: z.ZodString; enabled: z.ZodBoolean }>>>),
+  options: generateOptionsSchema
 });

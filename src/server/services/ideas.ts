@@ -1,7 +1,9 @@
+import { defaultContext, defaultParams } from '@/config/prompt';
+import type { GenerateInput } from '@/validation/generate';
 import type { Component } from '@prisma/client';
 import { ComponentType } from '@prisma/client';
+import * as Sentry from '@sentry/node';
 import { openai } from '../api/openai';
-
 export default class IdeasService {
   static componentsToPrompt(components: Component[]) {
     const componentsMap = components.reduce((acc, component) => {
@@ -20,35 +22,66 @@ export default class IdeasService {
     return prompt;
   }
 
-  static async generate(prompt: string) {
-    const response = await openai.createCompletion({
-      model: 'text-davinci-003',
-      prompt: `You're an AI developer assistant and your job is to generate sensible project ideas based on user prompts.
-      Here's a prompt: ${prompt}. Return only one idea. It must include all the requirements and add as much detail as possible.
-      Use the following template in JSON:\n\n
-      \`\`\`
-      {
-        "idea": "Your idea here",
-        "description": "Your description here"
-        "timeToComplete": "",
-        "difficulty": ""
-      }
-      \`\`\`\n\n
-      You can also use the following difficulty levels: easy, medium, hard, and advanced.
-      The time to complete should be in hours.
-      \n\n
-      `,
-      temperature: 0.9,
-      presence_penalty: 0.6,
-      max_tokens: 250
+  static async generate(prompt: string, options: GenerateInput['options'], dryRun = false) {
+    const params = {
+      ...defaultParams,
+      temperature: options?.temperature ?? defaultParams.temperature,
+      presence_penalty: options?.presencePenalty ?? defaultParams.presence_penalty
+    };
+
+    if (dryRun) {
+      return JSON.stringify({
+        idea: 'Your idea here',
+        description: 'Your description here',
+        timeToComplete: '1 hour',
+        difficulty: 'easy'
+      });
+    }
+
+    const response = await openai.createChatCompletion({
+      ...params,
+      messages: defaultContext(prompt)
     });
 
-    const rawResponse = response.data.choices[0]?.text;
+    const rawResponse = response.data.choices?.[0]?.message?.content as string;
 
     if (!rawResponse) {
+      Sentry.captureMessage('Failed to get message content from OpenAI', {
+        extra: {
+          response
+        }
+      });
       throw new Error('No response from OpenAI');
     }
 
-    return rawResponse;
+    try {
+      JSON.parse(rawResponse);
+      return rawResponse;
+    } catch (err) {
+      // Ask model to correct the response
+      const response = await openai.createChatCompletion({
+        ...params,
+        messages: [
+          ...defaultContext(prompt),
+          {
+            role: 'system',
+            content: `The response from OpenAI was not valid JSON. Please correct it:\n\n\`\`\`\n${rawResponse}\n\`\`\`\n\n`
+          }
+        ]
+      });
+
+      const correctedResponse = response.data.choices?.[0]?.message?.content as string;
+
+      if (!correctedResponse) {
+        Sentry.captureMessage('RETRY: Failed to get message content from OpenAI', {
+          extra: {
+            response
+          }
+        });
+        throw new Error('No response from OpenAI');
+      }
+
+      return correctedResponse;
+    }
   }
 }

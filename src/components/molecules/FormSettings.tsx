@@ -1,17 +1,20 @@
+import { defaultParams } from '@/config/prompt';
 import type { ComponentSettings } from '@/hooks/useComponentSettings';
 import useComponentSettings from '@/hooks/useComponentSettings';
 import { api } from '@/utils/api';
 import { cn } from '@/utils/styles';
+import type { GenerateInput } from '@/validation/generate';
+import { generateSettingsSchema } from '@/validation/generate';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Component } from '@prisma/client';
 import { ComponentType } from '@prisma/client';
+import { omit } from 'lodash';
 import mixpanel from 'mixpanel-browser';
 import type { FC } from 'react';
 import { Fragment, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import { z } from 'zod';
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -23,21 +26,22 @@ import {
 } from '../atoms/AlertDialog';
 import { ScrollArea } from '../atoms/ScrollArea';
 import { Separator } from '../atoms/Separator';
+import { Slider } from '../atoms/Slider';
 import { Switch } from '../atoms/Switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
 import SimpleSelect from './SimpleSelect';
+
+type FormValues = ComponentSettings & {
+  options: Required<Exclude<GenerateInput['options'], undefined>>;
+};
 
 const FormSettings: FC<{
   open: boolean;
   onClose: () => void;
   challengeMode: boolean;
-}> = ({ onClose, challengeMode: challengeModeDefault }) => {
-  const schema = z.object({
-    ...Object.values(ComponentType).reduce((acc, curr) => {
-      acc[curr] = z.array(z.object({ id: z.string(), value: z.string(), enabled: z.boolean() }));
-      return acc;
-    }, {} as Record<ComponentType, z.ZodArray<z.ZodObject<{ id: z.ZodString; value: z.ZodString; enabled: z.ZodBoolean }>>>)
-  });
+  options: GenerateInput['options'];
+  onOptionsChange: (options: GenerateInput['options']) => void;
+}> = ({ onClose, challengeMode: challengeModeDefault, options, onOptionsChange }) => {
   const [challengeMode, setChallengeMode] = useState(challengeModeDefault);
   const { data } = api.components.getAll.useQuery();
   const { isEnabled } = useComponentSettings();
@@ -50,7 +54,7 @@ const FormSettings: FC<{
     return acc;
   }, {} as Record<ComponentType, Component[]>);
 
-  const defaultValues = {
+  const defaultValues: FormValues = {
     ...Object.values(ComponentType).reduce((acc, curr) => {
       const type = curr as ComponentType;
       acc[type] =
@@ -60,33 +64,39 @@ const FormSettings: FC<{
           enabled: isEnabled(type, c.id)
         })) ?? [];
       return acc;
-    }, {} as Record<ComponentType, { id: string; value: string; enabled: boolean }[]>)
+    }, {} as Record<ComponentType, { id: string; value: string; enabled: boolean }[]>),
+    options: {
+      temperature: options?.temperature ?? defaultParams.temperature,
+      presencePenalty: options?.presencePenalty ?? defaultParams.presence_penalty
+    }
   };
 
-  const { handleSubmit, setValue, getValues, watch } = useForm<ComponentSettings>({
-    resolver: zodResolver(schema),
+  const { handleSubmit, setValue, getValues, watch } = useForm<FormValues>({
+    resolver: zodResolver(generateSettingsSchema),
     defaultValues
   });
 
   const values = getValues();
 
-  const remove = (type: ComponentType, id: string) => {
+  const removeComponent = (type: ComponentType, id: string) => {
     const component = components?.[type].find((c) => c.id === id);
     if (component)
       setValue(type, [...(values[type]?.filter((v) => v.id !== id) ?? []), { ...component, enabled: false }]);
   };
 
-  const add = (type: ComponentType, id: string) => {
+  const addComponent = (type: ComponentType, id: string) => {
     const component = components?.[type].find((c) => c.id === id);
     if (component)
       setValue(type, [...(values[type]?.filter((v) => v.id !== id) ?? []), { ...component, enabled: true }]);
   };
 
-  const onSubmit = (data: ComponentSettings) => {
-    mixpanel.track('Updated settings');
-    // Save to local storage
+  const onSubmit = (data: FormValues) => {
     try {
-      localStorage.setItem('settings', JSON.stringify(data));
+      mixpanel.track('Updated settings');
+      const componentSettings = omit(data, ['options']);
+      // Save to local storage
+      onOptionsChange(data.options);
+      localStorage.setItem('settings', JSON.stringify(componentSettings));
       toast.success('Settings saved!');
     } catch (e) {
       toast.error('Failed to save settings');
@@ -106,7 +116,7 @@ const FormSettings: FC<{
             <AlertDialogTitle>Settings</AlertDialogTitle>
             <AlertDialogDescription>
               <div className="flex flex-col  items-center justify-between md:flex-row">
-                <p>Customize the idea generator settings:</p>
+                <p>1. Customize the idea generator settings:</p>
                 <div className="flex items-center gap-4">
                   <div className="italic">Challenge mode options: </div>
                   <Switch checked={challengeMode} onCheckedChange={setChallengeMode} />
@@ -134,7 +144,7 @@ const FormSettings: FC<{
                         placeholder="Add back values.."
                         className="mb-2 w-full"
                         onSelect={(value) => {
-                          add(type, value.value);
+                          addComponent(type, value.value);
                         }}
                       />
                       <ScrollArea className="h-24 rounded-md  border md:h-72">
@@ -149,7 +159,7 @@ const FormSettings: FC<{
                                     <TooltipTrigger>
                                       <XMarkIcon
                                         className="h-4 w-4 hover:text-destructive"
-                                        onClick={() => remove(type, component.id)}
+                                        onClick={() => removeComponent(type, component.id)}
                                       />
                                     </TooltipTrigger>
                                     <TooltipContent className="Tooltip">
@@ -166,6 +176,39 @@ const FormSettings: FC<{
                       </ScrollArea>
                     </div>
                   ))}
+              </div>
+              <div className="mt-4">
+                <p>2. Fine-tune chat completion params:</p>
+                <div className="flex flex-grow flex-col gap-2 ">
+                  <div className="flex w-full flex-col items-center gap-4 md:flex-row">
+                    <label className="min-w-fit">Temperature:</label>
+                    <Slider
+                      defaultValue={[defaultParams.temperature]}
+                      max={1}
+                      step={0.01}
+                      min={0}
+                      value={[values.options.temperature]}
+                      onValueChange={(value) => {
+                        setValue('options.temperature', value[0] as number);
+                      }}
+                    />
+                    <p>{values.options.temperature.toPrecision(2)}</p>
+                  </div>
+                  <div className="flex w-full flex-col items-center gap-4 md:flex-row">
+                    <label className="min-w-fit">Presence Penalty:</label>
+                    <Slider
+                      defaultValue={[defaultParams.presence_penalty]}
+                      max={1}
+                      step={0.01}
+                      min={0}
+                      value={[values.options.presencePenalty]}
+                      onValueChange={(value) => {
+                        setValue('options.presencePenalty', value[0] as number);
+                      }}
+                    />
+                    <p>{values.options.presencePenalty.toPrecision(2)}</p>
+                  </div>
+                </div>
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>

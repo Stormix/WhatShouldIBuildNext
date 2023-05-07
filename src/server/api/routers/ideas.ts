@@ -7,6 +7,7 @@ import * as Sentry from '@sentry/node';
 import { TRPCClientError } from '@trpc/client';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+import { omit } from 'lodash';
 import { z } from 'zod';
 import IdeasService from '../../services/ideas';
 
@@ -295,10 +296,11 @@ export const ideasRouter = createTRPCRouter({
     .output(generateOutputSchema)
     .mutation(async ({ input, ctx }) => {
       try {
+        const componentIds = Object.values(omit(input, 'options'));
         const components = await ctx.prisma.component.findMany({
           where: {
             id: {
-              in: Object.values(input)
+              in: componentIds
             }
           }
         });
@@ -316,20 +318,8 @@ export const ideasRouter = createTRPCRouter({
           throw new TRPCClientError(`You have exceeded the rate limit. Please try again in ${duration}s.`);
         }
 
-        let rawResponse = '';
-
-        if (env.ENABLE_OPENAI?.toLowerCase() === 'true') {
-          rawResponse = await IdeasService.generate(prompt);
-        } else {
-          rawResponse = JSON.stringify({
-            idea: 'Your idea here',
-            description: 'Your description here',
-            timeToComplete: '1 hour',
-            difficulty: 'easy'
-          });
-        }
-
-        await CreditsService.deduct(ctx.session.user.id, 1);
+        const dryRun = env.ENABLE_OPENAI?.toLowerCase() !== 'true';
+        const rawResponse = await IdeasService.generate(prompt, input.options, dryRun);
 
         let openAIResponse: OpenAIIdea | null = null;
 
@@ -354,7 +344,7 @@ export const ideasRouter = createTRPCRouter({
             timeToComplete: openAIResponse.timeToComplete,
             difficulty: openAIResponse.difficulty,
             components: {
-              create: Object.values(input).map((id) => ({
+              create: componentIds.map((id) => ({
                 component: {
                   connect: {
                     id
@@ -376,6 +366,9 @@ export const ideasRouter = createTRPCRouter({
           }
         });
 
+        // Deduct credits
+        await CreditsService.deduct(ctx.session.user.id, 1);
+
         return ideaToIdeaDto(
           idea,
           false,
@@ -389,8 +382,8 @@ export const ideasRouter = createTRPCRouter({
           }
         });
         // Refund credits
-        await CreditsService.reward(ctx.session.user.id, 2);
-        throw new TRPCClientError('Something went wrong: ' + (error as Error).message);
+        await CreditsService.reward(ctx.session.user.id, 2); // People will probably exploit this, but it's fine
+        throw error;
       }
     }),
 

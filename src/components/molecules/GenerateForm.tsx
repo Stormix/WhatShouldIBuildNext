@@ -7,14 +7,15 @@ import { useIdeasStore } from '@/hooks/store/ideas';
 import type { ComponentSettings } from '@/hooks/useComponentSettings';
 import useComponentSettings from '@/hooks/useComponentSettings';
 import { toOptions } from '@/utils/ideas';
+import type { GenerateInput } from '@/validation/generate';
 import { generateInputSchema } from '@/validation/generate';
 import { ArrowPathIcon, Cog6ToothIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { sample } from 'lodash';
 import mixpanel from 'mixpanel-browser';
 import { useSession } from 'next-auth/react';
 import type { FC } from 'react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import type { z } from 'zod';
 import { AlertDialog, AlertDialogTrigger } from '../atoms/AlertDialog';
 import Button from '../atoms/Button';
 import { Card, CardContent } from '../atoms/Card';
@@ -23,8 +24,6 @@ import { Switch } from '../atoms/Switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../atoms/Tooltip';
 import FormSettings from './FormSettings';
 import ComponentSelect from './WrappedSelect';
-
-type FormValues = z.TypeOf<typeof generateInputSchema>;
 
 const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
   const { data: session, update } = useSession();
@@ -55,11 +54,11 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
     return acc;
   }, {} as ComponentSettings);
 
-  const { handleSubmit, setValue, control } = useForm<FormValues>({
+  const { handleSubmit, setValue, control, getValues } = useForm<GenerateInput>({
     resolver: zodResolver(generateInputSchema)
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = (data: GenerateInput) => {
     mixpanel.track('Clicked Generate');
     if (!session?.user) {
       return toast.error('Please login first!', {
@@ -81,15 +80,14 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
 
   const randomize = () => {
     mixpanel.track('Clicked randomize');
-
     for (const componentType in components) {
-      const component =
-        components[componentType as ComponentType][
-          Math.floor(Math.random() * components[componentType as ComponentType].length)
-        ];
-      setValue(componentType.toLowerCase() as keyof FormValues, component!.id);
+      const type = componentType as ComponentType;
+      const enabledComponents = components[type].filter((component) => component.enabled);
+      const component = sample(enabledComponents);
+      setValue(type.toLowerCase() as keyof GenerateInput, component!.id);
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex h-full w-full">
       <Card className="z-20 flex h-full w-full ">
@@ -98,28 +96,28 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
           {components && (
             <div className="flex flex-row flex-wrap items-center justify-center gap-1">
               <span>Build</span>
-              <ComponentSelect<FormValues>
+              <ComponentSelect<GenerateInput>
                 options={toOptions(components[ComponentType.What])}
                 placeholder="Select a value.."
                 control={control}
                 name="what"
               />
               <span>for</span>
-              <ComponentSelect<FormValues>
+              <ComponentSelect<GenerateInput>
                 options={toOptions(components[ComponentType.For])}
                 placeholder="Select a value.."
                 control={control}
                 name="for"
               />
               <span>using</span>
-              <ComponentSelect<FormValues>
+              <ComponentSelect<GenerateInput>
                 options={toOptions(components[ComponentType.Using])}
                 placeholder="Select a value.."
                 control={control}
                 name="using"
               />
               <span>and on</span>
-              <ComponentSelect<FormValues>
+              <ComponentSelect<GenerateInput>
                 options={toOptions(components[ComponentType.On])}
                 placeholder="Select a value.."
                 control={control}
@@ -128,7 +126,7 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
               {challengeMode && (
                 <>
                   <span>but</span>
-                  <ComponentSelect<FormValues>
+                  <ComponentSelect<GenerateInput>
                     options={toOptions(components[ComponentType.But])}
                     placeholder="Select a value.."
                     control={control}
@@ -146,7 +144,18 @@ const GenerateForm: FC<{ loading?: boolean }> = ({ loading }) => {
                 <AlertDialogTrigger>
                   <Button variant={'outline'} icon={<Cog6ToothIcon className="h-5 w-5" />} />
                 </AlertDialogTrigger>
-                <FormSettings open={open} onClose={() => setOpen(false)} challengeMode />
+                <FormSettings
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  challengeMode
+                  options={getValues()['options']}
+                  onOptionsChange={(options) => {
+                    setValue('options', {
+                      ...getValues()['options'],
+                      ...options
+                    });
+                  }}
+                />
               </AlertDialog>
             </div>
           )}

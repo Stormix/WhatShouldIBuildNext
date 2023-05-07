@@ -10,5 +10,9 @@ const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
 Sentry.init({
   dsn: SENTRY_DSN || 'https://af355dd205424e8fa64ed6360deee7a3@o84215.ingest.sentry.io/4504976186802176',
   tracesSampleRate: 1.0,
-  release: version
+  release: version,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+
+  integrations: [new Sentry.Replay()],
 });

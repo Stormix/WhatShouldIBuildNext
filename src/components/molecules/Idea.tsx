@@ -67,7 +67,7 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
       <CardContent className="flex flex-col gap-4">
         <h3 className="text-start font-bold opacity-70">Idea #{idea?.number}</h3>
         <div className="flex flex-col gap-8 md:flex-row  ">
-          <div className="flex-grow text-justify">
+          <div className="flex-grow text-justify md:w-4/5">
             <h2 className="py-4 text-3xl font-semibold">
               {loading && <Skeleton className="h-6 rounded-full" />}
               {!loading && idea?.title}
@@ -81,7 +81,7 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
             )}
             {!loading && <p>{idea?.description}</p>}
           </div>
-          <div className="flex flex-col items-start gap-4 text-start md:w-2/5">
+          <div className="flex flex-col items-start gap-4 text-start md:w-1/5">
             <div>
               <h4 className="font-semibold">Difficulty</h4>
               {loading ? <Skeleton className="mt-2 h-4 rounded-full" /> : <p>{idea?.difficulty ?? ''}</p>}
@@ -102,10 +102,10 @@ const Idea: FC<IdeaProps> = ({ className, idea, noSave, loading }) => {
               {loading ? (
                 <Skeleton className="mt-2 h-4 rounded-full" />
               ) : (
-                <p className="flex gap-2">
+                <p className="flex flex-col gap-2">
                   {idea?.keywords?.map((key, i) => (
-                    <Link href={`/ideas/${key}`} key={key} className="text-sm font-semibold">
-                      #{key}
+                    <Link href={`/ideas/${key}`} key={key} className="ignore-click text-sm font-semibold">
+                      # {key}
                     </Link>
                   ))}
                 </p>

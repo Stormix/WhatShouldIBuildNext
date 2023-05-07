@@ -105,7 +105,7 @@ function PrefilledPage(props: InferGetStaticPropsType<typeof getStaticProps>) {
         )}
         {!component?.value && <p className="mb-8 mt-6 max-w-2xl text-lg leading-8">What are you trying to do? </p>}
       </Hero>
-      <div className="container mx-auto mb-12 grid min-w-fit max-w-7xl grid-cols-1 gap-8">
+      <div className="container mx-auto mb-12 grid max-w-7xl grid-cols-1 gap-8">
         <Separator />
         {!(isLoading || isLoadingComponent) && (!component || !data) && (
           <p>
