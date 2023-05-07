@@ -2,8 +2,8 @@ import { ComponentType } from '@prisma/client';
 import { z } from 'zod';
 
 export const generateOptionsSchema = z.object({
-  temperature: z.number().min(0).max(1).optional(),
-  presencePenalty: z.number().min(0).max(1).optional()
+  temperature: z.number().optional(),
+  presencePenalty: z.number().optional()
 });
 
 export const generateInputSchema = z.object({
