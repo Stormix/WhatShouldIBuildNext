@@ -1207,10 +1207,10 @@
   dependencies:
     "@floating-ui/dom" "^1.2.7"
 
-"@floating-ui/react@^0.24.0":
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.24.0.tgz#d835f7041b9b4ed1b7daa83f33af412ae0c6c946"
-  integrity sha512-/UxcKFV5WtD+CbInbosDmUwVpcKlTTo6sVllSWMYXiX/HHXWeMxbcUNIkilsj5EDlbKiw7nHQtHYHYQLQMsVdQ==
+"@floating-ui/react@^0.24.1":
+  version "0.24.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/react/-/react-0.24.1.tgz#9ef81c78045c4b88ac062755826a3daf7cbe23d6"
+  integrity sha512-qjCKUZDEz/4bnJmu4gn66TqsoX912/re8JGEi3pXazsphmyh327l0UpTgpBAT3WkNbnzAH7Adt3wKlLMNtfupw==
   dependencies:
     "@floating-ui/react-dom" "^2.0.0"
     aria-hidden "^1.1.3"
