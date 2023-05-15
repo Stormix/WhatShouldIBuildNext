@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.24.0",
-    "@heroicons/react": "^2.0.17",
+    "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.1.0",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.13.0",
